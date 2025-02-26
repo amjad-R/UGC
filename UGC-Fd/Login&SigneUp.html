@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In / Sign Up</title>
+    <link rel="stylesheet" href="Login&SigneUp.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+        <a href="index.html" class="logo-login">Ugc.com</a>
+
+        <div class="business-box">
+            <h2>Creator sign in</h2>
+            <p>Order & manage your videos</p>
+            <div class="tab">
+                <button class="tablinks active" data-tab="login" onclick="changeUserType('creator')">Log In</button>
+                <button class="tablinks" data-tab="signup" onclick="changeUserType('creator')">Sign Up</button>
+            </div>
+
+            <div id="login" class="tabcontent">
+                <form id="login-form">
+                    <button class="google-btn">
+                        <i class="fab fa-google"></i> Continue with Google
+                    </button>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <input type="hidden" name="user_type" value="creator">
+                    <a href="#" class="forgot-password" data-tab="reset-password">Forgot Password?</a>
+                    <button type="submit">Log In</button>
+                </form>
+            </div>
+
+            <div id="signup" class="tabcontent" style="display:none;">
+                <form id="signup-form">
+                    <button class="google-btn">
+                        <i class="fab fa-google"></i> Continue with Google
+                    </button>
+                    <input id="first_name" type="text" name="first_name" placeholder="First Name" required>
+                    <input id="last_name" type="text" name="last_name" placeholder="Last Name" required>
+                    <input id="email" type="email" name="email" placeholder="Email" required>
+                    <input id="phone" type="tel" name="phone" placeholder="Phone" required>
+                    <input id="password" type="password" name="password" placeholder="Password" required>
+                    <input id="password_confirmation" type="password" name="confirm_password"
+                        placeholder="Confirm Password" required>
+                    <input id="user_type" type="hidden" name="user_type" value="creator">
+                    <button type="button" id="register-btn">Sign Up</button>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="creator-box">
+            <h2>For businesses</h2>
+            <p>Sign in or sign up via Billo for Creators app</p>
+            <div class="tab">
+                <button class="tablinks active" data-tab="login-creator" onclick="changeUserType('business')">Log
+                    In</button>
+                <button class="tablinks" data-tab="signup-creator" onclick="changeUserType('business')">Sign Up</button>
+            </div>
+
+            <div id="login-creator" class="tabcontent">
+                <form id="login-creator-form">
+                    <button class="google-btn">
+                        <i class="fab fa-google"></i> Continue with Google
+                    </button>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <input type="hidden" name="user_type" value="business">
+                    <a href="#" class="forgot-password" data-tab="reset-password">Forgot Password?</a>
+                    <button type="submit">Log In</button>
+                </form>
+            </div>
+
+            <div id="signup-creator" class="tabcontent" style="display:none;">
+                <form id="signup-creator-form">
+                    <button class="google-btn">
+                        <i class="fab fa-google"></i> Continue with Google
+                    </button>
+                    <input type="text" name="first_name" placeholder="First Name" required>
+                    <input type="text" name="last_name" placeholder="Last Name" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="tel" name="phone" placeholder="Phone" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                    <input type="hidden" name="user_type" value="business">
+                    <button type="submit">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        function changeUserType(userType) {
+            const userTypeInput = document.querySelector('input[name="user_type"]');
+            userTypeInput.value = userType;
+
+            const tabLinks = document.querySelectorAll('.tablinks');
+            const tabContents = document.querySelectorAll('.tabcontent');
+
+            tabLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            tabContents.forEach(content => {
+                content.style.display = 'none';
+            });
+
+            const activeTab = document.querySelector(`[data-tab="${userType === 'creator' ? 'signup' : 'signup-creator'}"]`);
+            const activeTabContent = document.getElementById(userType === 'creator' ? 'signup' : 'signup-creator');
+
+            activeTab.classList.add('active');
+            activeTabContent.style.display = 'block';
+        }
+    </script>
+    <script src="Tab&Api.js"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</body>
+
+</html>

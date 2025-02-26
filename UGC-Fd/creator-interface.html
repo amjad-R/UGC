@@ -1,0 +1,2680 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم</title>
+    <style>
+        * {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            background-color: #f8f8f8;
+        }
+
+        .sidebar {
+            background-color: #e3d8ff;
+            width: 15%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 0 10px 10px 0;
+            position: fixed;
+
+        }
+
+        .profile-image img {
+            content: '';
+            top: -1px;
+            left: -1px;
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            border: 3px solid #555;
+            box-sizing: border-box;
+            pointer-events: none;
+            padding: 2px;
+            animation: floatY 5s ease-in-out infinite;
+        }
+
+        @keyframes floatY {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .profile-image {
+            position: relative;
+        }
+
+
+        .sidebar h2 {
+            font-family: sans-serif;
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .sidebar-icons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin-top: auto;
+        }
+
+        .icon-link {
+            text-decoration: none;
+        }
+
+        .icon {
+            font-size: 15px;
+            width: 25px;
+            height: 25px;
+            opacity: 0.5;
+            color: #a4a7b5;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon:hover {
+            opacity: 1;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            display: none;
+            margin-left: 200px;
+
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        .order-history h2 {
+            font-size: 30px;
+            color: #555;
+            margin-bottom: 40px;
+            font-weight: bold;
+            text-align: start;
+        }
+
+        .order-tabs a {
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: bold;
+            color: 555;
+            text-align: start;
+            background-color: #e3d8ff98;
+            color: #555;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .order-tabs a:hover {
+            color: #6b50ff;
+        }
+
+        .order-table-header {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1fr 1fr;
+            padding: 17px 45px;
+            border: 1px solid #ccc;
+            font-weight: bold;
+            font-size: 20px;
+            color: #555;
+            border-radius: 25px;
+            margin-bottom: 10px;
+        }
+
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .order-table td {
+            padding: 25px;
+            border-bottom: 1px solid #ddd;
+            font-size: 16px;
+            color: #555;
+            font-weight: bold;
+
+        }
+
+        .order-table .status-pending {
+            color: #ff0000bb;
+            font-weight: bold;
+        }
+
+        .order-table .status-delivered {
+            color: #28a7469f;
+            font-weight: bold;
+        }
+
+        .order-button {
+            background-color: #e3d8ff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .order-button:hover {
+            background-color: #644f99e0;
+        }
+
+        .online-status {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: #28a745;
+            border-radius: 50%;
+            border: 3px solid #e3d8ff;
+            bottom: 5px;
+            right: 8px;
+            animation: fadeInOut 2s infinite;
+        }
+
+        @keyframes fadeInOut {
+
+            0%,
+            100% {
+                opacity: 0.9;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+
+
+
+
+
+        .sidebar {
+            background-color: #e3d8ff;
+            width: 15%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 0 10px 10px 0;
+        }
+
+        .profile-image img {
+            content: '';
+            top: -1px;
+            left: -1px;
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            border: 3px solid #555;
+            box-sizing: border-box;
+            pointer-events: none;
+            padding: 2px;
+        }
+
+        .profile-image {
+            position: relative;
+        }
+
+        .sidebar h2 {
+            font-family: sans-serif;
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .dropdown {
+            position: relative;
+            margin-top: 10px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .dropdown-toggle {
+            border: none;
+            color: #555;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: background-color 0.3s, transform 0.3s;
+            width: 80%;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .dropdown-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-icon {
+            margin-left: 10px;
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+
+
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            list-style: none;
+            padding: 10px 0;
+            width: 200px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .dropdown-menu li {
+            padding: 12px 20px;
+        }
+
+        .dropdown-menu li a {
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+            display: block;
+            transition: background-color 0.3s, color 0.3s;
+            font-weight: bold;
+        }
+
+        .dropdown-menu li a:hover {
+            color: #333;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .sidebar-icons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin-top: auto;
+        }
+
+        .icon-link {
+            text-decoration: none;
+        }
+
+        .icon {
+            font-size: 18px;
+            width: 28px;
+            height: 28px;
+            opacity: 0.7;
+            color: #a4a7b5;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon:hover {
+            opacity: 1;
+        }
+
+
+
+        .service-status-info {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            margin-left: 80px;
+        }
+
+        .service-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-published {
+            background-color: #28a745;
+        }
+
+        .status-pending {
+            background-color: #ffc107;
+        }
+
+        .status-rejected {
+            background-color: #dc3545;
+        }
+
+        .status-text {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .add-service-button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            background-color: #6a50ff79;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 40%;
+            margin-bottom: 25px;
+        }
+
+        .add-service-button:hover {
+            background-color: #e3d8ff;
+        }
+
+        .edit-service-button {
+            display: inline-block;
+            margin: 10px 5px 10px 0;
+            padding: 8px 15px;
+            background-color: #6e38f87e;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-service-button:hover {
+            background-color: #4a27b0;
+        }
+
+        .delete-service-button {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 8px 15px;
+            background-color: #dc35465e;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-service-button:hover {
+            background-color: #a71d2a;
+        }
+
+
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .order-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .dropdown-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-btn {
+            background-color: #e3d8ff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-btn:hover {
+            background-color: #644f99e0;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            border: 1px solid #ddd;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            z-index: 1;
+        }
+
+        .dropdown-content p {
+            margin: 0;
+            padding: 8px 12px;
+            color: #333;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .dropdown-content p:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown-container:hover .dropdown-content {
+            display: block;
+        }
+
+
+        @media (max-width: 1024px) {
+            .content {
+                padding: 10px;
+            }
+
+            .order-tabs a {
+                display: block;
+                margin: 5px 0;
+            }
+
+            .order-table-header {
+                display: none;
+            }
+
+            .order-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .order-table tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                padding: 10px;
+            }
+
+            .order-table td {
+                display: flex;
+                justify-content: space-between;
+                padding: 5px;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .order-table td:last-child {
+                border-bottom: none;
+            }
+
+
+            .cards {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .card {
+                width: 100%;
+            }
+
+
+
+        }
+
+        @media screen and (max-width: 1024px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-radius: 0;
+                position: relative;
+            }
+
+            .profile-image img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .sidebar h2 {
+                font-size: 18px;
+            }
+
+            .dropdown-menu {
+                position: static;
+                transform: none;
+                width: 100%;
+                text-align: left;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .order-history h2 {
+                font-size: 24px;
+            }
+
+            .order-tabs a {
+                font-size: 14px;
+                padding: 5px 8px;
+            }
+
+            .order-table-header {
+                grid-template-columns: 1fr;
+                font-size: 16px;
+                padding: 10px;
+            }
+
+            .order-table td {
+                font-size: 14px;
+                padding: 15px;
+            }
+
+            .order-button {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+
+            .sidebar-icons {
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .icon {
+                font-size: 20px;
+            }
+
+            .dropdown-toggle {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+
+    <head>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    </head>
+
+</head>
+
+<div class="sidebar">
+    <div class="profile-image">
+        <img src="p1.png" id="profile-picture">
+
+        <span class="online-status"></span>
+    </div>
+
+    <h2>Actin</h2>
+
+    <div class="dropdown">
+        <div class="dropdown">
+            <div class="dropdown-toggle">UGC.COM
+                <span class="dropdown-icon"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <ul class="dropdown-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="creators.html">Creators</a></li>
+                <li><a href="About-Us.html">About Us</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+
+
+    <div class="sidebar-icons">
+        <a href="#" class="icon-link 1" onclick="showServices()">
+            <img src="my-business.png" class="icon" alt="الإحصائيات">
+        </a>
+        <a href="#" class="icon-link 2" onclick="showChat()">
+            <img src="chat (1).png" class="icon" alt="الصفحة الرئيسية">
+        </a>
+        <a href="#" class="icon-link 1" onclick="showProfile()">
+            <img src="user.png" class="icon" alt="الملف الشخصي">
+        </a>
+        <a href="#" class="icon-link 1" onclick="showOrders()">
+            <img src="clipboard.png" class="icon" alt="لوحة التحكم">
+        </a>
+        <a href="#" class="icon-link 1" onclick="showWish()">
+            <img src="wishlist.png" class="icon" alt="الإحصائيات">
+        </a>
+        <a href="#" class="icon-link logout-link" onclick="logout()">
+            <img src="turn-off.png" class="icon" alt="تسجيل الخروج">
+        </a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function logout() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                axios.post('http://127.0.0.1:8000/api/logout', {}, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+                        'Accept': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        alert(response.data.message);
+                        localStorage.removeItem('authToken');
+                        window.location.href = '/Login&SigneUp.html';
+                    })
+                    .catch(error => {
+                        console.error('Logout error:', error.response);
+                        alert('فشل تسجيل الخروج. حاول مرة أخرى.');
+                    });
+            }
+        }
+    </script>
+
+</div>
+
+
+
+<div class="content" id="servicesContent">
+    <div class="order-history">
+        <a href="Create-Service.html">
+            <button class="add-service-button">Add New Service</button>
+        </a>
+
+        <div class="cards"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const authToken = localStorage.getItem("authToken");
+
+        if (!authToken) {
+            alert("لم يتم العثور على التوكن. يرجى تسجيل الدخول.");
+            return;
+        }
+        axios.get('http://localhost:8000/api/profile', {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            }
+        })
+            .then(profileResponse => {
+                const profileData = profileResponse.data;
+
+                const profileImage = profileData.profile_image ?
+                    `http://localhost:8000/storage/${profileData.profile_image}` :
+                    'https://via.placeholder.com/150';
+
+                axios.get('http://localhost:8000/api/my-services', {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    }
+                })
+                    .then(response => {
+                        const services = response.data.services;
+                        const cardsContainer = document.querySelector('.cards');
+
+                        if (services && services.length > 0) {
+                            services.forEach(service => {
+                                const card = document.createElement('div');
+                                card.className = 'card';
+
+                                const userName = service.user ? `${service.user.first_name} ${service.user.last_name}` : 'Unknown User';
+
+                                card.innerHTML = `
+    <div class="service-status-info">
+    <div class="service-status status-${service.status}"></div>
+    <span class="status-text">${service.status || ''}</span>
+</div>
+    <button class="edit-service-button" data-service-id="${service.id}">Edit Service</button>
+    <button class="delete-service-button" data-service-id="${service.id}">Delete Service</button>
+    <div class="video-thumbnail">
+        <video
+            src="${service.uploaded_files && service.uploaded_files.length > 0 ? service.uploaded_files[0] : 'No video found'}"
+            controls data-service-id="${service.id}">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="creator-info">
+                        <img src="${profileImage}" class="avatar" alt="Creator">
+        <span class="name">${userName}</span>
+        <span class="rating">★ 4.8</span>
+    </div>
+`;
+                                cardsContainer.appendChild(card);
+                            });
+                        } else {
+                            cardsContainer.innerHTML = '<p>No services found.</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching services:', error);
+                    });
+            });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const authToken = localStorage.getItem("authToken");
+
+            if (!authToken) {
+                alert("لم يتم العثور على التوكن. يرجى تسجيل الدخول.");
+                return;
+            }
+
+            document.querySelector('.cards').addEventListener('click', function (e) {
+                if (e.target.classList.contains('delete-service-button')) {
+                    const serviceId = e.target.dataset.serviceId;
+
+                    if (confirm('هل أنت متأكد أنك تريد حذف هذه الخدمة؟')) {
+                        axios.delete(`http://localhost:8000/api/services/${serviceId}`, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                            },
+                        })
+                            .then(() => {
+                                alert('تم حذف الخدمة بنجاح');
+                                e.target.closest('.card').remove();
+                            })
+                            .catch(error => {
+                                console.error('Error deleting service:', error);
+                                alert('حدث خطأ أثناء محاولة حذف الخدمة.');
+                            });
+                    }
+                }
+            });
+        });
+
+        document.querySelector('.cards').addEventListener('click', function (e) {
+            const authToken = localStorage.getItem("authToken");
+
+            if (!authToken) {
+                alert("لم يتم العثور على التوكن. يرجى تسجيل الدخول.");
+                return;
+            }
+
+            if (e.target.classList.contains('delete-service-button')) {
+                const serviceId = e.target.dataset.serviceId;
+
+                if (confirm('هل أنت متأكد أنك تريد حذف هذه الخدمة؟')) {
+                    axios.delete(`http://localhost:8000/api/services/${serviceId}`, {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        },
+                    })
+                        .then(() => {
+                            alert('تم حذف الخدمة بنجاح');
+                            e.target.closest('.card').remove();
+                        })
+                        .catch(error => {
+                            console.error('Error deleting service:', error);
+                            alert('حدث خطأ أثناء محاولة حذف الخدمة.');
+                        });
+                }
+            }
+        });
+
+        document.querySelector('.cards').addEventListener('click', function (e) {
+            if (e.target.classList.contains('edit-service-button')) {
+                const serviceId = e.target.dataset.serviceId;
+
+                window.location.href = `/edit-service.html?id=${serviceId}`;
+            }
+
+        });
+
+    });
+
+
+</script>
+
+
+
+
+
+</div>
+</div>
+
+
+
+
+<div class="content" id="orderContent">
+    <div class="order-history">
+        <h2>Order History</h2>
+        <div class="order-tabs">
+            <a href="javascript:void(0)" onclick="fetchOrders()">All Orders</a>
+            <a href="javascript:void(0)" onclick="fetchOrders('pending')">Pending</a>
+            <a href="javascript:void(0)" onclick="fetchOrders('accepted')">Completed</a>
+            <a href="javascript:void(0)" onclick="fetchOrders('cancelled')">Cancelled</a>
+        </div>
+
+        <div class="order-table-header">
+            <div>Item</div>
+            <div>Action</div>
+            <div>Total</div>
+            <div>Details</div>
+        </div>
+        <table class="order-table">
+            <tr>
+                <td>Adventure Story Book</td>
+                <td>
+                    <div class="dropdown-container">
+                        <button class="dropdown-btn">Choose Action</button>
+                        <div class="dropdown-content">
+                            <p>Accept</p>
+                            <p>Reject</p>
+                        </div>
+                    </div>
+                </td>
+                <td>$452.23</td>
+                <td><button class="order-button" onclick="showPopup('Adventure Story Book')">Order Details</button></td>
+            </tr>
+            <tr>
+                <td>Travelling Backpack</td>
+                <td>
+                    <div class="dropdown-container">
+                        <button class="dropdown-btn">Choose Action</button>
+                        <div class="dropdown-content">
+                            <p>Accept</p>
+                            <p>Reject</p>
+                        </div>
+                    </div>
+                </td>
+                <td>$452.23</td>
+                <td><button class="order-button" onclick="showPopup('Travelling Backpack')">Order Details</button></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span class="close-btn" onclick="hidePopup()">&times;</span>
+        <h3>Order Details</h3>
+        <p><strong>Item:</strong> <span id="popup-item"></span></p>
+        <p><strong>Full Name:</strong> <span id="popup-full-name"></span></p>
+        <p><strong>Start Date:</strong> <span id="popup-start-date"></span></p>
+        <p><strong>End Date:</strong> <span id="popup-end-date"></span></p>
+        <p><strong>Email:</strong> <span id="popup-email"></span></p>
+        <p><strong>Website:</strong> <span id="popup-website"></span></p>
+        <p><strong>Message:</strong> <span id="popup-message"></span></p>
+        <p><strong>Platforms:</strong></p>
+        <ul id="popup-platforms">
+        </ul>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    const orderContent = document.getElementById('orderContent');
+    let orders = [];
+
+    function showPopup(orderId) {
+        const order = orders.find(o => o.id === orderId);
+
+        if (order) {
+            axios.get(`http://localhost:8000/api/servicess/${order.service_id}`, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                }
+            })
+                .then(response => {
+                    const serviceTitle = response.data.title || 'No Service Title';
+                    document.getElementById('popup-item').textContent = serviceTitle;
+                })
+                .catch(error => {
+                    console.error('Error fetching service title:', error);
+                    document.getElementById('popup-item').textContent = 'Service Title Not Found';
+                });
+
+            document.getElementById('popup-full-name').textContent = `${order.first_name || 'N/A'} ${order.last_name || 'N/A'}`;
+            document.getElementById('popup-start-date').textContent = order.start_date || 'N/A';
+            document.getElementById('popup-end-date').textContent = order.end_date || 'N/A';
+            document.getElementById('popup-email').textContent = order.email || 'N/A';
+            document.getElementById('popup-website').textContent = order.website || 'N/A';
+            document.getElementById('popup-message').textContent = order.message || 'N/A';
+
+            const platformsList = document.getElementById('popup-platforms');
+            platformsList.innerHTML = '';
+
+            if (order.platform_data && order.platform_data.length > 0) {
+                try {
+                    const platforms = JSON.parse(order.platform_data);
+                    platforms.forEach(platform => {
+                        const li = document.createElement('li');
+                        li.textContent = `Platform: ${platform.platform || 'N/A'}, 
+                              Type: ${platform.type || 'N/A'}, 
+                              Duration: ${platform.duration || 'N/A'}, 
+                              Price: $${platform.price || '0.00'}`;
+                        platformsList.appendChild(li);
+                    });
+                } catch (error) {
+                    console.error('Error parsing platform data:', error);
+                    const li = document.createElement('li');
+                    li.textContent = 'Invalid Platform Data';
+                    platformsList.appendChild(li);
+                }
+            } else {
+                const li = document.createElement('li');
+                li.textContent = 'No Platforms Available';
+                platformsList.appendChild(li);
+            }
+
+
+            document.getElementById('popup').style.display = 'block';
+        } else {
+            alert('Order not found!');
+        }
+    }
+
+    function hidePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    function fetchOrders(status = '') {
+        const url = status ? `http://localhost:8000/api/orders?status=${status}` : 'http://localhost:8000/api/orders';
+
+        axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            }
+        })
+            .then(response => {
+                orders = response.data.data.map(order => ({
+                    ...order,
+                    service_id: order.service_id
+                }));
+                renderOrders(orders);
+            })
+            .catch(error => {
+                console.error('Error fetching orders:', error);
+                orderContent.innerHTML = `<p>Failed to load orders. Please try again later.</p>`;
+            });
+    }
+
+    function renderOrders(orders) {
+        const table = document.querySelector('.order-table');
+        table.innerHTML = '';
+
+        if (orders.length === 0) {
+            table.innerHTML = `<tr><td colspan="4">No orders found</td></tr>`;
+            return;
+        }
+
+        orders.forEach(order => {
+            axios.get(`http://localhost:8000/api/servicess/${order.service_id}`, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                }
+            })
+                .then(response => {
+                    const serviceTitle = response.data.title || 'No Service Title';
+
+                    const row = `
+                <tr>
+                    <td>${serviceTitle}</td>  <!-- عرض عنوان الخدمة بدلاً من الرسالة -->
+                    <td>
+                        <div class="dropdown-container">
+                            <button class="dropdown-btn">Choose Action</button>
+                            <div class="dropdown-content">
+                                <p onclick="updateOrderStatus(${order.id}, 'accepted')">Accept</p>
+                                <p onclick="updateOrderStatus(${order.id}, 'cancelled')">Reject</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>$${order.price || '0.00'}</td>
+                    <td>
+                        <button class="order-button" onclick="showPopup(${order.id})">Order Details</button>
+                    </td>
+                </tr>
+            `;
+                    table.innerHTML += row;
+                })
+                .catch(error => {
+                    console.error('Error fetching service title:', error);
+                    const row = `
+                <tr>
+                    <td>No Service Title</td> <!-- في حالة حدوث خطأ، عرض "No Service Title" -->
+                    <td>
+                        <div class="dropdown-container">
+                            <button class="dropdown-btn">Choose Action</button>
+                            <div class="dropdown-content">
+                                <p onclick="updateOrderStatus(${order.id}, 'accepted')">Accept</p>
+                                <p onclick="updateOrderStatus(${order.id}, 'cancelled')">Reject</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>$${order.price || '0.00'}</td>
+                    <td>
+                        <button class="order-button" onclick="showPopup(${order.id})">Order Details</button>
+                    </td>
+                </tr>
+            `;
+                    table.innerHTML += row;
+                });
+        });
+    }
+    function updateOrderStatus(orderId, status) {
+        axios.post(`http://localhost:8000/api/orders/${orderId}/status`, { status }, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            }
+        })
+            .then(response => {
+                alert(response.data.message);
+                fetchOrders();
+            })
+            .catch(error => {
+                console.error('Error updating order status:', error);
+                alert('Failed to update order status. Please try again.');
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchOrders();
+    });
+</script>
+
+
+
+
+<style>
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        max-width: 600px;
+        background: #f9f9f9;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
+        overflow: hidden;
+        z-index: 1000;
+    }
+
+    .popup-content {
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        padding: 25px;
+        text-align: left;
+        font-size: 16px;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .popup-content strong {
+        padding: 25px;
+        text-align: left;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        font-size: 16px;
+        color: #c6b2fd;
+        line-height: 1.6;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 18px;
+        color: #555;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .close-btn:hover {
+        color: #c6b2fd;
+    }
+
+    .popup ul {
+        list-style-type: disc;
+        margin: 15px 0 0 30px;
+    }
+
+    .popup ul li {
+        text-decoration: none;
+        list-style: none;
+        margin-bottom: 10px;
+    }
+
+    a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    @media screen and (max-width: 1024px) {
+        .popup {
+            width: 90%;
+            max-width: none;
+        }
+
+        .popup-content {
+            padding: 15px;
+        }
+
+        .close-btn {
+            top: 10px;
+            right: 10px;
+        }
+    }
+</style>
+
+
+
+
+<div class="content" id="ChatContent">
+    <div class="order-history">
+        <title>Chat Interface</title>
+
+        <body>
+            <div class="chat-interface">
+                <div id="chat-list" class="chat-list">
+                </div>
+                <div class="chat-area">
+                    <div class="chat-header">
+                        <div class="user-avatar">
+                            <img id="chat-avatar" src="p3.png" alt="User Avatar">
+                            <span id="status-dot" class="status-dot online"></span>
+                        </div>
+                        <div class="user-info">
+                            <h3 id="chat-name">Gold Coast</h3>
+                            <p id="last-seen">Last seen: 10:30 AM</p>
+                        </div>
+                    </div>
+
+
+                    <div id="chat-details" class="chat-messages">
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="message-input" placeholder="Type a message">
+                        <div class="action-buttons">
+                            <img src="attach-file.png" alt="Attach File">
+                            <img id="send-button" src="paper-plane.png" alt="Send Message">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
+    <script>
+        const authToken = localStorage.getItem("authToken");
+
+        if (!authToken) {
+            alert("لم يتم العثور على التوكن. يرجى تسجيل الدخول.");
+            throw new Error("No auth token found");
+        }
+
+        console.log("Auth Token:", authToken);
+
+        const axiosInstance = axios.create({
+            baseURL: "http://localhost:8000/api",
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        });
+
+        const chatListContainer = document.getElementById("chat-list");
+        const chatDetailsContainer = document.getElementById("chat-details");
+        const chatAvatar = document.getElementById("chat-avatar");
+        const chatName = document.getElementById("chat-name");
+        const lastSeen = document.getElementById("last-seen");
+        let currentChatId = null;
+
+        const formatTime = (isoTime) => {
+            const date = new Date(isoTime);
+            return date.toLocaleString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+            });
+        };
+
+        const fetchChatList = async () => {
+            try {
+                const response = await axiosInstance.get("/chats");
+                const chats = response.data;
+                renderChatList(chats);
+            } catch (error) {
+                console.error("فشل في جلب قائمة الدردشات:", error.response?.data || error.message);
+            }
+        };
+
+        const renderChatList = (chats) => {
+            chatListContainer.innerHTML = `
+            <h2>Chat List</h2>
+            <div class="search-box">
+                <input type="text" placeholder="Search">
+            </div>
+        `;
+
+            chats.forEach(chat => {
+                const chatItem = document.createElement("div");
+                chatItem.classList.add("chat-list-item");
+                chatItem.innerHTML = `
+                <img src="http://localhost:8000/storage/${chat.avatar || "default-avatar.png"}" alt="Avatar">
+                <div class="chat-info">
+                    <h3>${chat.name}</h3>
+                    <p>${chat.lastMessage || "No messages yet."}</p>
+                </div>
+                <div class="chat-time">${chat.lastActive || "Unknown"}</div>
+            `;
+
+                chatItem.addEventListener("click", () => {
+                    currentChatId = chat.id;
+                    updateChatHeader(chat);
+                    fetchChatDetails(chat.id);
+                });
+
+                chatListContainer.appendChild(chatItem);
+            });
+        };
+
+        const updateChatHeader = (chat) => {
+            chatAvatar.src = `http://localhost:8000/storage/${chat.avatar || "default-avatar.png"}`;
+            chatName.textContent = chat.name || "Unknown";
+            lastSeen.textContent = `Last seen: ${chat.lastActive || "Unknown"}`;
+        };
+
+        const fetchChatDetails = async (chatId) => {
+            try {
+                const response = await axiosInstance.get(`/chats/${chatId}`);
+                const { messages, current_user_id } = response.data;
+
+                renderChatDetails(messages, current_user_id);
+            } catch (error) {
+                console.error(`فشل في جلب تفاصيل الشات ${chatId}:`, error.response?.data || error.message);
+            }
+        };
+
+        const renderChatDetails = (messages, currentUserId) => {
+            chatDetailsContainer.innerHTML = "";
+            messages.forEach(message => {
+                const isSent = message.sender_id === currentUserId;
+                const messageDiv = document.createElement("div");
+                messageDiv.classList.add("message", isSent ? "sent" : "received");
+                messageDiv.innerHTML = `
+            <p>${message.content}</p>
+            <span class="message-time">${formatTime(message.created_at)}</span>
+        `;
+                chatDetailsContainer.appendChild(messageDiv);
+            });
+        };
+
+        fetchChatList();
+        document.getElementById("message-input").addEventListener("keydown", async (event) => {
+            if (event.key === "Enter") {
+                const messageInput = event.target;
+                const messageContent = messageInput.value.trim();
+                if (!messageContent) {
+                    alert("يرجى كتابة رسالة قبل الإرسال.");
+                    return;
+                }
+
+                if (!currentChatId) {
+                    alert("يرجى اختيار محادثة أولاً.");
+                    return;
+                }
+
+                try {
+                    const response = await axiosInstance.post(`/chates/${currentChatId}/messages`, {
+                        content: messageContent,
+                    });
+
+                    console.log("تم إرسال الرسالة بنجاح:", response.data);
+
+                    messageInput.value = "";
+
+                    fetchChatDetails(currentChatId);
+                } catch (error) {
+                    console.error(
+                        "فشل في إرسال الرسالة:",
+                        error.response?.data || error.message
+                    );
+                    alert("حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى.");
+                }
+            }
+        });
+
+        setInterval(() => {
+            if (currentChatId) {
+                fetchChatDetails(currentChatId);
+            }
+        }, 5000);
+    </script>
+
+
+
+
+</div>
+
+
+<style>
+    .chat-interface {
+        display: flex;
+        width: 90%;
+        max-width: 1200px;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .chat-list {
+        width: 30%;
+        padding: 20px;
+        border-right: 1px solid #ddd;
+
+    }
+
+    .chat-list h2 {
+        color: #1c1c1e;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        padding: 8px 12px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-box input {
+        border: none;
+        outline: none;
+        margin-left: 10px;
+        flex: 1;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .chat-list-item {
+        display: flex;
+        align-items: center;
+        background-color: #e3d8ff;
+        margin-bottom: 10px;
+        border-radius: 20px;
+        transition: background-color 0.3s;
+        padding: 15px 25px;
+    }
+
+    .chat-list-item:hover {
+        background-color: #e3d8ff;
+    }
+
+    .chat-list-item img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+
+
+        content: '';
+        border-radius: 50%;
+        border: 2px solid #555;
+        box-sizing: border-box;
+        pointer-events: none;
+
+        padding: 2px;
+    }
+
+    .chat-list-item .chat-info {
+        flex: 1;
+    }
+
+    .chat-list-item .chat-info h3 {
+        font-size: 14px;
+        color: #1c1c1e;
+        margin-bottom: 5px;
+    }
+
+    .chat-list-item .chat-info p {
+        font-size: 12px;
+        color: #888;
+    }
+
+    .chat-list-item .chat-time {
+        font-size: 12px;
+        color: #888;
+    }
+
+    .chat-area {
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        position: relative;
+        height: 90vh;
+    }
+
+    .chat-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        background-color: #e3d8ff;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-header img {
+
+
+        content: '';
+        top: -1px;
+        left: -1px;
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        border: 3px solid #555;
+        box-sizing: border-box;
+        pointer-events: none;
+        padding: 2px;
+    }
+
+    .chat-header h3 {
+        font-size: 18px;
+        color: #1c1c1e;
+    }
+
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+
+    .message {
+        padding: 10px 15px;
+        margin: 10px 0;
+        border-radius: 12px;
+        font-size: 14px;
+        line-height: 1.4;
+        clear: both;
+        max-width: 250px;
+    }
+
+    .message.sent {
+        background-color: #e3d8ff;
+        color: #fff;
+        align-self: flex-end;
+        border-top-right-radius: 0;
+        margin-left: auto;
+        margin-right: 10px;
+    }
+
+    .message.received {
+        background-color: #4a4a56;
+        color: #fff;
+        align-self: flex-start;
+        border-top-left-radius: 0;
+        margin-left: 10px;
+        margin-right: auto;
+    }
+
+    .chat-input {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        border-top: 1px solid #ddd;
+    }
+
+    .chat-input input[type="text"] {
+        flex: 1;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 20px;
+        outline: none;
+        background-color: #fff;
+        font-size: 14px;
+        color: #555;
+        margin-right: 10px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-input button {
+        background-color: #a280ff;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-left: 10px;
+    }
+
+
+
+
+
+    @media (max-width: 1024px) {
+        .chat-interface {
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .chat-list {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .chat-list h2 {
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .chat-list-item {
+            padding: 10px 15px;
+            border-radius: 10px;
+        }
+
+        .chat-list-item img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .chat-list-item .chat-info h3 {
+            font-size: 12px;
+        }
+
+        .chat-list-item .chat-info p {
+            font-size: 10px;
+        }
+
+        .chat-list-item .chat-time {
+            font-size: 10px;
+        }
+
+        .chat-area {
+            width: 100%;
+            padding: 10px;
+            height: calc(100vh - 50px);
+        }
+
+        .chat-header {
+            padding: 5px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chat-header img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .chat-header h3 {
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .chat-messages {
+            padding-right: 5px;
+        }
+
+        .message {
+            font-size: 12px;
+            max-width: 80%;
+        }
+
+        .chat-input {
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .chat-input input[type="text"] {
+            width: 100%;
+            font-size: 12px;
+        }
+
+        .chat-input button {
+            width: 100%;
+            font-size: 14px;
+        }
+
+
+
+        .search-box {
+            display: flex;
+            width: 95%;
+            background-color: #fff;
+            padding: 8px 12px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+
+
+    }
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        justify-content: center;
+        max-width: 1400px;
+    }
+
+    .card {
+        background-color: #e3d8ff;
+        border-radius: 15px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        width: 250px;
+        overflow: hidden;
+        text-align: center;
+        transition: transform 0.3s;
+
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+    }
+
+    .video-thumbnail {
+        position: relative;
+        width: 100%;
+        padding-top: 177.78%;
+        overflow: hidden;
+        border-radius: 15px;
+        border: #e3d8ff 7px solid;
+    }
+
+    .video-thumbnail img,
+    .video-thumbnail video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+    .play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2rem;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: none;
+        border-radius: 50%;
+        padding: 15px;
+        cursor: pointer;
+    }
+
+    .creator-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+
+
+        content: '';
+        top: -1px;
+        left: -1px;
+        border-radius: 50%;
+        border: 2px solid #555;
+        box-sizing: border-box;
+        pointer-events: none;
+    }
+
+    .name {
+        font-weight: bold;
+        color: #333;
+        font-size: 1rem;
+    }
+
+    .rating {
+        font-size: 1rem;
+        color: #ffb400;
+    }
+
+    .message-time {
+        display: block;
+        font-size: 12px;
+        color: #bbb;
+        margin-top: 5px;
+        text-align: right;
+    }
+
+
+    .status-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+    .status-dot.online {
+        background-color: #4caf50;
+    }
+
+
+    .status-dot.offline {
+        background-color: #f44336;
+
+    }
+
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        justify-content: center;
+        max-width: 1400px;
+    }
+
+    .card {
+        background-color: #e3d8ff;
+        border-radius: 15px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        width: 250px;
+        overflow: hidden;
+        text-align: center;
+        transition: transform 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+    }
+
+    .video-thumbnail {
+        position: relative;
+        width: 100%;
+        padding-top: 177.78%;
+        overflow: hidden;
+        border-radius: 15px;
+        border: #e3d8ff 7px solid;
+    }
+
+    .video-thumbnail img,
+    .video-thumbnail video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .creator-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        padding: 2px;
+        border: 2px solid #555;
+    }
+
+    .name {
+        font-weight: bold;
+        color: #333;
+        font-size: 1rem;
+    }
+
+    .rating {
+        font-size: 1rem;
+        color: #ffb400;
+    }
+
+    .message-time {
+        display: block;
+        font-size: 12px;
+        color: #bbb;
+        margin-top: 5px;
+        text-align: right;
+    }
+
+    .status-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+    .status-dot.online {
+        background-color: #4caf50;
+    }
+
+    .status-dot.offline {
+        background-color: #f44336;
+    }
+
+    @media (max-width: 1024px) {
+        .cards {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .card {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .creator-info {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+        }
+
+        .name {
+            font-size: 0.9rem;
+        }
+
+        .rating {
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .cards {
+            grid-template-columns: 1fr;
+        }
+
+        .card {
+            width: 100%;
+        }
+
+        .video-thumbnail {
+            border: none;
+        }
+
+        .name,
+        .rating {
+            font-size: 0.8rem;
+        }
+
+        .add-service-button,
+        .edit-service-button,
+        .delete-service-button {
+            font-size: 0.9rem;
+
+        }
+
+    }
+</style>
+
+<div class="content" id="ProfileContent">
+    <div class="order-history">
+        <html lang="en">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Profile with Stats</title>
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <style>
+                .container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    width: 90%;
+                    max-width: 1200px;
+                    margin: 20px auto;
+                }
+
+                .profile-section {
+                    flex: 1;
+                    padding: 20px;
+                }
+
+                .profile-section h1 {
+                    font-size: 36px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+
+                .order-tabs a {
+                    text-decoration: none;
+                    font-size: 14px;
+                    font-weight: bold;
+                    background-color: #e3d8ff;
+                    color: #6b50ff;
+                    padding: 5px 10px;
+                    border-radius: 20px;
+                    margin-right: 5px;
+                    display: inline-block;
+                    margin-bottom: 10px;
+                }
+
+                .profile-section p {
+                    font-size: 16px;
+                    line-height: 1.6;
+                    margin: 10px 0;
+                }
+
+                .profile-section .btn {
+                    padding: 12px 24px;
+                    background-color: #e3d8ff;
+                    color: #6b50ff;
+                    border-radius: 25px;
+                    text-decoration: none;
+                    font-weight: bold;
+                    display: inline-block;
+                    margin-top: 10px;
+                }
+
+                .stats-section {
+                    flex: 1;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 10px;
+                    margin-bottom: 20px;
+                }
+
+                .stat-card {
+                    padding: 20px;
+                    text-align: center;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 25px;
+                    background-color: #b595bd31;
+                    margin: 0 12px;
+                }
+
+                .stat-card .icon {
+                    font-size: 24px;
+                    margin-bottom: 10px;
+                }
+
+                .stat-card h3 {
+                    font-size: 18px;
+                    margin: 8px 0;
+                }
+
+                .stat-card span {
+                    font-size: 12px;
+                    color: gray;
+                }
+
+                .stat-card .change {
+                    font-size: 12px;
+                    margin-top: 5px;
+                    font-weight: bold;
+                }
+
+                .stat-card .change.positive {
+                    color: green;
+                }
+
+                .stat-card .change.negative {
+                    color: red;
+                }
+
+                .charts-section {
+                    width: 100%;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    gap: 20px;
+                }
+
+                .chart-container {
+
+                    padding: 20px;
+                    flex: 1;
+                    height: 250px;
+                }
+
+                canvas {
+                    width: 100%;
+                    height: 100%;
+                }
+
+                .chat-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    margin-bottom: 20px;
+                    padding: 15px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+
+                .chat-header .user-avatar {
+                    position: relative;
+                    margin-left: 15px;
+                }
+
+                .chat-header .user-avatar img {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    border: 2px solid #555;
+                    object-fit: cover;
+                }
+
+                .chat-header .status-dot {
+                    position: absolute;
+                    bottom: 5px;
+                    right: 5px;
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    border: 2px solid #e3d8ff;
+                }
+
+                .status-dot.online {
+                    background-color: #4caf50;
+                }
+
+                .status-dot.offline {
+                    background-color: #f44336;
+                }
+
+                .chat-header .user-info {
+                    display: flex;
+                    margin: 5px;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 5px;
+                }
+
+                .chat-header .user-info h3 {
+                    font-size: 20px;
+                    color: #333;
+                }
+
+                .chat-header .user-info p {
+                    font-size: 14px;
+                    color: #666;
+                    margin: 0;
+                }
+
+
+                .dropdown {
+                    font-size: 14px;
+                    color: #999;
+                }
+
+
+                .explore-button {
+                    margin-top: 20px;
+                    padding: 12px 25px;
+                    font-size: 1.1rem;
+                    font-weight: bold;
+                    color: white;
+                    background-color: #6a50ff79;
+                    border: none;
+                    border-radius: 30px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                    margin-left: 40%;
+                }
+            </style>
+        </head>
+        <div class="container">
+            <div class="profile-section">
+                <h1>John Doe</h1>
+                <div class="order-tabs">
+                    <a href="#">#CEO</a>
+                    <a href="#">#DEV</a>
+                    <a href="#">#UGC</a>
+                    <a href="#">#AMJAD</a>
+                </div>
+                <p>This is my personal profile page.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua.</p>
+                <a href="Personal-info.html" class="btn">Get in touch</a>
+                <script>
+                    const baseURL = "http://localhost:8000/api";
+                    function loadProfileSection() {
+                        const authToken = localStorage.getItem('authToken');
+
+                        if (!authToken) {
+                            alert('يرجى تسجيل الدخول أولاً.');
+                            return;
+                        }
+
+                        axios.get(`${baseURL}/user`, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                                "Accept": "application/json"
+                            }
+                        })
+                            .then(userResponse => {
+                                const userData = userResponse.data;
+
+                                return axios.get(`${baseURL}/profile`, {
+                                    headers: {
+                                        Authorization: `Bearer ${authToken}`,
+                                    },
+                                })
+                                    .then(profileResponse => {
+                                        const profile = profileResponse.data;
+
+                                        const sidebarProfileImage = document.querySelector('.sidebar .profile-image img');
+                                        if (profile.profile_image) {
+                                            sidebarProfileImage.src = `http://localhost:8000/storage/${profile.profile_image}`;
+                                        } else {
+                                            sidebarProfileImage.src = "https://via.placeholder.com/150";
+                                        }
+
+
+                                        const profileName = document.querySelector('.profile-section h1');
+                                        profileName.textContent = `${userData.first_name || ''} ${userData.last_name || ''}`;
+
+                                        const orderTabs = document.querySelector('.profile-section .order-tabs');
+                                        orderTabs.innerHTML = '';
+                                        const hashtags = (profile.hashtags || '').split(' ');
+                                        hashtags.forEach(tag => {
+                                            const tagElement = document.createElement('a');
+                                            tagElement.href = '#';
+                                            tagElement.textContent = `${tag.trim()}`;
+                                            orderTabs.appendChild(tagElement);
+                                        });
+
+                                        const profileDescription = document.querySelector('.profile-section p:nth-of-type(2)');
+                                        profileDescription.textContent = profile.service_description || 'لا يوجد وصف متاح.';
+
+                                        const sidebarName = document.querySelector('.sidebar h2');
+                                        sidebarName.textContent = `${userData.first_name || ''} ${userData.last_name || ''}`;
+                                    });
+                            })
+                            .catch(error => {
+                                console.error('حدث خطأ أثناء جلب البيانات:', error);
+                                alert('لم يتم جلب البيانات. حاول مرة أخرى.');
+                            });
+                    }
+
+                    document.addEventListener('DOMContentLoaded', loadProfileSection);
+
+                </script>
+            </div>
+
+            <div class="stats-section">
+                <div class="stat-card">
+                    <div class="icon" style="color: #9b89ff;"><i class="fas fa-tasks"></i></div>
+                    <span>Total Orders</span>
+                    <h3>120</h3>
+                    <div class="change positive">↑ 72.8%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon" style="color: #9b89ff;"><i class="fas fa-layer-group"></i></div>
+                    <span>Published Services</span>
+                    <h3>45</h3>
+                    <div class="change positive">↑ 28.42%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon" style="color: #9b89ff;"><i class="fas fa-check-circle"></i></div>
+                    <span>Accepted Orders</span>
+                    <h3>32</h3>
+                    <div class="change negative">↓ 14.82%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon" style="color: #9b89ff;"><i class="fas fa-dollar-sign"></i></div>
+                    <span>Total Earnings</span>
+                    <h3>$14,857</h3>
+                    <div class="change positive">↑ 28.14%</div>
+                </div>
+            </div>
+
+
+
+            <div class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h4>Orders</h4>
+                        <span class="dropdown">Daily Orders ▼</span>
+                    </div>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h4>Order Status</h4>
+                        <span class="dropdown">Approved & Total Orders ▼</span>
+                    </div>
+                    <canvas id="visitsChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <script>
+            function loadChartsData() {
+                const authToken = localStorage.getItem('authToken');
+
+                if (!authToken) {
+                    alert('يرجى تسجيل الدخول أولاً.');
+                    return;
+                }
+
+                axios.get('http://localhost:8000/api/statistics-data', {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                })
+                    .then(response => {
+                        const stats = response.data;
+
+                        if (!stats || !stats.dailyOrders || !stats.orderStatus) {
+                            console.error('البيانات المستلمة غير مكتملة:', stats);
+                            alert('لم يتم استلام البيانات المطلوبة بالكامل.');
+                            return;
+                        }
+
+                        updateRevenueChart(stats.dailyOrders);
+                        updateVisitsChart({
+                            approved_orders: stats.orderStatus.approved_orders || 0,
+                            total_orders: stats.orderStatus.total_orders || 0,
+                        });
+                    })
+                    .catch(error => {
+                        console.error('خطأ أثناء جلب البيانات:', error);
+                        if (error.response) {
+                            console.error('تفاصيل الخطأ من الخادم:', error.response.data);
+                        }
+                        alert('فشل في جلب البيانات. تحقق من الاتصال أو حاول مرة أخرى.');
+                    });
+            }
+
+            function updateRevenueChart(dailyOrders) {
+                try {
+                    const labels = dailyOrders.map(order => order.day);
+                    const dataValues = dailyOrders.map(order => order.count);
+
+                    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+                    new Chart(revenueCtx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Daily Orders',
+                                    data: dataValues,
+                                    borderColor: '#9b89ff',
+                                    backgroundColor: '#e3d8ff98',
+                                    tension: 0.4,
+                                    fill: true,
+                                },
+                            ],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top',
+                                    labels: { color: '#333' },
+                                },
+                            },
+                            scales: {
+                                x: { grid: { display: false } },
+                                y: { grid: { color: '#eee' }, ticks: { beginAtZero: true } },
+                            },
+                        },
+                    });
+                } catch (error) {
+                    console.error('خطأ أثناء تحديث رسم الإيرادات:', error);
+                }
+            }
+
+            function updateVisitsChart(orderStatus) {
+                const visitsCtx = document.getElementById('visitsChart').getContext('2d');
+                const approvedOrders = orderStatus.approved_orders || 0;
+                const totalOrders = orderStatus.total_orders || 0;
+
+                if (!visitsCtx) {
+                    console.error('Canvas for visitsChart not found.');
+                    return;
+                }
+
+                new Chart(visitsCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Approved Orders', 'Pending Orders'],
+                        datasets: [
+                            {
+                                data: [approvedOrders, totalOrders - approvedOrders],
+                                backgroundColor: ['#9b89ff', '#e3d8ff98'],
+                                borderWidth: 1,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: { color: '#333' },
+                            },
+                        },
+                    },
+                });
+            }
+
+            function loadStatistics() {
+                const authToken = localStorage.getItem('authToken');
+
+                if (!authToken) {
+                    alert('يرجى تسجيل الدخول أولاً.');
+                    return;
+                }
+
+                axios.get('http://localhost:8000/api/statistics', {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                })
+                    .then(response => {
+                        const stats = response.data;
+
+                        if (!stats) {
+                            console.error('لم يتم استلام الإحصائيات:', stats);
+                            alert('فشل في تحميل الإحصائيات.');
+                            return;
+                        }
+
+                        updateCard('.stat-card:nth-child(1)', `${stats.profit}`, stats.profitChange);
+                        updateCard('.stat-card:nth-child(2)', stats.sales, stats.salesChange);
+                        updateCard('.stat-card:nth-child(3)', stats.payments, stats.paymentsChange);
+                        updateCard('.stat-card:nth-child(4)', `$${stats.transactions}`, stats.transactionsChange);
+                    })
+                    .catch(error => {
+                        console.error('خطأ أثناء جلب الإحصائيات:', error);
+                        if (error.response) {
+                            console.error('تفاصيل الخطأ من الخادم:', error.response.data);
+                        }
+                        alert('فشل في جلب الإحصائيات. تحقق من الاتصال أو حاول مرة أخرى.');
+                    });
+            }
+
+            function updateCard(selector, value, change) {
+                try {
+                    const card = document.querySelector(selector);
+
+                    if (!card) {
+                        console.warn(`العنصر ${selector} غير موجود في DOM.`);
+                        return;
+                    }
+
+                    card.querySelector('h3').textContent = value;
+                    const changeElement = card.querySelector('.change');
+                    changeElement.textContent = change > 0 ? `↑ ${change}%` : `↓ ${Math.abs(change)}%`;
+                    changeElement.classList.toggle('positive', change > 0);
+                    changeElement.classList.toggle('negative', change < 0);
+                } catch (error) {
+                    console.error(`خطأ أثناء تحديث الكارد ${selector}:`, error);
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                loadChartsData();
+                loadStatistics();
+            });
+        </script>
+
+
+
+    </div>
+</div>
+
+
+
+<div class="content" id="WishContent">
+    <div class="order-history">
+
+        <div class="cards" id="cardsContainer">
+            <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const cardsContainer = document.getElementById("cardsContainer");
+    const authToken = localStorage.getItem("authToken");
+
+    if (!authToken) {
+        alert("لم يتم العثور على التوكن. يرجى تسجيل الدخول.");
+        return;
+    }
+
+    axios.get('http://localhost:8000/api/profile', {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        }
+    })
+    .then(profileResponse => {
+        const profileData = profileResponse.data;
+
+        const profileImage = profileData.profile_image ?
+            `http://localhost:8000/storage/${profileData.profile_image}` :
+            'https://via.placeholder.com/150';
+
+        axios.get('http://localhost:8000/api/wishlist', {
+            headers: { Authorization: `Bearer ${authToken}` }
+        })
+        .then(response => {
+            const wishlist = response.data;
+
+            if (!wishlist || wishlist.length === 0) {
+                cardsContainer.innerHTML = "<p>لا توجد فيديوهات محفوظة حاليًا.</p>";
+                return;
+            }
+
+            wishlist.forEach(item => {
+                const profileImages = item.profile_image ?
+                    `http://localhost:8000/storage/${item.profile_image}` :
+                    'https://via.placeholder.com/150';
+
+                const videoSrc = item.video_url ? item.video_url : 'fallback-video.mp4';
+
+                const cardHtml = `
+                    <div class="card">
+                        <div class="video-thumbnail">
+                            <video src="${videoSrc}" controls data-service-id="${item.service_id}">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="creator-info">
+                            <img src="${profileImages}" class="avatar" alt="Creator">
+                            <span class="name">${item.creator_name}</span>
+                            <span class="rating">★ 4.8</span>
+                        </div>
+                    </div>
+                `;
+                cardsContainer.insertAdjacentHTML("beforeend", cardHtml);
+            });
+
+            const videos = document.querySelectorAll(".video-thumbnail video");
+            videos.forEach((video) => {
+                video.addEventListener("click", function () {
+                    const serviceId = this.getAttribute("data-service-id");
+                    window.location.href = `description-page.html?id=${serviceId}`;
+                });
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching wishlist:", error);
+            cardsContainer.innerHTML = "<p>حدث خطأ أثناء تحميل الفيديوهات المحفوظة.</p>";
+        });
+    })
+    .catch(error => {
+        console.error("Error fetching profile:", error);
+        alert("حدث خطأ أثناء تحميل بيانات البروفايل.");
+    });
+});
+</script>
+
+            <div class="card">
+                <div class="video-thumbnail">
+                    <video src="s6.mp4" alt="Video thumbnail"></video>
+                </div>
+                <div class="creator-info">
+                    <img src="p5.png" class="avatar" alt="Creator">
+                    <span class="name">Brie, Tennessee</span>
+                    <span class="rating">★ 4.8</span>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="video-thumbnail">
+                    <video src="s7.mp4" alt="Video thumbnail"></video>
+                </div>
+                <div class="creator-info">
+                    <img src="p6.png" class="avatar" alt="Creator">
+                    <span class="name">Brie, Tennessee</span>
+                    <span class="rating">★ 4.8</span>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="video-thumbnail">
+                    <video src="s4.mp4" alt="Video thumbnail"></video>
+                </div>
+                <div class="creator-info">
+                    <img src="p1.png" class="avatar" alt="Creator">
+                    <span class="name">Brie, Tennessee</span>
+                    <span class="rating">★ 4.8</span>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="video-thumbnail">
+                    <video src="s1.mp4" alt="Video thumbnail"></video>
+                </div>
+                <div class="creator-info">
+                    <img src="p2.png" class="avatar" alt="Creator">
+                    <span class="name">Brie, Tennessee</span>
+                    <span class="rating">★ 4.8</span>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="explore-button">Explore creators</button>
+
+    </div>
+
+
+    <script>
+        function showOrders() {
+            document.getElementById('orderContent').classList.add('active');
+            document.getElementById('ChatContent').classList.remove('active');
+            document.getElementById('ProfileContent').classList.remove('active');
+            document.getElementById('WishContent').classList.remove('active');
+            document.getElementById('servicesContent').classList.remove('active');
+
+        }
+
+        function showChat() {
+            document.getElementById('ChatContent').classList.add('active');
+            document.getElementById('orderContent').classList.remove('active');
+            document.getElementById('ProfileContent').classList.remove('active');
+            document.getElementById('WishContent').classList.remove('active');
+            document.getElementById('servicesContent').classList.remove('active');
+
+        }
+
+
+        function showProfile() {
+            document.getElementById('ProfileContent').classList.add('active');
+            document.getElementById('orderContent').classList.remove('active');
+            document.getElementById('ChatContent').classList.remove('active');
+            document.getElementById('WishContent').classList.remove('active');
+            document.getElementById('servicesContent').classList.remove('active');
+
+        }
+
+
+
+        function showWish() {
+            document.getElementById('WishContent').classList.add('active');
+            document.getElementById('orderContent').classList.remove('active');
+            document.getElementById('ChatContent').classList.remove('active');
+            document.getElementById('ProfileContent').classList.remove('active');
+            document.getElementById('servicesContent').classList.remove('active');
+
+        }
+
+
+        function showServices() {
+            document.getElementById('servicesContent').classList.add('active');
+            document.getElementById('orderContent').classList.remove('active');
+            document.getElementById('ChatContent').classList.remove('active');
+            document.getElementById('ProfileContent').classList.remove('active');
+            document.getElementById('WishContent').classList.remove('active');
+
+        }
+
+
+
+        window.onload = function () {
+            showProfile();
+        };
+    </script>
+
+    </body>
+
+</html>

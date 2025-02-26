@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="en">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const authToken = localStorage.getItem('authToken');
+
+        const loginLink = document.querySelector('a.login');
+        if (authToken && loginLink) {
+            loginLink.style.display = 'none';
+        }
+
+        axios.get('http://localhost:8000/api/user-type', {
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+            }
+        })
+            .then(response => {
+                const userType = response.data.user_type;
+
+                let linkContainer = document.getElementById('user-link');
+                if (userType === 'creator') {
+                    linkContainer.href = "creator-interface.html";
+                    linkContainer.textContent = "Become a creator";
+                } else if (userType === 'business') {
+                    linkContainer.href = "profile-user.html";
+                    linkContainer.textContent = "My Account";
+                } else if (userType === 'support') {
+                    linkContainer.href = "creator-interface.html";
+                    linkContainer.textContent = "Become a creator";
+
+                    const socialIcons = document.querySelector('.footer-bottom .social-icons');
+                    if (socialIcons) {
+                        const adminLink = document.createElement('a');
+                        adminLink.href = "admin.html";
+                        adminLink.innerHTML = '<i class="fa fa-home"></i>';
+                        socialIcons.appendChild(adminLink);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user type:', error);
+            });
+    });
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UGC Platform</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <title>Ugc.com</title>
+    <div class="promo-bar">
+        <div class="contact-info">
+            <span><i class="fas fa-phone"></i> 06 00 00 00 00</span>
+            <span><i class="fas fa-envelope"></i> example@ugc.com</span>
+        </div>
+        <div class="promo-text">
+            Boost your brand with authentic <a href="#">creator videos at UGC.com!</a>.
+        </div>
+        <div class="social-icons">
+            <i class="fab fa-whatsapp"></i>
+            <i class="fab fa-facebook"></i>
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-tiktok"></i>
+        </div>
+    </div>
+    <nav>
+        <a href="index.html" class="logo">Ugc.com</a>
+
+        <div class="menu-icon">
+            <i class="fa fa-bars"></i>
+        </div>
+        <ul class="nav-menu">
+            <li class="services">
+                <a href="#">Services</a>
+                <ul>
+                    <li><a href="by-platform.html">by platform</a></li>
+                    <li><a href="by-business-type.html">by business type</a></li>
+                </ul>
+            </li>
+            <li><a href="creators.html">Creators</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="About-Us.html">About Us</a></li>
+            <li><a href="Blog.html">Blog</a></li>
+
+            <li class="cta-buttons">
+                <a href="Login&SigneUp.html" class="login">Login</a>
+
+<body class="light-mode">
+    <button id="dark-mode-toggle">
+        <span class="material-icons">dark_mode</span>
+    </button>
+
+    <a id="user-link" href="Login&SigneUp.html" class="get-started">Get Started</a>
+
+    </li>
+    </ul>
+    </nav>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButton = document.getElementById('dark-mode-toggle');
+            const body = document.body;
+            const icon = toggleButton.querySelector('.material-icons');
+
+            const savedMode = localStorage.getItem('dark-mode');
+            if (savedMode === 'enabled') {
+                body.classList.add('dark-mode');
+                icon.textContent = 'light_mode';
+            }
+
+            toggleButton.addEventListener('click', () => {
+                if (body.classList.contains('dark-mode')) {
+                    body.classList.remove('dark-mode');
+                    icon.textContent = 'dark_mode';
+                    localStorage.setItem('dark-mode', 'disabled');
+                } else {
+                    body.classList.add('dark-mode');
+                    icon.textContent = 'light_mode';
+                    localStorage.setItem('dark-mode', 'enabled');
+                }
+            });
+        });
+    </script>
+
+    </head>
+    <script>
+
+
+        const menuIcon = document.querySelector('.menu-icon');
+        const navMenu = document.querySelector('.nav-menu');
+
+        menuIcon.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+    </script>
+
+    <style>
+        .form-section input,
+        .form-section textarea,
+        .form-section select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            background: transparent;
+            color: #555;
+        }
+
+        .radio {
+            display: inline;
+        }
+
+        .body-con {
+            background: linear-gradient(135deg, rgba(186, 104, 200, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+        }
+
+        .ugc-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Helvetica Neue', sans-serif;
+            color: #333;
+            border-radius: 12px;
+            padding: 50px;
+        }
+
+        .ugc-text {
+            width: 50%;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #e3d8ff;
+            color: #6b50ff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .ugc-section h1 {
+            font-size: 2.5rem;
+            line-height: 1.2;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .ugc-section p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .primary-btn {
+            background-color: #000;
+            color: #fff;
+            border: none;
+        }
+
+        .primary-btn:hover {
+            background-color: #333;
+        }
+
+        .secondary-btn {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #000;
+        }
+
+        .secondary-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .image-container {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .phone-frame-1 {
+            position: relative;
+            width: 300px;
+            height: 600px;
+            background: #000;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .phone-frame-1::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 5px;
+            background-color: #999;
+            border-radius: 5px;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50px;
+        }
+
+        .phone-screen video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 37px;
+        }
+
+        .hashtag-container {
+            position: absolute;
+            background-color: #a080ff9f;
+            padding: 8px 16px;
+            border-radius: 15px;
+            color: white;
+            font-size: 0.9rem;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: floatHashtags 3s infinite;
+        }
+
+        .hashtag-container.left {
+            left: -25px;
+        }
+
+        .hashtag-container.right {
+            right: -160px;
+        }
+
+        @keyframes floatHashtags {
+            0% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+
+            25% {
+                transform: translateX(-50%) translateY(-10px);
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(10px);
+                opacity: 1;
+            }
+
+            75% {
+                transform: translateX(-50%) translateY(-10px);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .left-s,
+        .right-s {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .about-container {
+            background-color: linear-gradient(135deg, rgba(186, 104, 200, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+            padding: 20px;
+            border-radius: 8px;
+            width: 500px;
+        }
+
+        .about-header {
+            font-size: 2.1rem;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 30px;
+            font-family: 'Helvetica Neue', sans-serif;
+
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .profile-picture {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 30px;
+            font-family: 'Helvetica Neue', sans-serif;
+
+        }
+
+
+        .profile-info h3 {
+            display: flex;
+            color: #555;
+            margin-bottom: 0px;
+            font-family: 'Helvetica Neue', sans-serif;
+
+        }
+
+
+        .rating {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .rating i {
+            color: #ffb400;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .buttons button {
+            padding: 8px 16px;
+            border-radius: 25px;
+            border: 1px solid #555;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .buttons button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .details-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 30px;
+            font-family: 'Helvetica Neue', sans-serif;
+
+        }
+
+        .details-box .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        .bio-text {
+
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 30px;
+            font-family: 'Helvetica Neue', sans-serif;
+
+        }
+
+        :root {
+            --primary-color: #5E60CE;
+            --secondary-color: #6b50ff;
+            --accent-color: #9f80ff;
+            --gradient-bg: linear-gradient(135deg, rgba(186, 104, 200, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+        }
+
+        h6 {
+            color: #aaa;
+            padding: 25px;
+        }
+
+        .form-title {
+            font-size: 2.5rem;
+            line-height: 1.2;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .form-container {
+            padding: 30px;
+            width: 500px;
+            text-align: center;
+        }
+
+
+
+        .icon {
+            font-size: 30px;
+            color: #333;
+            cursor: pointer;
+            transition: transform 0.2s, color 0.3s;
+        }
+
+        .icon.selected {
+            color: var(--secondary-color);
+            transform: scale(1.2);
+        }
+
+
+        .platform-section.active {
+            display: block;
+        }
+
+        .video-type-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .video-type {
+            font-size: 16px;
+            padding: 5px 10px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .video-type.selected {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .input-group {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .input-group.active {
+            display: block;
+        }
+
+        label {
+            margin-top: 10px;
+            color: #aaa;
+        }
+
+        select,
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        select:focus,
+        input[type="number"]:focus {
+            border-color: var(--secondary-color);
+        }
+
+        .price {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #aaa;
+        }
+
+        @media only screen and (max-width: 1024px) {
+            .ugc-section {
+                flex-direction: column;
+                padding: 20px;
+                text-align: center;
+            }
+
+            .ugc-text {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .image-container {
+                width: 100%;
+            }
+
+            .phone-frame-1 {
+                width: 200px;
+                height: 400px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .primary-btn,
+            .secondary-btn {
+                width: 100%;
+            }
+
+            .container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .left-s,
+            .right-s {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .about-container {
+                width: 100%;
+                padding: 15px;
+            }
+
+            .details-box {
+                font-size: 1rem;
+                padding: 10px;
+            }
+
+            .profile-picture {
+                width: 50px;
+                height: 50px;
+            }
+
+            .profile-info h3 {
+                font-size: 1rem;
+            }
+
+            .form-title {
+                font-size: 2rem;
+            }
+        }
+
+        .form-section {
+            width: 50%;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .form-section form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: -150px;
+        }
+
+        .form-section input,
+        .form-section textarea,
+        .form-section select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            background: transparent;
+        }
+
+        .form-section input:focus,
+        .form-section textarea:focus,
+        .form-section select:focus {
+            outline: none;
+            border-bottom-color: #6b50ff;
+        }
+
+        .form-section textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        .form-section button {
+            padding: 20px;
+            background-color: #6b50ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        [type=button]:not(:disabled),
+        [type=reset]:not(:disabled),
+        [type=submit]:not(:disabled),
+        button:not(:disabled) {
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .form-section button:hover {
+            background-color: #5438cc;
+        }
+    </style>
+    <title>Document</title>
+    <div class="body-con">
+        <section class="ugc-section">
+            <div class="image-container">
+                <div class="phone-frame-1">
+                    <div class="phone-screen">
+                        <video id="previewVideo" controls>
+                            <source id="videoSource" src="s5.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="hashtag-container left" style="top: 30%;">#ContentCreation</div>
+                    <div class="hashtag-container left" style="top: 50%;">#BrandAuthenticity</div>
+
+                    <div class="hashtag-container right" style="top: 20%;">#UserGeneratedContent</div>
+                    <div class="hashtag-container right" style="top: 40%;">#SocialMediaMarketing</div>
+                    <div class="hashtag-container right" style="top: 60%;">#GrowthHacking</div>
+                </div>
+            </div>
+
+
+            <title>Form Section</title>
+            <style>
+                .form-section {
+                    width: 90%;
+                    max-width: 500px;
+                    padding: 20px;
+                    border-radius: 10px;
+                }
+
+                .form-section form {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+
+                .form-section input,
+                .form-section textarea,
+                .form-section select {
+                    width: 100%;
+                    padding: 10px;
+                    font-size: 16px;
+                    border: none;
+                    border-bottom: 2px solid #ccc;
+                    background: transparent;
+                }
+
+                .form-section input:focus,
+                .form-section textarea:focus,
+                .form-section select:focus {
+                    outline: none;
+                    border-bottom-color: #6b50ff;
+                }
+
+                .form-section textarea {
+                    resize: none;
+                    height: 100px;
+                }
+
+                .form-section button {
+                    padding: 10px 20px;
+                    background-color: #6b50ff;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    cursor: pointer;
+                }
+
+                .form-section button:hover {
+                    background-color: #5438cc;
+                }
+
+                .platform-icon-bt :hover {
+                    font-size: 27px;
+
+                }
+            </style>
+            </head>
+
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+            <body>
+                <div class="form-section">
+                    <form id="customForm" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="platforms">Select Platforms</label>
+                            <div id="platformIcons" class="platform-icons">
+                                <div type="button" class="platform-icon-bt" data-platform="facebook"
+                                    onclick="togglePlatformSelection('facebook')">
+                                    <i class="fab fa-facebook-f" style="color: rgb(226, 181, 226);"></i>
+                                </div>
+                                <div type="button" class="platform-icon-bt" data-platform="instagram"
+                                    onclick="togglePlatformSelection('instagram')">
+                                    <i class="fab fa-instagram" style="color: rgb(226, 181, 226);"></i>
+                                </div>
+                                <div type="button" class="platform-icon-bt" data-platform="tiktok"
+                                    onclick="togglePlatformSelection('tiktok')">
+                                    <i class="fab fa-tiktok" style="color: rgb(226, 181, 226);"></i>
+                                </div>
+                                <div type="button" class="platform-icon-bt" data-platform="youtube"
+                                    onclick="togglePlatformSelection('youtube')">
+                                    <i class="fab fa-youtube" style="color: rgb(226, 181, 226);"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Service Type</label>
+                            <div>
+                                <label class="radio"><input type="radio" name="paymentType" value="free"
+                                        onchange="togglePaymentFields()"> Free</label>
+                                <label class="radio"><input type="radio" name="paymentType" value="paid"
+                                        onchange="togglePaymentFields()"> Paid</label>
+                            </div>
+                        </div>
+                        <div id="platformDetails">
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" id="title" name="title" placeholder="Enter title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Select Category</label>
+                            <select id="category" name="category">
+                                <option value="technology">Technology</option>
+                                <option value="education">Education</option>
+                                <option value="entertainment">Entertainment</option>
+                                <option value="health">Health</option>
+                                <option value="fashion">Fashion</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fileUpload">Upload Video or Image Files</label>
+                            <input type="file" id="fileUpload" name="uploadedFiles" accept="video/*,image/*" multiple>
+                        </div>
+                        <script>
+                            document.getElementById('fileUpload').addEventListener('change', function (event) {
+                                const file = event.target.files[0];
+                                if (file && file.type.startsWith('video/')) {
+                                    const videoSource = document.getElementById('videoSource');
+                                    const videoPlayer = document.getElementById('previewVideo');
+
+                                    videoSource.src = URL.createObjectURL(file);
+
+                                    videoPlayer.load();
+                                } else {
+                                    alert('Please upload a valid video file.');
+                                }
+                            });
+                            window.onload = function () {
+                                document.getElementById('fileUpload').addEventListener('change', function (event) {
+                                    const file = event.target.files[0];
+                                    if (file && file.type.startsWith('video/')) {
+                                        const videoSource = document.getElementById('videoSource');
+                                        const videoPlayer = document.getElementById('previewVideo');
+                                        videoSource.src = URL.createObjectURL(file);
+                                        videoPlayer.load();
+                                    } else {
+                                        alert('Please upload a valid video file.');
+                                    }
+                                });
+                            };
+
+                        </script>
+                        <div>
+                            <textarea name="description" id="description"
+                                onfocus="setCaretToEnd(this)">I create engaging UGC (User-Generated Content) videos tailored to showcase your brand, product, or service authentically, helping you connect with your audience and boost engagement ... </textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="hashtags">Hashtags</label>
+                            <input type="text" id="hashtags" name="hashtags"
+                                placeholder="#hashtag1 #hashtag2 #hashtag3 #hashtag4 #hashtag5 ">
+                        </div>
+                        <script>
+                            document.getElementById('hashtags').addEventListener('input', function (event) {
+                                const hashtagsInput = event.target.value;
+                                const hashtags = hashtagsInput.split(/\s+/);
+
+                                const hashtagContainers = document.querySelectorAll('.hashtag-container');
+
+                                hashtagContainers.forEach((container, index) => {
+                                    if (hashtags[index]) {
+                                        container.textContent = hashtags[index];
+                                    } else {
+                                        container.textContent = '';
+                                    }
+                                });
+                            });
+                        </script>
+
+
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+
+                <script>
+                    let selectedPlatforms = [];
+                    let platforms = [];
+
+                    function togglePaymentFields() {
+                        const paymentType = document.querySelector('input[name="paymentType"]:checked').value;
+                        const priceFields = document.querySelectorAll('input[name^="price"]');
+
+                        priceFields.forEach((field) => {
+                            if (paymentType === 'free') {
+                                field.value = 0;
+                                field.setAttribute('readonly', true);
+                            } else {
+                                field.removeAttribute('readonly');
+                            }
+                        });
+                    }
+
+                    function togglePlatformSelection(platform) {
+                        const platformDetails = document.getElementById("platformDetails");
+
+                        if (selectedPlatforms.includes(platform)) {
+                            selectedPlatforms = selectedPlatforms.filter((p) => p !== platform);
+                            const platformSection = document.getElementById(`platform-${platform}`);
+                            if (platformSection) {
+                                platformSection.remove();
+                            }
+                        } else {
+                            selectedPlatforms.push(platform);
+
+                            const platformSection = document.createElement("div");
+                            platformSection.id = `platform-${platform}`;
+                            platformSection.innerHTML = `
+                    <h3>${platform.charAt(0).toUpperCase() + platform.slice(1)} Details</h3>
+                    <div id="videoTypeContainer-${platform}">
+                        <!-- الحقول الخاصة بالمنصة -->
+                    </div>
+                    <button type="button" onclick="addVideoType('${platform}')">Add Video Type</button>
+                    <hr>
+                `;
+                            platformDetails.appendChild(platformSection);
+                        }
+                    }
+
+                    function addVideoType(platform) {
+                        const container = document.getElementById(`videoTypeContainer-${platform}`);
+
+                        const videoTypeFields = document.createElement("div");
+                        videoTypeFields.className = "video-type-fields";
+                        videoTypeFields.innerHTML = `
+                <label>Video Type</label>
+                <select name="videoType[${platform}][]" required>
+                    <option value="story">Story</option>
+                    <option value="post">Post</option>
+                    <option value="reel">Reel</option>
+                    <option value="ad">Ad</option>
+                </select>
+        
+                <label>Price</label>
+                <input type="number" name="price[${platform}][]" placeholder="Enter price" required>
+        
+                <label>Duration (in minutes)</label>
+                <input type="number" name="duration[${platform}][]" placeholder="Enter duration" required>
+        
+                <button type="button" onclick="removeVideoType(this)">Remove</button>
+                <hr>
+            `;
+                        container.appendChild(videoTypeFields);
+
+                        togglePaymentFields();
+                    }
+
+                    function removeVideoType(button) {
+                        button.parentElement.remove();
+                    }
+
+                    async function submitForm(event) {
+                        event.preventDefault();
+
+                        const form = new FormData(event.target);
+                        platforms = [];
+
+                        selectedPlatforms.forEach(platform => {
+                            const videoTypeFields = document.querySelectorAll(`select[name="videoType[${platform}][]"]`);
+                            const timeFields = document.querySelectorAll(`input[name="duration[${platform}][]"]`);
+                            const priceFields = document.querySelectorAll(`input[name="price[${platform}][]"]`);
+
+                            videoTypeFields.forEach((field, index) => {
+                                const videoType = field.value;
+                                const time = timeFields[index]?.value || '';
+                                const price = priceFields[index]?.value || '';
+
+                                if (videoType && time) {
+                                    platforms.push({
+                                        name: platform,
+                                        videoType,
+                                        time,
+                                        price: price || null,
+                                    });
+                                }
+                            });
+                        });
+
+                        if (platforms.length === 0) {
+                            alert('Please select at least one platform and fill in the details.');
+                            return;
+                        }
+
+                        form.append('platforms', JSON.stringify(platforms));
+                        try {
+                            const authToken = localStorage.getItem("authToken");
+
+                            if (!authToken) {
+                                alert("لم يتم العثور على التوكن. يرجى تسجيل الدخول.");
+                                return;
+                            }
+
+                            const response = await axios.post('http://localhost:8000/api/services', form, {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data',
+                                    Authorization: `Bearer ${authToken}`
+                                }
+                            });
+
+                            if (response.status === 201) {
+                                alert('Service created successfully!');
+                                console.log(response.data);
+                            }
+                        } catch (error) {
+                            if (error.response) {
+                                console.error('Error:', error.response.data);
+                                alert(`Error: ${error.response.data.error}`);
+                            } else {
+                                console.error('Unexpected error:', error.message);
+                            }
+                        }
+                    }
+
+                    document.getElementById('customForm').addEventListener('submit', submitForm);
+                </script>
+
+
+
+
+            </body>
+
+
+            <script>
+                document.getElementById('customForm').addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    const form = new FormData(this);
+                    const platforms = [];
+
+                    selectedPlatforms.forEach(platform => {
+                        const videoType = document.querySelector(`select[name="${platform}_videoType"]`)?.value || '';
+                        const time = document.querySelector(`input[name="${platform}_time"]`)?.value || '';
+                        const price = document.querySelector(`input[name="${platform}_price"]`)?.value || '';
+
+                        if (videoType && time) {
+                            platforms.push({
+                                name: platform,
+                                videoType,
+                                time,
+                                price: price || null,
+                            });
+                        }
+                    });
+
+                    if (platforms.length === 0) {
+                        return;
+                    }
+
+                    form.append('platforms', JSON.stringify(platforms));
+                    try {
+                        const authToken = localStorage.getItem("authToken");
+
+                        if (!authToken) {
+                            alert("لم يتم العثور على التوكن. يرجى تسجيل الدخول.");
+                            return;
+                        }
+
+                        const response = await axios.post('http://localhost:8000/api/services', form, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                                Authorization: `Bearer ${authToken}`
+                            }
+                        });
+
+                        if (response.status === 201) {
+                            alert('Service created successfully!');
+                            console.log(response.data);
+                        }
+                    } catch (error) {
+                        if (error.response) {
+                            console.error('Error:', error.response.data);
+                            alert(`Error: ${error.response.data.error}`);
+                        } else {
+                            console.error('Unexpected error:', error.message);
+                        }
+                    }
+                });
+
+                console.log('Platforms:', JSON.stringify(platforms));
+
+            </script>
+
+            <style>
+                .form-section {
+                    width: 90%;
+                    max-width: 600px;
+                    margin: auto;
+                    padding: 20px;
+                    background: #f9f9f9;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+
+                .form-group {
+                    margin-bottom: 15px;
+                }
+
+                .form-group label {
+                    margin-bottom: 5px;
+                    font-weight: bold;
+                    display: inline-flex;
+                    padding: 15px;
+
+                }
+
+                .form-group input,
+                .form-group textarea,
+                .form-group select {
+                    width: 100%;
+                    padding: 8px;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    font-size: 14px;
+                    margin-right: 15px;
+                }
+
+                .platform-icons {
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .platform-icon-bt {
+                    width: 50px;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    cursor: pointer;
+                    border: 1px solid #ccc;
+                    border-radius: 50%;
+                    transition: all 0.3s ease;
+                }
+
+                button {
+                    background-color: #6b50ff;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    cursor: pointer;
+                }
+
+                button:hover {
+                    background-color: #5438cc;
+                }
+
+                .platform-container {
+                    margin-top: 10px;
+                    padding: 10px;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 5px;
+                    background-color: #f0f0f0;
+                }
+
+                h6 {
+                    margin-bottom: 10px;
+                    color: #333;
+                }
+            </style>
+            <style>
+                .form-container {
+                    max-width: 500px;
+                    margin: auto;
+                    padding: 20px;
+                    border-radius: 10px;
+                }
+
+                .form-group {
+                    margin-bottom: 15px;
+                }
+
+                .form-group.full {
+                    width: 100%;
+                }
+
+                textarea,
+                input[type="text"],
+                input[type="number"],
+                input[type="file"] {
+                    width: 100%;
+                    padding: 10px;
+                    margin-top: 5px;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                }
+
+                button.submit-btn {
+                    display: block;
+                    width: 100%;
+                    padding: 10px;
+                    background-color: #007bff;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+
+                button.submit-btn:hover {
+                    background-color: #0056b3;
+                }
+
+                .platform-icons {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-around;
+                    margin-top: 150px;
+                    padding: 25px;
+                    justify-content: center;
+                    gap: 15px;
+                }
+
+
+                .icon {
+                    font-size: 24px;
+                    cursor: pointer;
+                    color: #555;
+                }
+
+                .icon.selected {
+                    color: #007bff;
+                }
+
+                .platform-section {
+                    margin-top: 20px;
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    background: #fff;
+                }
+
+                .type-container {
+                    margin-top: 15px;
+                }
+
+                .type-container label {
+                    display: block;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                }
+
+                .type-container input {
+                    width: 100%;
+                    padding: 5px;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                }
+            </style>
+            <style>
+                :root {
+                    --primary-color: #5E60CE;
+                    --secondary-color: #6b50ff;
+                    --accent-color: #9f80ff;
+                    --gradient-bg: linear-gradient(135deg, rgba(186, 104, 200, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+                }
+
+                h4 {
+                    color: #aaa;
+                }
+
+                h6 {
+                    color: #aaa;
+                }
+
+                .form-title {
+                    font-size: 2.5rem;
+                    line-height: 1.2;
+                    font-weight: 700;
+                    margin-bottom: 15px;
+                    color: #333;
+                }
+
+                .body-con {
+                    font-family: 'Arial', sans-serif;
+                    background: var(--gradient-bg);
+
+                }
+
+                .form-container {
+                    padding: 30px;
+                    width: 500px;
+                    text-align: center;
+                }
+
+
+                .icon {
+                    font-size: 30px;
+                    color: #333;
+                    cursor: pointer;
+                    transition: transform 0.2s, color 0.3s;
+                }
+
+                .icon.selected {
+                    color: var(--secondary-color);
+                    transform: scale(1.2);
+                }
+
+                .platform-section {
+                    display: block;
+                    margin-top: 20px;
+                }
+
+                .platform-section.active {
+                    display: block;
+                }
+
+                .video-type-container {
+                    display: flex;
+                    gap: 10px;
+                    justify-content: center;
+                    margin-top: 15px;
+                }
+
+                .video-type {
+                    font-size: 16px;
+                    padding: 5px 10px;
+                    cursor: pointer;
+                    border: 1px solid #ddd;
+                    border-radius: 25px;
+                    transition: background-color 0.2s, color 0.2s;
+                }
+
+                .video-type.selected {
+                    color: var(--accent-color);
+                    font-weight: bold;
+                }
+
+                .input-group {
+                    display: none;
+                    margin-top: 10px;
+                }
+
+                .input-group.active {
+                    display: block;
+                }
+
+                label {
+                    margin-top: 10px;
+                    color: #aaa;
+                }
+
+                select,
+                input[type="number"] {
+                    width: 100%;
+                    padding: 10px;
+                    margin-top: 5px;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    font-size: 14px;
+                    transition: border-color 0.3s;
+                }
+
+
+
+                select:focus,
+                input[type="number"]:focus {
+                    border-color: var(--secondary-color);
+                }
+
+                .price {
+                    margin-top: 20px;
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #aaa;
+                }
+
+
+                .form-container {
+                    max-width: 600px;
+                    width: 100%;
+                    padding: 20px;
+                    text-align: center;
+                }
+
+                .form-container h2 {
+                    font-size: 25px;
+                    line-height: 1.2;
+                    font-weight: 700;
+                    margin-bottom: 15px;
+                    color: #333;
+                }
+
+                .form-group {
+                    justify-content: space-between;
+                    gap: 20px;
+                    margin-bottom: 15px;
+                    flex-wrap: wrap;
+                }
+
+                .form-group.full {
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .form-group .field {
+                    flex: 1;
+                    min-width: 45%;
+                    position: relative;
+                }
+
+                .form-group input,
+                .form-group textarea {
+                    width: 100%;
+                    padding: 10px 5px;
+                    font-size: 14px;
+                    border: none;
+                    border-bottom: 2px solid #ccc;
+                    outline: none;
+                    transition: border-color 0.3s ease;
+                }
+
+                .form-group input:focus,
+                .form-group textarea:focus {
+                    border-bottom: 2px solid;
+                    border-image: linear-gradient(to right, #4a00e0, #8e2de2) 1;
+                }
+
+                .form-group input::placeholder,
+                .form-group textarea::placeholder {
+                    color: #aaa;
+                }
+
+                .form-group textarea {
+                    resize: vertical;
+                    height: 80px;
+                }
+
+                .submit-btn {
+                    width: 150px;
+                    padding: 12px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #fff;
+                    background: linear-gradient(to right, #4a00e0, #8e2de2);
+                    border: none;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    transition: background 0.3s ease;
+                    margin-top: 10px;
+                }
+
+                .submit-btn:hover {
+                    background: linear-gradient(to right, #8e2de2, #4a00e0);
+                }
+
+
+
+                .swiper-container {
+                    width: 100%;
+                    height: 350px;
+                    align-items: center;
+                    display: flex;
+                    overflow: hidden;
+                    margin-bottom: 30px;
+                }
+
+                .swiper-slide {
+                    width: 250px;
+                    height: 100%;
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 25px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                }
+
+                .swiper-slide video {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                .top-frame {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    background-color: rgb(255, 255, 255);
+                    padding: 8px 10px;
+                    box-sizing: border-box;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 12px 12px 0 0;
+                    border-bottom-left-radius: 0px;
+                    border-bottom-right-radius: 0px;
+                }
+
+                .brand-info {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .brand-info img {
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    margin-right: 8px;
+                }
+
+                .brand-name {
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #333;
+                }
+
+                .sponsored-text {
+                    font-size: 12px;
+                    color: gray;
+                    margin-left: auto;
+                }
+
+
+                input[type="date"] {
+                    width: 100%;
+                    padding: 10px 5px;
+                    font-size: 14px;
+                    border: none;
+                    border-bottom: 2px solid #ccc;
+                    outline: none;
+                    transition: border-color 0.3s ease;
+
+                }
+
+                input[type="date"]:focus {
+                    border-bottom: 2px solid;
+                    border-image: linear-gradient(to right, #4a00e0, #8e2de2) 1;
+                }
+
+                input[type="date"]::placeholder {
+                    color: #aaa;
+                }
+
+
+                .request-type-icons {
+                    display: flex;
+                    gap: 20px;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .icon-container {
+                    cursor: pointer;
+                    padding: 10px;
+                    border: 2px solid #ccc;
+                    border-radius: 50px;
+                    transition: all 0.3s;
+                }
+
+                .icon-container.selected {
+                    background-color: #555;
+                    color: white;
+                }
+
+                .icon-container i {
+                    font-size: 24px;
+                    display: block;
+                    margin-bottom: 5px;
+                }
+            </style>
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        </section>
+
+        <footer>
+            <div class="footer-container">
+                <div class="footer-section">
+                    <h4>By business type</h4>
+                    <ul>
+                        <a href="by-business-type.html">
+                            <li>eCommerce</li>
+                        </a>
+                        <a href="by-business-type.html">
+                            <li>Agencies</li>
+                        </a>
+                        <a href="by-business-type.html">
+                            <li>Apps</li>
+                        </a>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>By platform</h4>
+                    <ul>
+                        <a href="by-platform.html">
+                            <li>TikTok</li>
+                        </a>
+                        <a href="by-platform.html">
+                            <li>Facebook</li>
+                        </a>
+                        <a href="by-platform.html">
+                            <li>Instagram</li>
+                        </a>
+                        <a href="by-platform.html">
+                            <li>Other</li>
+                        </a>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <a href="index.html">
+                            <li>Home</li>
+                        </a>
+                        <a href="by-platform.html">
+                            <li>Services by platform</li>
+                        </a>
+                        <a href="by-business-type.html">
+                            <li>Services by business</li>
+                        </a>
+                        <a href="creators.html">
+                            <li>Creators</li>
+                        </a>
+                        <a href="portfolio.html">
+                            <li>Portfolio</li>
+                        </a>
+                        <a href="About-Us.html">
+                            <li>About Us</li>
+                        </a>
+                        <a href="Blog.html">
+                            <li>Blog</li>
+                        </a>
+                        <a href="profile-user.html">
+                            <li>My Account</li>
+                        </a>
+
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <a href="Terms-of-service.html">
+                            <li>Terms of service</li>
+                        </a>
+                        <a href="Privacy_Statement_Ugc.html">
+                            <li>Privacy policy</li>
+                        </a>
+                        <a href="Refund_Policy_Ugc.html">
+                            <li>Refund policy</li>
+                        </a>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact us</h4>
+                    <p>584 Castro St. 2163<br>San Francisco, CA 94114</p>
+                    <p>+1 650 699 6740</p>
+                    <p>example@UJC.COM</p>
+                </div>
+
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright 2024 By ugc. All Rights Reserved.</p>
+                <div class="social-icons">
+                    <i class="fab fa-facebook"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-tiktok"></i>
+                    <!-- <a href="admin.html"> <i class="fa fa-home"></i></a> -->
+
+                </div>
+            </div>
+        </footer>
+
+</html>

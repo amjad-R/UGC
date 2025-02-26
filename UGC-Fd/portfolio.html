@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const authToken = localStorage.getItem('authToken');
+
+        const loginLink = document.querySelector('a.login');
+        if (authToken && loginLink) {
+            loginLink.style.display = 'none';
+        }
+
+        axios.get('http://localhost:8000/api/user-type', {
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+            }
+        })
+            .then(response => {
+                const userType = response.data.user_type;
+
+                let linkContainer = document.getElementById('user-link');
+                if (userType === 'creator') {
+                    linkContainer.href = "creator-interface.html";
+                    linkContainer.textContent = "Become a creator";
+                } else if (userType === 'business') {
+                    linkContainer.href = "profile-user.html";
+                    linkContainer.textContent = "My Account";
+                } else if (userType === 'support') {
+                    linkContainer.href = "creator-interface.html";
+                    linkContainer.textContent = "Become a creator";
+
+                    const socialIcons = document.querySelector('.footer-bottom .social-icons');
+                    if (socialIcons) {
+                        const adminLink = document.createElement('a');
+                        adminLink.href = "admin.html";
+                        adminLink.innerHTML = '<i class="fa fa-home"></i>';
+                        socialIcons.appendChild(adminLink);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user type:', error);
+            });
+    });
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UGC Platform</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Ugc.com</title>
+    <div class="promo-bar">
+        <div class="contact-info">
+            <span><i class="fas fa-phone"></i> 06 00 00 00 00</span>
+            <span><i class="fas fa-envelope"></i> example@ugc.com</span>
+        </div>
+        <div class="promo-text">
+            Boost your brand with authentic <a href="#">creator videos at UGC.com!</a>.
+        </div>
+        <div class="social-icons">
+            <i class="fab fa-whatsapp"></i>
+            <i class="fab fa-facebook"></i>
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-tiktok"></i>
+        </div>
+    </div>
+    <nav>
+        <a href="index.html" class="logo">Ugc.com</a>
+
+        <div class="menu-icon">
+            <i class="fa fa-bars"></i>
+        </div>
+        <ul class="nav-menu">
+            <li class="services">
+                <a href="#">Services</a>
+                <ul>
+                    <li><a href="by-platform.html">by platform</a></li>
+                    <li><a href="by-business-type.html">by business type</a></li>
+                </ul>
+            </li>
+            <li><a href="creators.html">Creators</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="About-Us.html">About Us</a></li>
+            <li><a href="Blog.html">Blog</a></li>
+
+            <li class="cta-buttons">
+                <a href="Login&SigneUp.html" class="login">Login</a>
+
+<body class="light-mode">
+    <button id="dark-mode-toggle">
+        <span class="material-icons">dark_mode</span>
+    </button>
+
+    <a id="user-link" href="Login&SigneUp.html" class="get-started">Get Started</a>
+
+    </li>
+    </ul>
+    </nav>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButton = document.getElementById('dark-mode-toggle');
+            const body = document.body;
+            const icon = toggleButton.querySelector('.material-icons');
+
+            const savedMode = localStorage.getItem('dark-mode');
+            if (savedMode === 'enabled') {
+                body.classList.add('dark-mode');
+                icon.textContent = 'light_mode';
+            }
+
+            toggleButton.addEventListener('click', () => {
+                if (body.classList.contains('dark-mode')) {
+                    body.classList.remove('dark-mode');
+                    icon.textContent = 'dark_mode';
+                    localStorage.setItem('dark-mode', 'disabled');
+                } else {
+                    body.classList.add('dark-mode');
+                    icon.textContent = 'light_mode';
+                    localStorage.setItem('dark-mode', 'enabled');
+                }
+            });
+        });
+    </script>
+
+    </head>
+    <script>
+
+
+        const menuIcon = document.querySelector('.menu-icon');
+        const navMenu = document.querySelector('.nav-menu');
+
+        menuIcon.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        .body-con {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f2f2f2;
+            padding: 25px;
+            height: 100%;
+            overflow: auto;
+
+        }
+
+        .section {
+            width: 80%;
+            text-align: center;
+            height: 560px;
+            background: linear-gradient(135deg, #f4e8f9, #e0d7f9);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .top-text {
+            font-size: 22px;
+            color: #6b54ce;
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background-color: #e3d8ff;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: 35px;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .experts-in {
+            font-size: 22px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .experts-icons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .experts-icons img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .button {
+            background-color: #6b54ce;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            gap: 10px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .video {
+            width: 9vw;
+            height: calc(9vw * 1.96);
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            opacity: 0.7;
+        }
+
+        .phone-frame {
+            position: relative;
+            width: 12vw;
+            height: calc(12vw * 1.96);
+            border: 5px solid black;
+            border-radius: 25px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .phone-frame::before,
+        .phone-frame::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            background-color: #333;
+            border-radius: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .phone-frame::before {
+            top: 10px;
+            height: 8px;
+        }
+
+        .phone-frame::after {
+            bottom: 10px;
+            height: 6px;
+        }
+
+        .phone-frame video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-details {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .person-name {
+            color: #1d1c1c;
+        }
+
+        .rating {
+            color: #FFD700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .rating .star {
+            margin-left: 3px;
+            color: #FFD700;
+        }
+
+        .swiper-container {
+
+            align-items: center;
+            display: flex;
+            overflow: hidden;
+            margin-top: 350px;
+            width: 100%;
+            height: 350px;
+
+        }
+
+        .swiper-container-reverse {
+            width: 100%;
+            height: 350px;
+            align-items: center;
+            display: flex;
+            overflow: hidden;
+            margin-top: 50px;
+
+
+        }
+
+
+        .swiper-container-3 {
+            width: 100%;
+            height: 350px;
+            align-items: center;
+            display: flex;
+            overflow: hidden;
+            margin-top: 50px;
+
+
+        }
+
+        .swiper-slide {
+            width: 250px;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .swiper-slide video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .top-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgb(255, 255, 255);
+            padding: 8px 10px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            border-radius: 12px 12px 0 0;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+
+        .brand-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand-info img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .brand-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .sponsored-text {
+            font-size: 12px;
+            color: gray;
+            margin-left: auto;
+        }
+
+        @media (max-width: 1024px) {
+
+            .video {
+                display: none;
+            }
+
+            .phone-frame {
+                display: none;
+            }
+
+        }
+    </style>
+
+    <div class="body-con">
+
+        <div class="section">
+            <div class="top-text">#1 UGC PLATFORM IN THE U.S.</div>
+            <h1 class="title">Excel on paid social with authentic creator videos</h1>
+            <p class="description">200,000+ videos created. 22,000 brands served. You too can match with our talented
+                creators and get authentic videos optimized for social ads performance. On time, on demand, and starting
+                at
+                just $99/video.</p>
+            <div class="experts-in">Experts in:</div>
+            <div class="experts-icons">
+                <img src="meta.png" alt="Meta">
+                <img src="instagram.png" alt="Instagram">
+            </div>
+            <button class="button">See pricing</button>
+
+            <div class="container">
+                <div class="video">
+                    <video src="story1.mp4" loop muted></video>
+                    <div class="video-details">
+                        <span class="person-name">John Doe</span>
+                        <span class="rating">4.5 <span class="star">★</span></span>
+                    </div>
+                </div>
+                <div class="video">
+                    <video src="story2.mp4" loop muted></video>
+                    <div class="video-details">
+                        <span class="person-name">Jane Smith</span>
+                        <span class="rating">4.7 <span class="star">★</span></span>
+                    </div>
+                </div>
+
+
+
+                <div class="phone-frame">
+                    <video id="mainVideo" autoplay muted></video>
+                </div>
+
+                <div class="video">
+                    <video src="story3.mp4" loop muted></video>
+                    <div class="video-details">
+                        <span class="person-name">Chris Lee</span>
+                        <span class="rating">4.6 <span class="star">★</span></span>
+                    </div>
+                </div>
+                <div class="video">
+                    <video src="story4.mp4" loop muted></video>
+                    <div class="video-details">
+                        <span class="person-name">Alex Brown</span>
+                        <span class="rating">4.8 <span class="star">★</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <video src="s1.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p4.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s2.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p3.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s4.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p6.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s5.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p1.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s6.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p1.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s7.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p1.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s5.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p2.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <video src="s6.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p3.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-container-reverse">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <video src="s1.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p4.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s2.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p3.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s4.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p6.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s5.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p1.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s6.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p1.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s7.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p1.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s5.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p2.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <video src="s6.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p3.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-container-3">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <video src="s1.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p4.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s2.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p3.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s4.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p6.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s5.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p1.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s6.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p1.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s7.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p1.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s5.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p2.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <video src="s6.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p3.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            const videos = ["story1.mp4", "story2.mp4", "story3.mp4", "story4.mp4", "story5.mp4"];
+            let currentIndex = 0;
+            const mainVideo = document.getElementById("mainVideo");
+
+            mainVideo.src = videos[currentIndex];
+            mainVideo.play();
+
+            mainVideo.onended = function () {
+                currentIndex = (currentIndex + 1) % videos.length;
+                mainVideo.src = videos[currentIndex];
+                mainVideo.play();
+            };
+        </script>
+    </div>
+
+
+
+
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        const swiper1 = new Swiper('.swiper-container', {
+            loop: true,
+            slidesPerView: 'auto',
+            spaceBetween: 10,
+            autoplay: {
+                delay: 0,
+                disableOnInteraction: true,
+            },
+            speed: 1000,
+            freeMode: true,
+            freeModeMomentum: true,
+        });
+
+        const swiper2 = new Swiper('.swiper-container-reverse', {
+            loop: true,
+            slidesPerView: 'auto',
+            spaceBetween: 10,
+            autoplay: {
+                delay: 0,
+                disableOnInteraction: true,
+                reverseDirection: true,
+            },
+            speed: 1000,
+            freeMode: true,
+            freeModeMomentum: true,
+        });
+
+        const swiper3 = new Swiper('.swiper-container-3', {
+            loop: true,
+            slidesPerView: 'auto',
+            spaceBetween: 10,
+            autoplay: {
+                delay: 0,
+                disableOnInteraction: true,
+            },
+            speed: 1000,
+            freeMode: true,
+            freeModeMomentum: true,
+        });
+
+    </script>
+
+
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>By business type</h4>
+                <ul>
+                    <a href="by-business-type.html">
+                        <li>eCommerce</li>
+                    </a>
+                    <a href="by-business-type.html">
+                        <li>Agencies</li>
+                    </a>
+                    <a href="by-business-type.html">
+                        <li>Apps</li>
+                    </a>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>By platform</h4>
+                <ul>
+                    <a href="by-platform.html">
+                        <li>TikTok</li>
+                    </a>
+                    <a href="by-platform.html">
+                        <li>Facebook</li>
+                    </a>
+                    <a href="by-platform.html">
+                        <li>Instagram</li>
+                    </a>
+                    <a href="by-platform.html">
+                        <li>Other</li>
+                    </a>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <a href="index.html">
+                        <li>Home</li>
+                    </a>
+                    <a href="by-platform.html">
+                        <li>Services by platform</li>
+                    </a>
+                    <a href="by-business-type.html">
+                        <li>Services by business</li>
+                    </a>
+                    <a href="creators.html">
+                        <li>Creators</li>
+                    </a>
+                    <a href="portfolio.html">
+                        <li>Portfolio</li>
+                    </a>
+                    <a href="About-Us.html">
+                        <li>About Us</li>
+                    </a>
+                    <a href="Blog.html">
+                        <li>Blog</li>
+                    </a>
+                    <a href="profile-user.html">
+                        <li>My Account</li>
+                    </a>
+
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <a href="Terms-of-service.html">
+                        <li>Terms of service</li>
+                    </a>
+                    <a href="Privacy_Statement_Ugc.html">
+                        <li>Privacy policy</li>
+                    </a>
+                    <a href="Refund_Policy_Ugc.html">
+                        <li>Refund policy</li>
+                    </a>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact us</h4>
+                <p>584 Castro St. 2163<br>San Francisco, CA 94114</p>
+                <p>+1 650 699 6740</p>
+                <p>example@UJC.COM</p>
+            </div>
+
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright 2024 By ugc. All Rights Reserved.</p>
+            <div class="social-icons">
+                <i class="fab fa-facebook"></i>
+                <i class="fab fa-instagram"></i>
+                <i class="fab fa-tiktok"></i>
+                <!-- <a href="admin.html"> <i class="fa fa-home"></i></a> -->
+
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+</html>

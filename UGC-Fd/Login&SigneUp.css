@@ -1,0 +1,236 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.logo-login {
+  font-size: 24px;
+  font-weight: bold;
+  color: #5e60ce;
+  margin-right: auto;
+  text-decoration: none;
+  margin-top: -45px;
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+}
+
+.container {
+  display: flex;
+  gap: 50px;
+  padding: 20px;
+}
+
+.business-box,
+.creator-box {
+  width: 400px;
+  padding: 40px;
+  background-color: #f4f5f7;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.creator-box {
+  background-color: #e6f3ff;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+}
+
+p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.tab {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.tab button {
+  flex: 1;
+  padding: 15px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.tab button.active {
+  font-weight: bold;
+  border-bottom: 3px solid #575658;
+  color: #575658;
+}
+
+.tab button:hover {
+  background-color: #e0e0e0;
+}
+
+.tabcontent {
+  display: none;
+}
+
+.tabcontent.active {
+  display: block;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ddd;
+  padding: 15px;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="tel"] {
+  padding: 15px;
+  font-size: 16px;
+  text-align: center;
+}
+.email-input {
+  padding: 15px;
+  font-size: 16px;
+}
+
+button[type="submit"] {
+  background-color: #6200ee;
+  color: white;
+  padding: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+  text-align: center;
+}
+button[type="button"] {
+  background-color: #6200ee;
+  color: white;
+  padding: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+  text-align: center;
+}
+
+button[type="button"]:hover {
+  background-color: #4b00c4;
+}
+button[type="submit"]:hover {
+  background-color: #4b00c4;
+}
+
+.forgot-password {
+  font-size: 14px;
+  color: #575658;
+  text-decoration: none;
+  text-align: center;
+}
+
+.app-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 25px;
+}
+
+.app-buttons img {
+  width: 130px;
+}
+
+.google-btn {
+  gap: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.google-btn i {
+  font-size: 20px;
+}
+
+@media (max-width: 1024px) {
+  body {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .business-box,
+  .creator-box {
+    width: 100%;
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  .tab button {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  form {
+    gap: 15px;
+  }
+
+  input[type="email"],
+  input[type="password"],
+  input[type="text"],
+  input[type="tel"] {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  button[type="submit"],
+  .google-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .logo-login {
+    font-size: 20px;
+    text-align: center;
+    margin-top: 0;
+  }
+}

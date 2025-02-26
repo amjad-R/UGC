@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Interactive Profile</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Raleway', sans-serif;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    .profile-container {
+      max-width: 900px;
+      margin: 40px auto;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      transform: scale(1);
+      transition: transform 0.3s ease;
+    }
+
+    .profile-container:hover {
+      transform: scale(1.03);
+    }
+
+    .profile-header {
+      position: relative;
+      background: linear-gradient(135deg, #f4e8f9, #e0d7f9);
+      color: #ffffff;
+      padding: 40px 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .profile-header img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 5px solid #ffffff;
+      object-fit: cover;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .profile-info h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .profile-info p {
+      margin: 8px 0;
+      font-size: 16px;
+    }
+
+    .social-icons-3 {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .social-icons-3 a {
+      text-decoration: none;
+      color: #ffffff;
+      font-size: 24px;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .social-icons-3 a:hover {
+      transform: scale(1.2);
+      color: #8a2be2;
+    }
+
+    .profile-details {
+      padding: 30px;
+    }
+
+    .profile-details h2 {
+      margin-top: 0;
+      font-size: 22px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .profile-details h2::after {
+      content: '';
+      width: 50px;
+      height: 4px;
+      background: #8a2be2;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      border-radius: 2px;
+    }
+
+    .statistics {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .stat-item {
+      text-align: center;
+      background: #f1f1f1;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-item:hover {
+      transform: translateY(-10px);
+    }
+
+    .stat-item h3 {
+      margin: 0;
+      font-size: 24px;
+      color: #8a2be2;
+    }
+
+    .profile-details {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .profile-details h2,
+    .profile-details p,
+    .hashtags {
+      flex: 1 1 100%;
+      margin-bottom: 20px;
+    }
+
+    .statistics {
+      flex: 1 1 calc(50% - 20px);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .stat-item {
+      flex: 1 1 calc(33.333% - 20px);
+      min-width: 150px;
+    }
+
+
+    .hashtags span {
+      display: inline-block;
+      background: linear-gradient(135deg, #f4e8f9, #d4aff7d3);
+      color: #ffffff;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .hashtags span:hover {
+      transform: scale(1.1);
+    }
+
+    .videos-section ul li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f1f1f1;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 10px;
+    }
+
+    .videos-section ul li:hover {
+      background: #8a2be2;
+      color: #ffffff;
+    }
+  </style>
+  <style>
+    .cards-3 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 50px;
+      justify-content: center;
+    }
+
+    .card-3 {
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      width: 250px;
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.3s;
+      margin-top: 15px;
+
+    }
+
+    .card-3:hover {
+      transform: translateY(-10px);
+    }
+
+    .video-thumbnail {
+      position: relative;
+      width: 100%;
+      padding-top: 177.78%;
+      overflow: hidden;
+      border-radius: 15px;
+      border: #fff 7px solid;
+    }
+
+    .video-thumbnail img,
+    .video-thumbnail video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.5);
+      border: none;
+      border-radius: 50%;
+      padding: 15px;
+      cursor: pointer;
+    }
+
+    .creator-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+    }
+
+    .avatar-3 {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #8a2be2;
+    }
+
+    .name {
+      font-weight: bold;
+      color: #333;
+      font-size: 1rem;
+    }
+
+    .rating {
+      font-size: 1rem;
+      color: #ffb400;
+    }
+
+    .explore-button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: white;
+      background-color: #8a2be2;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .explore-button:hover {
+      background-color: #6d1cb2;
+    }
+
+    .header-section {
+      background: linear-gradient(135deg, #f4e8f9, #e0d7f9);
+      border-radius: 10px;
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 20px;
+      width: 1050px;
+      height: 300px;
+      font-family: Arial, sans-serif;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+
+    }
+
+    .header-section h2 {
+      font-size: 1.8rem;
+      color: #333333;
+      font-weight: normal;
+      margin-bottom: 20px;
+    }
+
+    .top-text {
+      font-size: 15px;
+      color: #6b54ce;
+      font-weight: bold;
+      padding: 5px 15px;
+      border-radius: 20px;
+      background-color: #e3d8ff;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .header-section p {
+      color: #666666;
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .search-bar input[type="text"] {
+      width: 60%;
+      padding: 12px;
+      border: 1px solid #cccccc;
+      border-radius: 20px 0 0 20px;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .search-button {
+
+      width: 5%;
+      padding: 12px;
+      border: 1px #cccccc;
+      border-radius: 0px 20px 20px 0px;
+      outline: none;
+
+
+
+    }
+
+
+
+    .wishlist-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: #fff;
+      padding: 5px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .wishlist-icon:hover {
+      color: #e0d7f9;
+    }
+
+    .wishlist-icon i {
+      font-size: 16px;
+    }
+
+    .wishlist-icon.active {
+      color: #c9a1fd;
+    }
+
+    @media (max-width: 1024px) {
+      .header-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f2f2f2;
+        padding: 25px;
+        height: 100%;
+        overflow: auto;
+      }
+
+      .header-section {
+        width: 80%;
+        text-align: center;
+        background: linear-gradient(135deg, #f4e8f9, #e0d7f9);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+
+
+
+
+
+      .search-bar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+      }
+
+      .search-bar input[type="text"] {
+        width: 60%;
+        padding: 12px;
+        border: 1px solid #cccccc;
+        border-radius: 20px 0 0 20px;
+        outline: none;
+        font-size: 1rem;
+      }
+
+      .search-button {
+
+        width: 20%;
+        padding: 12px;
+        border: 1px #cccccc;
+        border-radius: 0px 20px 20px 0px;
+        outline: none;
+
+      }
+    }
+
+
+    @media (max-width: 1024px) {
+      .cards-3 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        padding: 10px;
+      }
+
+      .card-3 {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="profile-container">
+    <div class="profile-header">
+      <img src="p4.png" alt="Profile Picture">
+      <div class="profile-info">
+        <h1>John Doe</h1>
+        <p>Creative content creator specialized in social media videos.</p>
+        <div class="social-icons-3">
+          <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="profile-details">
+      <h2>About</h2>
+      <div>
+        <p>Email: johndoe@example.com</p>
+        <p>Phone: +123-456-7890</p>
+        <div>
+          <h2>Description:</h2>
+          <p> Passionate about creating compelling stories and impactful visuals.</p>
+          <h2>Followers:</h2>
+          <p>250k</p>
+        </div>
+      </div>
+
+      <div class="hashtags">
+        <span>#Creative</span>
+        <span>#Engaging</span>
+        <span>#Innovative</span>
+      </div>
+      <h2>Statistics</h2>
+      <div class="statistics">
+        <div class="stat-item">
+          <h3>50</h3>
+          <p>Services</p>
+        </div>
+        <div class="stat-item">
+          <h3>120</h3>
+          <p>Orders Completed</p>
+        </div>
+        <div class="stat-item">
+          <h3>$80 - $150</h3>
+          <p>Price Range</p>
+        </div>
+      </div>
+      <h2>Videos</h2>
+      <div class="card-3" data-category="health" data-title="Health video 2">
+        <div class="video-thumbnail">
+          <video src="s7.mp4" alt="Video thumbnail"></video>
+          <div class="wishlist-icon">
+            <i class="fa fa-bookmark"></i>
+          </div>
+        </div>
+        <div class="creator-info">
+          <img src="p1.png" class="avatar-3" alt="Creator">
+          <span class="name">Brie, Tennessee</span>
+          <span class="rating">★ 4.8</span>
+        </div>
+      </div>
+      <div class="card-3" data-category="health" data-title="Health video 3">
+        <div class="video-thumbnail">
+          <video src="s5.mp4" alt="Video thumbnail"></video>
+          <div class="wishlist-icon">
+            <i class="fa fa-bookmark"></i>
+          </div>
+        </div>
+        <div class="creator-info">
+          <img src="p1.png" class="avatar-3" alt="Creator">
+          <span class="name">Brie, Tennessee</span>
+          <span class="rating">★ 4.8</span>
+        </div>
+      </div>
+      <div class="card-3" data-category="health" data-title="Health video 4">
+        <div class="video-thumbnail">
+          <video src="s3.mp4" alt="Video thumbnail"></video>
+          <div class="wishlist-icon">
+            <i class="fa fa-bookmark"></i>
+          </div>
+        </div>
+        <div class="creator-info">
+          <img src="p1.png" class="avatar-3" alt="Creator">
+          <span class="name">Brie, Tennessee</span>
+          <span class="rating">★ 4.8</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div>
+  </div>
+
+</body>
+
+</html>

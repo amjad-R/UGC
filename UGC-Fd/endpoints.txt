@@ -1,0 +1,920 @@
+1-
+POST http://127.0.0.1:8000/api/register
+Accept :application/json
+{
+    "first_name": "string",
+    "last_name": "string",
+    "email": "string (unique)",
+    "phone": "string (unique)",
+    "password": "string (min: 8)",
+    "password_confirmation": "string"
+}
+/
+{
+    "first_name": "test",
+    "last_name": "test",
+    "email": "testelll@gmail.com",
+    "phone": "0600000000",
+    "password": "123456789",
+    "password_confirmation": "123456789",
+    "user_type":"creator"
+}
+201 Created
+{
+    "message": "User registered successfully!"
+}
+-------------------------------------
+2-
+POST http://127.0.0.1:8000/api/login 
+Accept :application/json
+{
+    "email": "string",
+    "password": "string"
+}
+{
+	"email": "testelll@gmail.com",
+    "password": "12345678910"
+}
+200 OK
+"128|O6RIDPrd2D37yEmVoqDbe92bRKKRjOyIDVeQLf954f05f2eb"
+---------------------------------------
+3-
+POST http://127.0.0.1:8000/api/forgot-password
+Accept :application/json
+{
+    "email": "string"
+}
+{
+	"email": "testelll@gmail.com"
+}
+200 OK
+{
+    "message": "رابط إعادة تعيين كلمة المرور تم إرساله بنجاح إلى بريدك الإلكتروني."
+}
+-----------------------------------------
+4-
+POST http://127.0.0.1:8000/api/reset-password
+Accept :application/json
+{
+    "email": "string",
+    "password": "string (min: 8)",
+    "password_confirmation": "string",
+    "token": "string"
+}
+{
+    "email": "testelll@gmail.com",
+    "password": "12345678910",
+    "password_confirmation": "12345678910",
+    "token": "652ea2760cd580e31c4bd95290043022dbd9ed31c2deb4d14f76347a09c4f9be"
+}
+200 OK
+{
+    "message": "كلمة المرور أعيد تعيينها بنجاح."
+}
+----------------------------------------
+5-
+POST http://127.0.0.1:8000/api/profile
+Bearer Token ...
+Accept :application/json
+{'first_name': 'string', 'last_name': 'string'}
+{
+    "first_name": "amjadtest",
+    "last_name": "amjadtest",
+    "instagram": "https://www.instagram.com/am",
+    "facebook": "https://www.instagram.com/am",
+    "tiktok": "https://www.instagram.com/am",
+    "youtube": "https://www.instagram.com/am",
+    "service_description": "https://www.instagram.com/am",
+    "profile_image": null,
+    "hashtags": "#test #ttt" ,
+    "identity_verification": null
+}
+200 OK
+{
+    "message": "Profile updated successfully",
+    "profile": {
+        "id": 8,
+        "user_id": 21,
+        "instagram": "https://www.instagram.com/am",
+        "facebook": "https://www.instagram.com/am",
+        "tiktok": "https://www.instagram.com/am",
+        "youtube": "https://www.instagram.com/am",
+        "service_description": "https://www.instagram.com/am",
+        "profile_image": null,
+        "hashtags": "#test #ttt",
+        "identity_verification": null,
+        "created_at": "2024-12-10T19:38:52.000000Z",
+        "updated_at": "2024-12-10T19:42:17.000000Z"
+    }
+}
+------------------------------------------------
+6-
+GET http://127.0.0.1:8000/api/profile
+Bearer Token ...
+Accept :application/json
+200 OK
+{
+    "id": 7,
+    "user_id": 20,
+    "instagram": "https://www.instagram.com/test1",
+    "facebook": "https://www.instagram.com/test1",
+    "tiktok": "https://www.instagram.com/test1",
+    "youtube": "https://www.instagram.com/test1",
+    "service_description": "desc test",
+    "profile_image": null,
+    "hashtags": "#array #hoppa",
+    "identity_verification": null,
+    "created_at": "2024-12-10T08:27:57.000000Z",
+    "updated_at": "2024-12-10T10:22:03.000000Z"
+}
+
+----------------------------------------------------------
+7-
+GET http://127.0.0.1:8000/api/user
+Bearer Token ...
+Accept :application/json
+200 OK
+{
+    "id": 21,
+    "first_name": "string",
+    "last_name": "string",
+    "email": "amjadtest@gmail.com",
+    "user_type": "creator",
+    "phone": "0600000000",
+    "created_at": "2024-12-10T19:38:52.000000Z",
+    "updated_at": "2024-12-10T19:38:52.000000Z",
+    "profile_image": null,
+    "social_link": null,
+    "service_description": null,
+    "hashtags": null,
+    "identity_pdf": null
+}
+----------------------------------------------------------------
+8-
+POST http://127.0.0.1:8000/api/services
+Bearer Token ...
+Accept :application/json
+{
+    "title": "Social Media Campaign",
+    "platforms": ["facebook", "instagram", "youtube"],
+    "description": "This is a test service for managing social media campaigns.",
+    "services": [
+        {
+            "type": "reel",
+            "price": 100.50,
+            "time": "3 days",
+            "negotiable": true
+        },
+        {
+            "type": "story",
+            "price": 50,
+            "time": "2 days",
+            "negotiable": false
+        }
+    ],
+    "hashtags": "#socialmedia #marketing"
+}
+201 Created
+{
+    "message": "Service created successfully!",
+    "service": {
+        "title": "Social Media Campaign",
+        "description": "This is a test service for managing social media campaigns.",
+        "hashtags": "#socialmedia #marketing",
+        "platforms": "[\"facebook\",\"instagram\",\"youtube\"]",
+        "services": "[{\"type\":\"reel\",\"price\":100.5,\"time\":\"3 days\",\"negotiable\":true},{\"type\":\"story\",\"price\":50,\"time\":\"2 days\",\"negotiable\":false}]",
+        "user_id": 21,
+        "updated_at": "2024-12-10T19:47:36.000000Z",
+        "created_at": "2024-12-10T19:47:36.000000Z",
+        "id": 3
+    }
+}
+-------------------------------------------------------------------------
+9-
+GET http://127.0.0.1:8000/api/services/2
+Bearer Token ...
+Accept :application/json
+{
+    "title": "Social Media Campaign",
+    "platforms": ["facebook", "instagram", "youtube"],
+    "description": "This is a test service for managing social media campaigns.",
+    "services": [
+        {
+            "type": "reel",
+            "price": 100.50,
+            "time": "3 days",
+            "negotiable": true
+        },
+        {
+            "type": "story",
+            "price": 50,
+            "time": "2 days",
+            "negotiable": false
+        }
+    ],
+    "hashtags": "#socialmedia #marketing"
+}
+
+200 OK
+{
+    "service": {
+        "id": 2,
+        "user_id": 20,
+        "title": "Social Media Campaign",
+        "platforms": "[\"facebook\",\"instagram\",\"youtube\"]",
+        "description": "This is a test service for managing social media campaigns.",
+        "services": "[{\"type\":\"reel\",\"price\":100.5,\"time\":\"3 days\",\"negotiable\":true},{\"type\":\"story\",\"price\":50,\"time\":\"2 days\",\"negotiable\":false}]",
+        "hashtags": "#socialmedia #marketing",
+        "is_free": 0,
+        "media": null,
+        "created_at": "2024-12-10T10:41:23.000000Z",
+        "updated_at": "2024-12-10T10:41:23.000000Z",
+        "negotiable": 0,
+        "user": {
+            "id": 20,
+            "first_name": "test",
+            "last_name": "test",
+            "email": "testelll@gmail.com",
+            "user_type": "creator",
+            "phone": "0600000000",
+            "created_at": "2024-12-10T08:27:57.000000Z",
+            "updated_at": "2024-12-10T09:35:24.000000Z",
+            "profile_image": null,
+            "social_link": null,
+            "service_description": null,
+            "hashtags": null,
+            "identity_pdf": null
+        }
+    },
+    "messages": []
+}
+--------------------------------------------------------------------
+10-
+GET http://127.0.0.1:8000/api/listings
+Bearer Token ...
+Accept :application/json
+200 OK
+[
+    {
+        "id": 1,
+        "user_id": 1,
+        "title": "dev",
+        "platforms": [
+            "tiktok",
+            "youtube"
+        ],
+        "description": "this dev serv",
+        "services": [
+            {
+                "type": "story",
+                "price": "120",
+                "time": "01.00.00",
+                "negotiable": "1"
+            },
+            {
+                "type": "reel",
+                "price": "150",
+                "time": "00.30.00",
+                "negotiable": "1"
+            },
+            {
+                "type": "post",
+                "price": "150",
+                "time": "10.00"
+            }
+        ],
+        "hashtags": "#DEV #UGC #fullStack",
+        "is_free": 0,
+        "media": null,
+        "created_at": "2024-11-07T16:06:02.000000Z",
+        "updated_at": "2024-11-07T16:06:02.000000Z",
+        "negotiable": 0
+    },
+    {
+        "id": 2,
+        "user_id": 20,
+        "title": "Social Media Campaign",
+        "platforms": "[\"facebook\",\"instagram\",\"youtube\"]",
+        "description": "This is a test service for managing social media campaigns.",
+        "services": "[{\"type\":\"reel\",\"price\":100.5,\"time\":\"3 days\",\"negotiable\":true},{\"type\":\"story\",\"price\":50,\"time\":\"2 days\",\"negotiable\":false}]",
+        "hashtags": "#socialmedia #marketing",
+        "is_free": 0,
+        "media": null,
+        "created_at": "2024-12-10T10:41:23.000000Z",
+        "updated_at": "2024-12-10T10:41:23.000000Z",
+        "negotiable": 0
+    },
+    {
+        "id": 3,
+        "user_id": 21,
+        "title": "Social Media Campaign",
+        "platforms": "[\"facebook\",\"instagram\",\"youtube\"]",
+        "description": "This is a test service for managing social media campaigns.",
+        "services": "[{\"type\":\"reel\",\"price\":100.5,\"time\":\"3 days\",\"negotiable\":true},{\"type\":\"story\",\"price\":50,\"time\":\"2 days\",\"negotiable\":false}]",
+        "hashtags": "#socialmedia #marketing",
+        "is_free": 0,
+        "media": null,
+        "created_at": "2024-12-10T19:47:36.000000Z",
+        "updated_at": "2024-12-10T19:47:36.000000Z",
+        "negotiable": 0
+    }
+]
+-------------------------------------------------------------
+11-
+GET http://127.0.0.1:8000/api/user/20/services
+Bearer Token ...
+Accept :application/json
+200 OK
+{
+    "message": "User services retrieved successfully",
+    "services": [
+        {
+            "id": 2,
+            "user_id": 20,
+            "title": "Social Media Campaign",
+            "platforms": "[\"facebook\",\"instagram\",\"youtube\"]",
+            "description": "This is a test service for managing social media campaigns.",
+            "services": "[{\"type\":\"reel\",\"price\":100.5,\"time\":\"3 days\",\"negotiable\":true},{\"type\":\"story\",\"price\":50,\"time\":\"2 days\",\"negotiable\":false}]",
+            "hashtags": "#socialmedia #marketing",
+            "is_free": 0,
+            "media": null,
+            "created_at": "2024-12-10T10:41:23.000000Z",
+            "updated_at": "2024-12-10T10:41:23.000000Z",
+            "negotiable": 0
+        }
+    ]
+}
+-------------------------------------------------------------
+12-
+GET http://127.0.0.1:8000/api/my-services
+Bearer Token ...
+Accept :application/json
+200 OK
+[
+    {
+        "id": 3,
+        "user_id": 21,
+        "title": "Social Media Campaign",
+        "platforms": "[\"facebook\",\"instagram\",\"youtube\"]",
+        "description": "This is a test service for managing social media campaigns.",
+        "services": "[{\"type\":\"reel\",\"price\":100.5,\"time\":\"3 days\",\"negotiable\":true},{\"type\":\"story\",\"price\":50,\"time\":\"2 days\",\"negotiable\":false}]",
+        "hashtags": "#socialmedia #marketing",
+        "is_free": 0,
+        "media": null,
+        "created_at": "2024-12-10T19:47:36.000000Z",
+        "updated_at": "2024-12-10T19:47:36.000000Z",
+        "negotiable": 0
+    }
+]
+---------------------------------------------------------------------------
+13-PUT http://127.0.0.1:8000/api/my-services/3
+Bearer Token ...
+Accept :application/json
+{
+    "title": "Updated Service Title",
+    "platforms": ["youtube", "tiktok"],
+    "description": "Updated description.",
+    "services": [
+        {
+            "type": "story",
+            "price": 40,
+            "time": "3 days",
+            "negotiable": false
+        }
+    ],
+    "hashtags": "#updated"
+}
+
+200 OK
+{
+    "message": "Service updated successfully",
+    "service": {
+        "id": 3,
+        "user_id": 21,
+        "title": "Updated Service Title",
+        "platforms": "[\"youtube\",\"tiktok\"]",
+        "description": "Updated description.",
+        "services": "[{\"type\":\"story\",\"price\":40,\"time\":\"3 days\",\"negotiable\":false}]",
+        "hashtags": "#updated",
+        "is_free": 0,
+        "media": null,
+        "created_at": "2024-12-10T19:47:36.000000Z",
+        "updated_at": "2024-12-10T20:29:28.000000Z",
+        "negotiable": 0
+    }
+}
+---------------------------------------------------------------------------------
+14-
+DELET http://127.0.0.1:8000/api/my-services/4
+Bearer Token ...
+Accept :application/json
+200 OK
+{
+    "message": "Service deleted successfully"
+}
+------------------------------------------------------------------------------------------
+15-
+POST http://127.0.0.1:8000/api/orders
+Bearer Token ...
+Accept :application/json
+{
+    "first_name": "John",
+    "last_name": "Doe",
+    "phone": "+1234567890",
+    "start_date": "2024-12-15",
+    "post_type": "reel",
+    "post_count": 5,
+    "duration": 7,
+    "price": 150.75,
+    "service_id":20,
+    "attachment": null
+}
+200 OK
+<h1>Your order has been submitted successfully!</h1>
+<a href="http://127.0.0.1:8000/services">Return to home</a>
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\UserProfile;
+
+class UserProfileController extends Controller
+{
+
+    // عرض صفحة البروفايل
+    public function show()
+    {
+
+        $profile = auth()->user()->profile;
+
+        if (!$profile) {
+            return response()->json(['error' => 'Profile not found'], 404);
+        }
+
+        return response()->json($profile);
+    }
+
+    // تحديث البروفايل
+  // تحديث البروفايل
+  public function update(Request $request)
+  {
+      if (!auth()->check()) {
+          return response()->json(['error' => 'Unauthorized'], 401);
+      }
+
+
+      $data = $request->validate([
+          'first_name' => 'required|string|max:255',
+          'last_name' => 'required|string|max:255',
+          'phone' => 'nullable|string|max:15',
+          'instagram' => 'nullable|url',
+          'facebook' => 'nullable|url',
+          'tiktok' => 'nullable|url',
+          'youtube' => 'nullable|url',
+          'service_description' => 'nullable|string',
+          'hashtags' => 'nullable|string',
+          'identity_verification' => 'nullable|file|mimes:pdf|max:2048',
+          'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+      ]);
+
+      // تحميل ملف الهوية
+      if ($request->hasFile('identity_verification')) {
+          $file = $request->file('identity_verification')->store('identity_verifications');
+          $data['identity_verification'] = $file;
+      }
+
+      if ($request->hasFile('profile_image')) {
+        $file = $request->file('profile_image')->store('profile_images', 'public');
+        $data['profile_image'] = $file;
+
+
+    // التأكد من أنه صورة صحيحة
+}
+
+
+      // تحديث أو إنشاء البروفايل
+      $profile = UserProfile::updateOrCreate(
+          ['user_id' => auth()->id()],
+          $data
+
+      );
+
+      return response()->json([
+          'message' => 'Profile updated successfully',
+          'profile' => $profile,
+      ]);
+  }
+}
+{
+  "messages": {
+    "sendResetLinkEmail": {
+      "success": {
+        "status": 200,
+        "message": "رابط إعادة تعيين كلمة المرور تم إرساله بنجاح إلى بريدك الإلكتروني."
+      },
+      "error": {
+        "status": 400,
+        "message": "فشل في إرسال رابط إعادة تعيين كلمة المرور، تأكد من صحة البريد الإلكتروني."
+      },
+      "validation_error": {
+        "status": 422,
+        "message": "Validation failed!",
+        "errors": {
+          "email": "البريد الإلكتروني مطلوب ويجب أن يكون عنوان بريد إلكتروني صالح."
+        }
+      },
+      "unexpected_error": {
+        "status": 500,
+        "message": "حدث خطأ غير متوقع، يرجى المحاولة لاحقًا."
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "resetPassword": {
+      "success": {
+        "status": 200,
+        "message": "كلمة المرور أعيد تعيينها بنجاح."
+      },
+      "error": {
+        "status": 400,
+        "message": "فشل في إعادة تعيين كلمة المرور، تأكد من صحة البريد الإلكتروني أو الرمز."
+      },
+      "validation_error": {
+        "status": 422,
+        "message": "Validation failed!",
+        "errors": {
+          "email": "البريد الإلكتروني مطلوب ويجب أن يكون عنوان بريد إلكتروني صالح.",
+          "password": "كلمة المرور مطلوبة ويجب أن تكون مؤلفة من 8 حروف على الأقل ومؤكدة.",
+          "token": "الرمز مطلوب ويجب أن يكون صحيحاً."
+        }
+      },
+      "unexpected_error": {
+        "status": 500,
+        "message": "حدث خطأ غير متوقع، يرجى المحاولة لاحقًا."
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "getListings": {
+      "success": {
+        "status": 200,
+        "message": "تم جلب الخدمات بنجاح.",
+        "data": [
+          {
+            "id": 1,
+            "name": "Service Name 1",
+            "description": "Service description 1",
+            "price": 100,
+            "created_at": "2024-12-10T12:00:00Z",
+            "updated_at": "2024-12-10T12:00:00Z"
+          },
+          {
+            "id": 2,
+            "name": "Service Name 2",
+            "description": "Service description 2",
+            "price": 200,
+            "created_at": "2024-12-10T12:00:00Z",
+            "updated_at": "2024-12-10T12:00:00Z"
+          }
+        ]
+      },
+      "error": {
+        "status": 500,
+        "message": "فشل في جلب الخدمات. يرجى المحاولة لاحقًا."
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "createOrder": {
+      "success": {
+        "status": 200,
+        "message": "تم تقديم الطلب بنجاح.",
+        "redirect": "orders.success"
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "createOrder": {
+      "validation_error": {
+        "status": 422,
+        "message": "Validation failed!",
+        "errors": {
+          "first_name": "الاسم الأول مطلوب ويجب أن يكون نصًا.",
+          "last_name": "الاسم الأخير مطلوب ويجب أن يكون نصًا.",
+          "phone": "رقم الهاتف مطلوب ويجب أن يكون نصًا.",
+          "start_date": "تاريخ البدء مطلوب ويجب أن يكون تاريخًا صالحًا.",
+          "post_type": "نوع المنشور مطلوب ويجب أن يكون نصًا.",
+          "post_count": "عدد المنشورات مطلوب ويجب أن يكون عددًا صحيحًا.",
+          "service_id": "معرف الخدمة مطلوب ويجب أن يكون عددًا صحيحًا.",
+          "duration": "المدة المطلوبة يجب أن تكون عددًا صحيحًا.",
+          "price": "السعر مطلوب ويجب أن يكون رقمًا.",
+          "attachment": "يجب أن يكون الملف المرفق بصيغة zip أو rar وبحد أقصى 10 ميغابايت."
+        }
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "createOrder": {
+      "unexpected_error": {
+        "status": 500,
+        "message": "حدث خطأ غير متوقع، يرجى المحاولة لاحقًا."
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "getMyOrders": {
+      "success": {
+        "status": 200,
+        "message": "تم جلب الطلبات بنجاح.",
+        "data": [
+          {
+            "id": 1,
+            "first_name": "أحمد",
+            "last_name": "الطويل",
+            "phone": "1234567890",
+            "start_date": "2024-12-10",
+            "post_type": "منشور تسويقي",
+            "post_count": 5,
+            "service_id": 2,
+            "duration": 30,
+            "price": 500.0,
+            "attachment_path": "attachments/xyz.zip",
+            "created_at": "2024-12-10T10:00:00Z",
+            "updated_at": "2024-12-10T10:00:00Z"
+          },
+          {
+            "id": 2,
+            "first_name": "سارة",
+            "last_name": "السعيد",
+            "phone": "0987654321",
+            "start_date": "2024-12-11",
+            "post_type": "منشور تقني",
+            "post_count": 3,
+            "service_id": 1,
+            "duration": 15,
+            "price": 300.0,
+            "attachment_path": null,
+            "created_at": "2024-12-11T10:00:00Z",
+            "updated_at": "2024-12-11T10:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "getMyOrders": {
+      "error": {
+        "status": 500,
+        "message": "فشل في جلب الطلبات. يرجى المحاولة لاحقًا."
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "orderSuccess": {
+      "status": 200,
+      "message": "تم تقديم الطلب بنجاح. شكرًا لك!"
+    }
+  }
+}
+{
+  "messages": {
+    "createService": {
+      "success": {
+        "status": 201,
+        "message": "تم إنشاء الخدمة بنجاح!",
+        "service": {
+          "id": 1,
+          "title": "خدمة تسويقية",
+          "platforms": ["facebook", "instagram"],
+          "description": "خدمة تسويقية متميزة.",
+          "services": [
+            {"type": "reel", "price": 100, "time": "30 دقيقة", "negotiable": true}
+          ],
+          "hashtags": "#خدمة #تسويق",
+          "user_id": 1
+        }
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "createService": {
+      "validation_error": {
+        "status": 422,
+        "message": "فشل التحقق من المدخلات!",
+        "errors": {
+          "title": "العنوان مطلوب ويجب أن يكون نصًا.",
+          "platforms": "المنصات المطلوبة ويجب أن تكون مصفوفة.",
+          "platforms.*": "كل منصة يجب أن تكون ضمن facebook, instagram, tiktok, youtube.",
+          "services": "الخدمات مطلوبة ويجب أن تكون مصفوفة.",
+          "services.*.type": "نوع الخدمة مطلوب ويجب أن يكون أحد القيم التالية: reel, story, post.",
+          "services.*.price": "السعر مطلوب ويجب أن يكون رقمًا.",
+          "services.*.time": "الوقت مطلوب ويجب أن يكون نصًا.",
+          "hashtags": "الكلمات المفتاحية غير مطلوبة ولكن يجب أن تكون نصًا إذا كانت موجودة."
+        }
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "createService": {
+      "unauthorized": {
+        "status": 401,
+        "message": "غير مصرح أو لا يوجد بروفايل للمستخدم."
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "getServices": {
+      "success": {
+        "status": 200,
+        "message": "تم جلب الخدمات بنجاح.",
+        "services": [
+          {
+            "id": 1,
+            "title": "خدمة تسويقية",
+            "platforms": ["facebook", "instagram"],
+            "description": "خدمة تسويقية متميزة.",
+            "services": [
+              {"type": "reel", "price": 100, "time": "30 دقيقة", "negotiable": true}
+            ],
+            "hashtags": "#خدمة #تسويق",
+            "user_id": 1
+          }
+        ]
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "getService": {
+      "success": {
+        "status": 200,
+        "message": "تم جلب تفاصيل الخدمة بنجاح.",
+        "service": {
+          "id": 1,
+          "title": "خدمة تسويقية",
+          "platforms": ["facebook", "instagram"],
+          "description": "خدمة تسويقية متميزة.",
+          "services": [
+            {"type": "reel", "price": 100, "time": "30 دقيقة", "negotiable": true}
+          ],
+          "hashtags": "#خدمة #تسويق",
+          "user_id": 1
+        },
+        "messages": [
+          {"id": 1, "user_id": 2, "message": "هل يمكنني طلب هذه الخدمة؟", "created_at": "2024-12-10T10:00:00Z"}
+        ]
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "updateService": {
+      "success": {
+        "status": 200,
+        "message": "تم تعديل الخدمة بنجاح.",
+        "service": {
+          "id": 1,
+          "title": "خدمة تسويقية محدثة",
+          "platforms": ["facebook", "instagram", "tiktok"],
+          "description": "وصف محدث للخدمة.",
+          "services": [
+            {"type": "post", "price": 150, "time": "45 دقيقة", "negotiable": false}
+          ],
+          "hashtags": "#خدمة #تسويق #محدث",
+          "user_id": 1
+        }
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "updateService": {
+      "validation_error": {
+        "status": 422,
+        "message": "فشل التحقق من المدخلات!",
+        "errors": {
+          "title": "العنوان مطلوب ويجب أن يكون نصًا.",
+          "platforms": "المنصات المطلوبة ويجب أن تكون مصفوفة.",
+          "platforms.*": "كل منصة يجب أن تكون ضمن facebook, instagram, tiktok, youtube.",
+          "services": "الخدمات مطلوبة ويجب أن تكون مصفوفة.",
+          "services.*.type": "نوع الخدمة مطلوب ويجب أن يكون أحد القيم التالية: reel, story, post.",
+          "services.*.price": "السعر مطلوب ويجب أن يكون رقمًا.",
+          "services.*.time": "الوقت مطلوب ويجب أن يكون نصًا.",
+          "hashtags": "الكلمات المفتاحية غير مطلوبة ولكن يجب أن تكون نصًا إذا كانت موجودة."
+        }
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "deleteService": {
+      "success": {
+        "status": 200,
+        "message": "تم حذف الخدمة بنجاح."
+      }
+    }
+  }
+}
+{
+  "messages": {
+    "getUserServices": {
+      "success": {
+        "status": 200,
+        "message": "تم جلب خدمات المستخدم بنجاح.",
+        "services": [
+          {
+            "id": 1,
+            "title": "خدمة تسويقية",
+            "platforms": ["facebook", "instagram"],
+            "description": "خدمة تسويقية متميزة.",
+            "services": [
+              {"type": "reel", "price": 100, "time": "30 دقيقة", "negotiable": true}
+            ],
+            "hashtags": "#خدمة #تسويق",
+            "user_id": 1
+          }
+        ]
+      }
+    }
+  }
+}
+{
+  "message": "Profile fetched successfully",
+  "profile": {
+    "id": 1,
+    "user_id": 1,
+    "first_name": "John",
+    "last_name": "Doe",
+    "phone": "+1234567890",
+    "instagram": "https://instagram.com/johndoe",
+    "facebook": "https://facebook.com/johndoe",
+    "tiktok": "https://tiktok.com/@johndoe",
+    "youtube": "https://youtube.com/johndoe",
+    "service_description": "Digital marketing services",
+    "hashtags": "#Marketing #SEO #Content",
+    "identity_verification": "identity_verifications/abc123.pdf",
+    "profile_image": "profile_images/profile123.jpg"
+  }
+}
+{
+  "error": "Profile not found"
+}
+{
+  "message": "Profile updated successfully",
+  "profile": {
+    "id": 1,
+    "user_id": 1,
+    "first_name": "John",
+    "last_name": "Doe",
+    "phone": "+1234567890",
+    "instagram": "https://instagram.com/johndoe",
+    "facebook": "https://facebook.com/johndoe",
+    "tiktok": "https://tiktok.com/@johndoe",
+    "youtube": "https://youtube.com/johndoe",
+    "service_description": "Digital marketing services",
+    "hashtags": "#Marketing #SEO #Content",
+    "identity_verification": "identity_verifications/abc123.pdf",
+    "profile_image": "profile_images/profile123.jpg"
+  }
+}
+{
+  "error": {
+    "first_name": ["The first name field is required."],
+    "last_name": ["The last name field is required."],
+    "profile_image": ["The profile image must be an image."],
+    "identity_verification": ["The identity verification must be a file of type: pdf."]
+  }
+}
+{
+  "error": "Unauthorized"
+}
+

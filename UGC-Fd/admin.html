@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Layout</title>
+    <link rel="stylesheet" href="styleadmin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+</head>
+
+<body>
+    <style>
+        .service-status-info {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            margin-left: 80px;
+        }
+
+        .service-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-published {
+            background-color: #28a745;
+        }
+
+        .status-pending {
+            background-color: #ffc107;
+        }
+
+        .status-rejected {
+            background-color: #dc3545;
+        }
+
+        .status-text {
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+    <div class="dashboard-container">
+
+        <aside class="sidebar">
+            <div class="logo">
+                <h1><a href="index.html">Ugc.com</a></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active" data-tab="dashboard"><i class="fas fa-home"></i> Dashboard</li>
+                    <li data-tab="users"><i class="fas fa-users"></i> Users</li>
+                    <li data-tab="creators"><i class="fas fa-user-cog"></i> Creators</li>
+                    <li data-tab="chats"><i class="fas fa-comments"></i> Chats</li>
+                    <li data-tab="services"><i class="fas fa-concierge-bell"></i> Services</li>
+                    <li data-tab="blogs"><i class="fas fa-blog"></i> Blogs</li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section id="dashboard" class="tab-content active-tab">
+                <header class="header">
+                    <div class="header-icons">
+                    </div>
+                </header>
+                <div class="welcome-card">
+                    <h2>Hello, Admin! Ready to manage?</h2>
+                    <p>Everything is under your control. Manage with ease.</p>
+                    <button id="viewBadgesButton">View Badges</button>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const sidebarLinks = document.querySelectorAll('.sidebar ul li');
+                            const tabContents = document.querySelectorAll('.tab-content');
+                            const cardsSection = document.querySelector('.cards-section');
+                            const viewBadgesButton = document.getElementById('viewBadgesButton'); // الزر
+                    
+                            sidebarLinks.forEach(link => {
+                                link.addEventListener('click', () => {
+                                    sidebarLinks.forEach(item => item.classList.remove('active'));
+                    
+                                    link.classList.add('active');
+                    
+                                    tabContents.forEach(content => content.classList.remove('active-tab'));
+                    
+                                    const targetTab = link.getAttribute('data-tab');
+                                    document.getElementById(targetTab).classList.add('active-tab');
+                    
+                                    if (targetTab === 'dashboard') {
+                                        cardsSection.style.display = 'flex';
+                                    } else {
+                                        cardsSection.style.display = 'none';
+                                    }
+                                });
+                            });
+                                                viewBadgesButton.addEventListener('click', () => {
+                                const targetTab = document.querySelector('.sidebar ul li[data-tab="chats"]');
+                                if (targetTab) {
+                                    sidebarLinks.forEach(item => item.classList.remove('active'));
+                                    targetTab.classList.add('active');
+                    
+                                    tabContents.forEach(content => content.classList.remove('active-tab'));
+                                    document.getElementById('chats').classList.add('active-tab');
+                    
+                                    if (cardsSection) {
+                                        cardsSection.style.display = 'none';
+                                    }
+                                }
+                            });
+                        });
+                    </script>                </div>
+
+                <div class="dashboard-container">
+                    <section class="charts-section">
+                        <div class="chart-container">
+                            <h3>Users Growth Over Time</h3>
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </section>
+
+                    <script>
+                        const lineCtx = document.getElementById('lineChart').getContext('2d');
+                        const authToken = localStorage.getItem("authToken");
+
+
+                        axios.get('http://localhost:8000/api/admin/monthly-user-stats', {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                            }
+                        })
+                            .then(response => {
+                                const stats = response.data;
+
+                                const lineChart = new Chart(lineCtx, {
+                                    type: 'line',
+                                    data: {
+                                        labels: stats.months,
+                                        datasets: [{
+                                            label: 'New Users',
+                                            data: stats.user_counts,
+                                            borderColor: '#5b61d8',
+                                            backgroundColor: 'rgba(91, 97, 216, 0.2)',
+                                            tension: 0.4,
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        plugins: {
+                                            legend: { display: true },
+                                        },
+                                        scales: {
+                                            x: { grid: { display: false } },
+                                            y: { beginAtZero: true }
+                                        }
+                                    }
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error fetching user stats for chart:', error);
+                            });
+                    </script>
+
+
+
+
+
+                    <div class="cards-section">
+                        <div class="card">
+                            <h3>Profit</h3>
+                            <p id="profitValue">$0</p>
+                            <span id="profitGrowth" class="growth">+0%</span>
+                        </div>
+                        <div class="card">
+                            <h3>Services Count</h3>
+                            <p id="salesValue">0</p>
+                            <span id="salesGrowth" class="growth">+0%</span>
+                        </div>
+                        <div class="card">
+                            <h3>Users</h3>
+                            <p id="paymentsValue">0</p>
+                            <span id="paymentsGrowth" class="growth">+0%</span>
+                        </div>
+                        <div class="card">
+                            <h3>Creators</h3>
+                            <p id="transactionsValue">0</p>
+                            <span id="transactionsGrowth" class="growth">+0%</span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </section>
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const authToken = localStorage.getItem("authToken");
+
+                    axios.get('http://localhost:8000/api/admin/stats', {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        }
+                    })
+                        .then(response => {
+                            const stats = response.data;
+
+                            const updateElement = (valueId, growthId, value, growth) => {
+                                document.getElementById(valueId).textContent = value;
+
+                                const growthElement = document.getElementById(growthId);
+                                growthElement.textContent = `${growth > 0 ? '+' : ''}${growth}%`;
+
+                                growthElement.classList.remove('positive', 'negative');
+
+                                if (growth > 0) {
+                                    growthElement.classList.add('positive');
+                                } else if (growth < 0) {
+                                    growthElement.classList.add('negative');
+                                }
+                            };
+
+                            updateElement('profitValue', 'profitGrowth', `$${stats.total_revenue}`, stats.revenue_growth);
+
+                            updateElement('salesValue', 'salesGrowth', stats.services_count, stats.services_growth);
+
+                            updateElement('paymentsValue', 'paymentsGrowth', stats.business_users, stats.business_growth);
+
+                            updateElement('transactionsValue', 'transactionsGrowth', stats.creator_users, stats.creator_growth);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching dashboard stats:', error);
+                        });
+                });
+            </script>
+
+
+
+            <style>
+                .positive {
+                    color: green;
+                    font-weight: bold;
+                }
+
+                .negative {
+                    color: red;
+                    font-weight: bold;
+                }
+            </style>
+            <section id="users" class="tab-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Join Date</th>
+                            <th>Services</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-list">
+                    </tbody>
+                </table>
+            </section>
+
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+            <body>
+
+                <div id="profilePopup" class="popup">
+                    <div class="popup-content">
+                        <span class="close-btn" onclick="closePopup()">&times;</span>
+                        <div class="profile-container">
+                            <div class="profile-header">
+                                <img src="p4.png" alt="Profile Picture">
+                                <div class="profile-info">
+                                    <h1>John Doe</h1>
+                                    <p>Creative content creator specialized in social media videos.</p>
+                                    <div class="social-icons-3">
+                                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-details-3">
+                                <h2>About</h2>
+                                <div>
+                                    <p>Email: johndoe@example.com</p>
+                                    <p>Phone: +123-456-7890</p>
+                                    <div>
+                                        <h2>Description:</h2>
+                                        <p class="description">Description: Passionate about creating compelling stories
+                                            and impactful visuals.</p>
+                                        <h2>Followers:</h2>
+                                        <p>250k</p>
+                                    </div>
+                                </div>
+
+                                <div class="hashtags">
+                                    <span>#Creative</span>
+                                    <span>#Engaging</span>
+                                    <span>#Innovative</span>
+                                </div>
+                                <h2>Statistics</h2>
+                                <div class="statistics">
+                                    <div class="stat-item">
+                                        <h3>50</h3>
+                                        <p>Services</p>
+                                    </div>
+                                    <div class="stat-item">
+                                        <h3>120</h3>
+                                        <p>Orders Completed</p>
+                                    </div>
+                                    <div class="stat-item">
+                                        <h3>$80 - $150</h3>
+                                        <p>Price Range</p>
+                                    </div>
+                                </div>
+                                <h2>Videos</h2>
+                                <div class="cards-3">
+                                    <div class="card-3" data-category="health" data-title="Health video 2">
+                                        <div class="video-thumbnail">
+                                            <video src="s7.mp4" alt="Video thumbnail"></video>
+                                            <div class="wishlist-icon">
+                                                <i class="fa fa-bookmark"></i>
+                                            </div>
+                                        </div>
+                                        <div class="creator-info">
+                                            <img src="p1.png" class="avatar-3" alt="Creator">
+                                            <span class="name">Brie, Tennessee</span>
+                                            <span class="rating">★ 4.8</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-3" data-category="health" data-title="Health video 3">
+                                        <div class="video-thumbnail">
+                                            <video src="s5.mp4" alt="Video thumbnail"></video>
+                                            <div class="wishlist-icon">
+                                                <i class="fa fa-bookmark"></i>
+                                            </div>
+                                        </div>
+                                        <div class="creator-info">
+                                            <img src="p1.png" class="avatar-3" alt="Creator">
+                                            <span class="name">Brie, Tennessee</span>
+                                            <span class="rating">★ 4.8</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-3" data-category="health" data-title="Health video 4">
+                                        <div class="video-thumbnail">
+                                            <video src="s3.mp4" alt="Video thumbnail"></video>
+                                            <div class="wishlist-icon">
+                                                <i class="fa fa-bookmark"></i>
+                                            </div>
+                                        </div>
+                                        <div class="creator-info">
+                                            <img src="p1.png" class="avatar-3" alt="Creator">
+                                            <span class="name">Brie, Tennessee</span>
+                                            <span class="rating">★ 4.8</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+                <script>
+                    if (!authToken) {
+                        console.error("Auth token is missing");
+                    }
+
+                    axios.get('http://localhost:8000/api/creators', {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        }
+                    })
+                        .then(response => {
+                            const creatorsList = document.getElementById('creators-list');
+
+                            console.log("Received users data:", response.data.users);
+
+                            response.data.users.forEach(user => {
+                                const row = document.createElement('tr');
+
+                                const profileImage = user.profile_image
+                                    ? user.profile_image
+                                    : 'http://localhost:8000/storage/default-profile-image.jpg';
+
+                                console.log(`User ID: ${user.id}, Profile Image URL: ${profileImage}`);
+
+                                const buttonText = user.is_active ? 'Active' : 'Pending';
+                                const buttonColor = user.is_active ? '#5b61d8' : 'orange';
+
+                                row.innerHTML = `
+                        <td>
+                            <div class="client-info">
+                                <img class="profile-pic" src="${profileImage}" alt="Profile Picture" onerror="console.error('Image load error for user ID:', ${user.id})">
+                                <div>
+                                    ${user.full_name}<br><small>${user.phone || 'No phone number'}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${user.join_date}</td>
+                    <td><button class="btn details" data-user-id="${user.id}">Details</button></td>
+                    <td>
+                            <button class="btn comment" id="status-btn-${user.id}" style="background-color: ${buttonColor}" onclick="toggleUserStatus(${user.id})">
+                                ${buttonText}
+                            </button>
+                            <button class="btn delete" onclick="deleteUser(${user.id})">Delete</button>
+                            <button class="btn change-user-type" onclick="changeUserType(${user.id})">Change to support</button>
+                        </td>
+                    `;
+
+                                creatorsList.appendChild(row);
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching creators:', error);
+                        });
+
+                    function toggleUserStatus(userId) {
+                        const authToken = localStorage.getItem("authToken");
+                        const statusButton = document.getElementById(`status-btn-${userId}`);
+
+                        if (!statusButton) {
+                            console.error(`Button with ID status-btn-${userId} not found`);
+                            return;
+                        }
+
+                        axios.patch(`http://localhost:8000/api/user/status/${userId}`, {}, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                            }
+                        })
+                            .then(response => {
+                                alert(response.data.message);
+
+                                const newStatus = response.data.new_status;
+                                if (newStatus) {
+                                    statusButton.innerText = 'Active';
+                                    statusButton.style.backgroundColor = '#5b61d8';
+                                } else {
+                                    statusButton.innerText = 'Pending';
+                                    statusButton.style.backgroundColor = 'orange';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error updating user status:', error);
+                                alert('Error updating user status.');
+                            });
+                    }
+
+                    function deleteUser(userId) {
+                        const authToken = localStorage.getItem("authToken");
+
+                        axios.delete(`http://localhost:8000/api/user/${userId}`, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                            }
+                        })
+                            .then(response => {
+                                alert(response.data.message);
+                                location.reload();
+                            })
+                            .catch(error => {
+                                console.error('Error deleting user:', error);
+                                alert('Error deleting user.');
+                            });
+                    }
+
+                    function changeUserType(userId) {
+                        const authToken = localStorage.getItem("authToken");
+
+                        axios.patch(`http://localhost:8000/api/user/type/${userId}`, {
+                            user_type: 'support',
+                        }, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                            }
+                        })
+                            .then(response => {
+                                alert('User type changed to support!');
+                                location.reload();
+                            })
+                            .catch(error => {
+                                console.error('Error changing user type:', error);
+                                alert('Error changing user type.');
+                            });
+                    }
+
+                    function formatFollowers(followersCount) {
+                        if (followersCount >= 1000 && followersCount < 1000000) {
+                            return (followersCount / 1000).toFixed(1) + "K";
+                        } else if (followersCount >= 1000000) {
+                            return (followersCount / 1000000).toFixed(1) + "M";
+                        }
+                        return followersCount.toString();
+                    }
+
+                    function formatNumber(num) {
+                        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+
+                    function showPopup(userId) {
+                        const popup = document.getElementById('profilePopup');
+
+                        if (!popup) {
+                            console.error("Error: عنصر البوب أب غير موجود في DOM.");
+                            return;
+                        }
+
+
+                        if (!userId) {
+                            console.error("Error: User ID not found.");
+                            return;
+                        }
+
+                        axios.get(`http://localhost:8000/api/profiles/${userId}`)
+                            .then(response => {
+                                const profile = response.data?.profile;
+
+                                if (profile) {
+                                    popup.querySelector(".profile-header img").src =
+                                        `http://localhost:8000/storage/${profile.profile_image || "default-profile-image.jpg"}`;
+
+                                    popup.querySelector(".profile-info h1").textContent =
+                                        profile.fullname || "Full Name";
+
+                                    popup.querySelector(".profile-info p").textContent =
+                                        profile.role || "No role available.";
+
+                                    popup.querySelector(".profile-details-3 p:nth-child(1)").textContent =
+                                        `Email: ${profile.email || "N/A"}`;
+                                    popup.querySelector(".profile-details-3 p:nth-child(2)").textContent =
+                                        `Phone: ${profile.phone || "N/A"}`;
+
+                                    popup.querySelector(".description").textContent =
+                                        `${profile.service_description || ""}`;
+
+                                    popup.querySelector(".profile-details-3 p:nth-child(4)").textContent =
+                                        `${formatFollowers(profile.stats?.followers || 0)} Followers`;
+
+                                    const hashtagsContainer = popup.querySelector(".profile-details-3 .hashtags");
+                                    hashtagsContainer.innerHTML = "";
+                                    (profile['hashtags-2'] || []).forEach(tag => {
+                                        const span = document.createElement("span");
+                                        span.textContent = tag;
+                                        hashtagsContainer.appendChild(span);
+                                    });
+
+                                    const statistics = popup.querySelector(".statistics");
+                                    if (statistics) {
+                                        statistics.querySelector(".stat-item:nth-child(1) h3").textContent = profile.stats?.services || "0";
+                                        statistics.querySelector(".stat-item:nth-child(2) h3").textContent = profile.stats?.orders || "0";
+                                        statistics.querySelector(".stat-item:nth-child(3) h3").textContent =
+                                            profile.select_price === "less_100" ? "100€" :
+                                                profile.select_price === "100_500" ? "100€ - 500€" : "More than 500€";
+                                    }
+
+                                    const onlineStatus = document.getElementById('online-status');
+                                    if (onlineStatus) {
+                                        console.log("Element 'online-status' found.");
+                                        onlineStatus.classList.toggle('online', profile.is_online);
+                                        onlineStatus.classList.toggle('offline', !profile.is_online);
+                                    } else {
+                                        console.error("Error: Element 'online-status' not found in the DOM.");
+                                    }
+
+                                    const socialIconsContainer = popup.querySelector(".social-icons-3");
+                                    if (socialIconsContainer) {
+                                        console.log("Element 'social-icons-3' found.");
+                                        socialIconsContainer.innerHTML = "";
+                                        Object.entries(profile.social_links || {}).forEach(([platform, url]) => {
+                                            if (url && platform) {
+                                                const socialIcon = document.createElement('a');
+                                                socialIcon.href = url;
+                                                socialIcon.title = platform.charAt(0).toUpperCase() + platform.slice(1);
+                                                socialIcon.target = "_blank";
+                                                socialIcon.innerHTML = `<i class="fab fa-${platform}"></i>`;
+                                                socialIconsContainer.appendChild(socialIcon);
+                                            }
+                                        });
+                                    } else {
+                                        console.error("Error: Element 'social-icons-3' not found in the DOM.");
+                                    }
+
+                                    const cardsContainer = popup.querySelector(".cards-3");
+                                    if (cardsContainer) {
+                                        console.log("Element 'cards-3' found.");
+                                        const services = profile.services || [];
+                                        if (!services || services.length === 0) {
+                                            console.warn("No services available.");
+                                            cardsContainer.innerHTML = "<p>لا توجد خدمات متاحة حاليًا.</p>";
+                                            return;
+                                        }
+
+                                        cardsContainer.innerHTML = "";
+                                        services.forEach(service => {
+                                            const videoSrc = Array.isArray(service.uploaded_files) && service.uploaded_files.length > 0
+                                                ? service.uploaded_files[0]
+                                                : 'fallback-video.mp4';
+
+                                            const userImage = service.user?.profile_image || "https://via.placeholder.com/150";
+
+                                            const cardHtml = `
+                    <div class="card-3" data-service-id="${service.id}" data-category="${service.category}">
+                        <div class="video-thumbnail">
+                            <video src="${videoSrc}" controls></video>
+                        </div>
+                        <div class="creator-info">
+                            <img src="${userImage}" class="avatar-3" alt="Creator">
+                            <span class="name">${service.user?.first_name || "N/A"} ${service.user?.last_name || "N/A"}</span>
+                            <span class="rating">★ ${service.user?.rating || "4.8"}</span>
+                        </div>
+                    </div>
+                `;
+                                            cardsContainer.innerHTML += cardHtml;
+                                        });
+                                    } else {
+                                        console.error("Error: Element 'cards-3' not found in the DOM.");
+                                    }
+
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error fetching profile:", error);
+                                const cardsContainer = popup.querySelector(".cards-3");
+                                cardsContainer.innerHTML = "<p>حدث خطأ أثناء تحميل البيانات. حاول مرة أخرى لاحقًا.</p>";
+                            });
+
+                        popup.style.display = 'block';
+                    }
+
+
+
+
+
+
+                    function addDetailsButtonListeners() {
+                        const detailButtons = document.querySelectorAll('.btn.details');
+                        detailButtons.forEach(button => {
+                            button.addEventListener('click', (e) => {
+                                const userId = e.target.getAttribute('data-user-id');
+                                showPopup(userId);
+                            });
+                        });
+                    }
+
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const popupCloseButton = document.getElementById('closePopupButton');
+                        if (popupCloseButton) {
+                            popupCloseButton.addEventListener('click', closePopup);
+                        }
+                    });
+
+                </script>
+                <script>
+
+                    axios.get('http://localhost:8000/api/business-users', {
+                        baseURL: "http://localhost:8000/api",
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        }
+                    })
+                        .then(response => {
+                            const usersList = document.getElementById('users-list');
+                            response.data.users.forEach(user => {
+                                const row = document.createElement('tr');
+                                const buttonText = user.status === 'published' ? 'Active' : 'Pending';
+                                const buttonColor = user.status === 'published' ? '#5b61d8' : 'orange';
+
+                                row.innerHTML = `
+            <td>
+                <div class="client-info">
+                    <img class="profile-pic" src="http://localhost:8000/storage/${user.profile_image}" alt="Profile Picture">
+                    <div>
+                        ${user.full_name}<br><small>${user.phone || 'No phone number'}</small>
+                    </div>
+                </div>
+            </td>
+            <td>${user.join_date}</td>
+            <td><button class="btn details" data-user-id="${user.id}">Details</button></td>
+            <td>
+                <button class="btn delete" onclick="deleteUser(${user.id})">Delete</button>
+            </td>
+        `;
+                                usersList.appendChild(row);
+                            });
+
+                            addDetailsButtonListeners();
+                        })
+                        .catch(error => console.error('Error fetching users:', error));
+
+                    function toggleUserStatus(userId) {
+                        const authToken = localStorage.getItem("authToken");
+                        const statusButton = document.getElementById(`status-btn-${userId}`);
+
+                        axios.patch(`http://localhost:8000/api/user/status/${userId}`, {}, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                            }
+                        })
+                            .then(response => {
+                                alert(response.data.message);
+
+                                const newStatus = response.data.new_status;
+                                if (newStatus === 'pending') {
+                                    statusButton.innerText = 'Pending';
+                                    statusButton.style.backgroundColor = 'orange';
+                                } else if (newStatus === 'published') {
+                                    statusButton.innerText = 'Active';
+                                    statusButton.style.backgroundColor = '#5b61d8';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error updating user status:', error);
+                                alert('Error updating user status.');
+                            });
+                    }
+
+                    function deleteUser(userId) {
+                        const authToken = localStorage.getItem("authToken");
+
+                        axios.delete(`http://localhost:8000/api/user/${userId}`, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                            }
+                        })
+                            .then(response => {
+                                alert(response.data.message);
+                                location.reload();
+                            })
+                            .catch(error => {
+                                console.error('Error deleting user:', error);
+                                alert('Error deleting user.');
+                            });
+                    }
+                    function formatFollowers(followersCount) {
+                        if (followersCount >= 1000 && followersCount < 1000000) {
+                            return (followersCount / 1000).toFixed(1) + "K";
+                        } else if (followersCount >= 1000000) {
+                            return (followersCount / 1000000).toFixed(1) + "M";
+                        }
+                        return followersCount.toString();
+                    }
+
+                    function formatNumber(num) {
+                        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+
+                    function showPopup(userId) {
+                        const popup = document.getElementById('profilePopup');
+
+                        if (!popup) {
+                            console.error("Error: عنصر البوب أب غير موجود في DOM.");
+                            return;
+                        }
+
+
+                        if (!userId) {
+                            console.error("Error: User ID not found.");
+                            return;
+                        }
+
+                        axios.get(`http://localhost:8000/api/profiles/${userId}`)
+                            .then(response => {
+                                const profile = response.data?.profile;
+
+                                if (profile) {
+                                    popup.querySelector(".profile-header img").src =
+                                        `http://localhost:8000/storage/${profile.profile_image || "default-profile-image.jpg"}`;
+
+                                    popup.querySelector(".profile-info h1").textContent =
+                                        profile.fullname || "Full Name";
+
+                                    popup.querySelector(".profile-info p").textContent =
+                                        profile.role || "No role available.";
+
+                                    popup.querySelector(".profile-details-3 p:nth-child(1)").textContent =
+                                        `Email: ${profile.email || "N/A"}`;
+                                    popup.querySelector(".profile-details-3 p:nth-child(2)").textContent =
+                                        `Phone: ${profile.phone || "N/A"}`;
+
+                                    popup.querySelector(".description").textContent =
+                                        `${profile.service_description || ""}`;
+
+                                    popup.querySelector(".profile-details-3 p:nth-child(4)").textContent =
+                                        `${formatFollowers(profile.stats?.followers || 0)} Followers`;
+
+                                    const hashtagsContainer = popup.querySelector(".profile-details-3 .hashtags");
+                                    hashtagsContainer.innerHTML = "";
+                                    (profile['hashtags-2'] || []).forEach(tag => {
+                                        const span = document.createElement("span");
+                                        span.textContent = tag;
+                                        hashtagsContainer.appendChild(span);
+                                    });
+
+                                    const statistics = popup.querySelector(".statistics");
+                                    if (statistics) {
+                                        statistics.querySelector(".stat-item:nth-child(1) h3").textContent = profile.stats?.services || "0";
+                                        statistics.querySelector(".stat-item:nth-child(2) h3").textContent = profile.stats?.orders || "0";
+                                        statistics.querySelector(".stat-item:nth-child(3) h3").textContent =
+                                            profile.select_price === "less_100" ? "100€" :
+                                                profile.select_price === "100_500" ? "100€ - 500€" : "More than 500€";
+                                    }
+
+                                    const onlineStatus = document.getElementById('online-status');
+                                    if (onlineStatus) {
+                                        console.log("Element 'online-status' found.");
+                                        onlineStatus.classList.toggle('online', profile.is_online);
+                                        onlineStatus.classList.toggle('offline', !profile.is_online);
+                                    } else {
+                                        console.error("Error: Element 'online-status' not found in the DOM.");
+                                    }
+
+                                    const socialIconsContainer = popup.querySelector(".social-icons-3");
+                                    if (socialIconsContainer) {
+                                        console.log("Element 'social-icons-3' found.");
+                                        socialIconsContainer.innerHTML = "";
+                                        Object.entries(profile.social_links || {}).forEach(([platform, url]) => {
+                                            if (url && platform) {
+                                                const socialIcon = document.createElement('a');
+                                                socialIcon.href = url;
+                                                socialIcon.title = platform.charAt(0).toUpperCase() + platform.slice(1);
+                                                socialIcon.target = "_blank";
+                                                socialIcon.innerHTML = `<i class="fab fa-${platform}"></i>`;
+                                                socialIconsContainer.appendChild(socialIcon);
+                                            }
+                                        });
+                                    } else {
+                                        console.error("Error: Element 'social-icons-3' not found in the DOM.");
+                                    }
+
+                                    const cardsContainer = popup.querySelector(".cards-3");
+                                    if (cardsContainer) {
+                                        console.log("Element 'cards-3' found.");
+                                        const services = profile.services || [];
+                                        if (!services || services.length === 0) {
+                                            console.warn("No services available.");
+                                            cardsContainer.innerHTML = "<p>لا توجد خدمات متاحة حاليًا.</p>";
+                                            return;
+                                        }
+
+                                        cardsContainer.innerHTML = "";
+                                        services.forEach(service => {
+                                            const videoSrc = Array.isArray(service.uploaded_files) && service.uploaded_files.length > 0
+                                                ? service.uploaded_files[0]
+                                                : 'fallback-video.mp4';
+
+                                            const userImage = service.user?.profile_image || "https://via.placeholder.com/150";
+
+                                            const cardHtml = `
+            <div class="card-3" data-service-id="${service.id}" data-category="${service.category}">
+                <div class="video-thumbnail">
+                    <video src="${videoSrc}" controls></video>
+                </div>
+                <div class="creator-info">
+                    <img src="${userImage}" class="avatar-3" alt="Creator">
+                    <span class="name">${service.user?.first_name || "N/A"} ${service.user?.last_name || "N/A"}</span>
+                    <span class="rating">★ ${service.user?.rating || "4.8"}</span>
+                </div>
+            </div>
+        `;
+                                            cardsContainer.innerHTML += cardHtml;
+                                        });
+                                    } else {
+                                        console.error("Error: Element 'cards-3' not found in the DOM.");
+                                    }
+
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error fetching profile:", error);
+                                const cardsContainer = popup.querySelector(".cards-3");
+                                cardsContainer.innerHTML = "<p>حدث خطأ أثناء تحميل البيانات. حاول مرة أخرى لاحقًا.</p>";
+                            });
+
+                        popup.style.display = 'block';
+                    }
+
+
+
+
+                    function closePopup() {
+                        const popup = document.getElementById('profilePopup');
+                        popup.style.display = 'none';
+                    }
+
+                    function addDetailsButtonListeners() {
+                        const detailButtons = document.querySelectorAll('.btn.details');
+                        detailButtons.forEach(button => {
+                            button.addEventListener('click', (e) => {
+                                const userId = e.target.getAttribute('data-user-id');
+                                showPopup(userId);
+                            });
+                        });
+                    }
+
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const popupCloseButton = document.getElementById('closePopupButton');
+                        if (popupCloseButton) {
+                            popupCloseButton.addEventListener('click', closePopup);
+                        }
+                    });
+
+                </script>
+                <section id="creators" class="tab-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Creator</th>
+                                <th>Join Date</th>
+                                <th>Services</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="creators-list">
+                        </tbody>
+                    </table>
+                </section>
+
+
+
+
+
+
+
+
+                <section class="content" id="ChatContent">
+                    <section id="chats" class="tab-content">
+                        <div class="order-history">
+                            <title>Chat Interface</title>
+
+                            <body>
+                                <div class="chat-interface">
+                                    <div id="chat-list" class="chat-list">
+                                    </div>
+                                    <div class="chat-area">
+                                        <div class="chat-header">
+                                            <div class="user-avatar">
+                                                <img id="chat-avatar" src="p3.png" alt="User Avatar">
+                                                <span id="status-dot" class="status-dot online"></span>
+                                            </div>
+                                            <div class="user-info">
+                                                <h3 id="chat-name">Gold Coast</h3>
+                                                <p id="last-seen">Last seen: 10:30 AM</p>
+                                            </div>
+                                        </div>
+
+
+                                        <div id="chat-details" class="chat-messages">
+                                        </div>
+                                        <div class="chat-input">
+                                            <input type="text" id="message-input" placeholder="Type a message">
+                                            <div class="action-buttons">
+                                                <img src="attach-file.png" alt="Attach File">
+                                                <img id="send-button" src="paper-plane.png" alt="Send Message">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </body>
+                        </div>
+
+                        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+                        <script>
+                            const token = localStorage.getItem('authToken');
+                            if (!authToken) {
+                                alert("لم يتم العثور على التوكن. يرجى تسجيل الدخول.");
+                                throw new Error("No auth token found");
+                            }
+
+                            console.log("Auth Token:", authToken);
+
+                            const axiosInstance = axios.create({
+                                baseURL: "http://localhost:8000/api",
+                                headers: {
+                                    Authorization: `Bearer ${authToken}`,
+                                },
+                            });
+
+                            const chatListContainer = document.getElementById("chat-list");
+                            const chatDetailsContainer = document.getElementById("chat-details");
+                            const chatAvatar = document.getElementById("chat-avatar");
+                            const chatName = document.getElementById("chat-name");
+                            const lastSeen = document.getElementById("last-seen");
+                            const messageInput = document.getElementById("message-input");
+                            const sendButton = document.getElementById("send-button");
+                            let currentChatId = null;
+
+                            const formatTime = (isoTime) => {
+                                const date = new Date(isoTime);
+                                return date.toLocaleString("en-US", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                });
+                            };
+
+                            const fetchChatList = async () => {
+                                try {
+                                    const response = await axiosInstance.get("/support-chats");
+                                    const chats = response.data;
+                                    renderChatList(chats);
+                                } catch (error) {
+                                    console.error("فشل في جلب قائمة الدردشات:", error.response?.data || error.message);
+                                }
+                            };
+
+                            const renderChatList = (chats) => {
+                                chatListContainer.innerHTML = `
+                    <h2>Chat List</h2>
+                    <div class="search-box">
+                        <input type="text" placeholder="Search">
+                    </div>
+                `;
+
+                                chats.forEach(chat => {
+                                    const chatItem = document.createElement("div");
+                                    chatItem.classList.add("chat-list-item");
+                                    chatItem.innerHTML = `
+                        <img src="http://localhost:8000/storage/${chat.avatar || "default-avatar.png"}" alt="Avatar">
+                        <div class="chat-info">
+                            <h3>${chat.name}</h3>
+                            <p>${chat.lastMessage || "No messages yet."}</p>
+                        </div>
+                        <div class="chat-time">${chat.lastActive || "Unknown"}</div>
+                    `;
+
+                                    chatItem.addEventListener("click", () => {
+                                        currentChatId = chat.id;
+                                        updateChatHeader(chat);
+                                        fetchChatDetails(chat.id);
+                                    });
+
+                                    chatListContainer.appendChild(chatItem);
+                                });
+                            };
+
+                            const updateChatHeader = (chat) => {
+                                chatAvatar.src = `http://localhost:8000/storage/${chat.avatar || "default-avatar.png"}`;
+                                chatName.textContent = chat.name || "Unknown";
+                                lastSeen.textContent = `Last seen: ${chat.lastActive || "Unknown"}`;
+                            };
+
+                            const fetchChatDetails = async (chatId) => {
+                                try {
+                                    const response = await axiosInstance.get(`/chates/${chatId}`);
+                                    const { messages, current_user_id } = response.data;
+                                    renderChatDetails(messages, current_user_id);
+                                } catch (error) {
+                                    console.error(`فشل في جلب تفاصيل الشات ${chatId}:`, error.response?.data || error.message);
+                                }
+                            };
+
+
+                            const renderChatDetails = (messages, currentUserId) => {
+                                chatDetailsContainer.innerHTML = "";
+                                messages.forEach(message => {
+                                    const messageDiv = document.createElement("div");
+                                    messageDiv.classList.add("message", message.sender_id === currentUserId ? "sent" : "received");
+                                    messageDiv.innerHTML = `
+            <p>${message.content}</p>
+            <span class="message-time">${formatTime(message.created_at)}</span>
+        `;
+                                    chatDetailsContainer.appendChild(messageDiv);
+                                });
+                            };
+
+
+                            const sendMessage = async () => {
+                                const messageContent = messageInput.value.trim();
+                                if (!messageContent) {
+                                    alert("يرجى إدخال رسالة.");
+                                    return;
+                                }
+
+                                if (!currentChatId) {
+                                    alert("يرجى اختيار محادثة أولاً.");
+                                    return;
+                                }
+
+                                try {
+                                    const response = await axiosInstance.post(`/support/chates/${currentChatId}/message`, {
+                                        message: messageContent,
+                                    });
+
+                                    fetchChatDetails(currentChatId);
+
+                                    messageInput.value = "";
+                                } catch (error) {
+                                    console.error("فشل في إرسال الرسالة:", error.response?.data || error.message);
+                                }
+                            };
+
+                            sendButton.addEventListener("click", sendMessage);
+
+                            fetchChatList();
+                        </script>
+                    </section>
+
+
+
+                    <section id="services" class="tab-content">
+                        <div class="content" id="WishContent">
+                            <div class="order-history">
+
+                                <div class="cards-2">
+
+                                    <div class="card-2">
+                                        <div class="service-status-info">
+                                        </div>
+                                        <button class="edit-service-button">Accept </button>
+                                        <button class="delete-service-button">Delete </button>
+                                        <div class="video-thumbnail">
+                                            <video src="s6.mp4" alt="Video thumbnail"></video>
+                                        </div>
+
+                                        <div class="creator-info">
+                                            <img src="p5.png" class="avatar" alt="Creator">
+                                            <span class="name">Brie, Tennessee</span>
+                                            <span class="rating">★ 4.8</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-2">
+                                        <div class="service-status-info">
+                                        </div>
+                                        <button class="edit-service-button">Accept</button>
+                                        <button class="delete-service-button">Delete </button>
+                                        <div class="video-thumbnail">
+                                            <video src="s6.mp4" alt="Video thumbnail"></video>
+                                        </div>
+
+                                        <div class="creator-info">
+                                            <img src="p5.png" class="avatar" alt="Creator">
+                                            <span class="name">Brie, Tennessee</span>
+                                            <span class="rating">★ 4.8</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-2">
+                                        <div class="service-status-info">
+                                        </div>
+                                        <button class="edit-service-button">Accept</button>
+                                        <button class="delete-service-button">Delete </button>
+                                        <div class="video-thumbnail">
+                                            <video src="s6.mp4" alt="Video thumbnail"></video>
+                                        </div>
+
+                                        <div class="creator-info">
+                                            <img src="p5.png" class="avatar" alt="Creator">
+                                            <span class="name">Brie, Tennessee</span>
+                                            <span class="rating">★ 4.8</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-2">
+                                        <div class="service-status-info">
+                                        </div>
+                                        <button class="edit-service-button">Accept</button>
+                                        <button class="delete-service-button">Delete</button>
+                                        <div class="video-thumbnail">
+                                            <video src="s6.mp4" alt="Video thumbnail"></video>
+                                        </div>
+
+                                        <div class="creator-info">
+                                            <img src="p5.png" class="avatar" alt="Creator">
+                                            <span class="name">Brie, Tennessee</span>
+                                            <span class="rating">★ 4.8</span>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", () => {
+                                            const servicesContainer = document.querySelector(".cards-2");
+                                            const token = localStorage.getItem('authToken');
+                                            const authToken = localStorage.getItem("authToken");
+
+                                            if (!authToken) {
+                                                alert("لم يتم العثور على التوكن. يرجى تسجيل الدخول.");
+                                                return;
+                                            }
+
+                                            const fetchAndDisplayServices = async () => {
+                                                try {
+                                                    const response = await axios.get('http://localhost:8000/api/admin/services', {
+                                                        headers: {
+                                                            Authorization: `Bearer ${authToken}`,
+                                                        }
+                                                    });
+
+                                                    const services = response.data.services || [];
+                                                    console.log("Services fetched:", services);
+
+                                                    servicesContainer.innerHTML = "";
+
+                                                    services.forEach(service => {
+                                                        const profileImage = service.creator.profile_image
+                                                            ? `http://localhost:8000/storage/${service.creator.profile_image}`
+                                                            : 'default-profile-image.jpg';
+                                                        const userName = `${service.creator.first_name} ${service.creator.last_name}`;
+                                                        const videoSrc = Array.isArray(service.uploaded_files) && service.uploaded_files.length > 0
+                                                            ? service.uploaded_files[0]
+                                                            : 'fallback-video.mp4';
+                                                        console.log(profileImage);
+
+                                                        const serviceCard = document.createElement("div");
+                                                        serviceCard.classList.add("card-2");
+
+                                                        serviceCard.innerHTML = `
+                    <div class="service-status-info">
+                        <div class="service-status status-${service.status}"></div>
+                        <span class="status-text">${service.status || ''}</span>
+                    </div>
+                    <button class="edit-service-button" data-id="${service.id}">Accept</button>
+                    <button class="delete-service-button" data-id="${service.id}">Delete</button>
+                    <div class="video-thumbnail">
+                        <video src="${videoSrc}" controls data-service-id="${service.id}"></video>
+                    </div>
+                    <div class="creator-info">
+                        <img src="${profileImage}" class="avatar" alt="Creator">
+                        <span class="name">${userName}</span>
+                        <span class="rating">★ 4.8</span>
+                    </div>
+                `;
+
+                                                        servicesContainer.appendChild(serviceCard);
+                                                    });
+
+                                                    const videos = document.querySelectorAll(".video-thumbnail video");
+                                                    videos.forEach((video) => {
+                                                        video.addEventListener("click", function () {
+                                                            const serviceId = this.getAttribute("data-service-id");
+                                                            window.location.href = `description-page.html?id=${serviceId}`;
+                                                        });
+                                                    });
+                                                } catch (error) {
+                                                    console.error("Error fetching services:", error);
+                                                }
+                                            };
+
+                                            fetchAndDisplayServices();
+                                        });
+
+                                    </script>
+                                    <script>
+                                        document.addEventListener("click", (e) => {
+                                            if (e.target.classList.contains("edit-service-button")) {
+                                                const serviceId = e.target.dataset.id;
+
+                                                const authToken = localStorage.getItem("authToken");
+
+                                                if (!authToken) {
+                                                    alert("لم يتم العثور على التوكن. يرجى تسجيل الدخول.");
+                                                    return;
+                                                }
+                                                axios.put(
+                                                    'http://localhost:8000/api/services/update-status',
+                                                    {
+                                                        id: serviceId,
+                                                        status: 'published'
+                                                    },
+                                                    {
+                                                        headers: {
+                                                            Authorization: `Bearer ${authToken}`,
+                                                        }
+                                                    }
+                                                )
+                                                    .then(response => {
+                                                        alert("Service status updated successfully!");
+                                                        location.reload();
+                                                    })
+                                                    .catch(error => {
+                                                        console.error("Error updating service status:", error);
+                                                    });
+                                            }
+                                        });
+                                    </script>
+                                    <script>
+                                        document.addEventListener("click", (e) => {
+                                            if (e.target.classList.contains("delete-service-button")) {
+                                                const serviceId = e.target.dataset.id;
+
+                                                const authToken = localStorage.getItem("authToken");
+
+                                                if (!authToken) {
+                                                    alert("لم يتم العثور على التوكن. يرجى تسجيل الدخول.");
+                                                    return;
+                                                }
+                                                axios.put(
+                                                    'http://localhost:8000/api/services/update-status',
+                                                    {
+                                                        id: serviceId,
+                                                        status: 'rejected'
+                                                    },
+                                                    {
+                                                        headers: {
+                                                            Authorization: `Bearer ${authToken}`,
+                                                        }
+                                                    }
+                                                )
+                                                    .then(response => {
+                                                        alert("Service status updated successfully!");
+                                                        location.reload();
+                                                    })
+                                                    .catch(error => {
+                                                        console.error("Error updating service status:", error);
+                                                    });
+                                            }
+                                        });
+                                    </script>
+                                </div>
+
+                                <button class="explore-button">Explore creators</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="blogs" class="tab-content">
+                        <main class="main-content">
+                            <header>
+                                <h2>Create a New Blog</h2>
+                            </header>
+
+                            <section class="edit-blog-section">
+                                <form id="blogForm" class="blog-form">
+                                    <div class="form-group">
+                                        <label for="blogTitle">Blog Title</label>
+                                        <input type="text" id="blogTitle" name="blogTitle"
+                                            placeholder="Enter blog title" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="blogContent">Blog Content</label>
+                                        <textarea id="blogContent" name="blogContent"
+                                            placeholder="Write your blog content here..." rows="8" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="blogImage">Upload Image</label>
+                                        <input type="file" id="blogImage" name="blogImage" accept="image/*">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="blogCategory">Category</label>
+                                        <select id="blogCategory" name="blogCategory" required>
+                                            <option value="" disabled selected>Select category</option>
+                                            <option value="Technology">Technology</option>
+                                            <option value="Lifestyle">Lifestyle</option>
+                                            <option value="Business">Business</option>
+                                            <option value="Travel">Travel</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">Save Blog</button>
+                                        <button type="reset" class="btn btn-secondary">Reset</button>
+                                    </div>
+                                </form>
+                            </section>
+                        </main>
+                    </section>
+                    <script>
+                        const blogForm = document.getElementById('blogForm');
+
+                        blogForm.addEventListener('submit', async (event) => {
+                            event.preventDefault();
+
+                            const authToken = localStorage.getItem("authToken");
+
+                            const formData = new FormData();
+                            formData.append('title', document.getElementById('blogTitle').value);
+                            formData.append('content', document.getElementById('blogContent').value);
+                            formData.append('category', document.getElementById('blogCategory').value);
+
+                            const blogImage = document.getElementById('blogImage').files[0];
+                            if (blogImage) {
+                                formData.append('image', blogImage);
+                            }
+
+                            try {
+                                const response = await axios.post('http://localhost:8000/api/blogs', formData, {
+                                    headers: {
+                                        'Content-Type': 'multipart/form-data',
+                                        'Authorization': `Bearer ${authToken}`,
+                                    },
+                                });
+
+                                alert('Blog created successfully!');
+                                blogForm.reset();
+                            } catch (error) {
+                                console.error('Error creating blog:', error);
+                                alert('Failed to create blog. Please try again.');
+                            }
+                        });
+                    </script>
+
+        </main>
+
+
+        <script>
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const sidebarLinks = document.querySelectorAll('.sidebar ul li');
+                const tabContents = document.querySelectorAll('.tab-content');
+                const cardsSection = document.querySelector('.cards-section');
+
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        sidebarLinks.forEach(item => item.classList.remove('active'));
+
+                        link.classList.add('active');
+
+                        tabContents.forEach(content => content.classList.remove('active-tab'));
+
+                        const targetTab = link.getAttribute('data-tab');
+                        document.getElementById(targetTab).classList.add('active-tab');
+
+                        if (targetTab === 'dashboard') {
+                            cardsSection.style.display = 'flex';
+                        } else {
+                            cardsSection.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</body>
+
+</html>

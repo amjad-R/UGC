@@ -1,0 +1,2958 @@
+<!DOCTYPE html>
+<html lang="en">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const authToken = localStorage.getItem('authToken');
+
+        const loginLink = document.querySelector('a.login');
+        if (authToken && loginLink) {
+            loginLink.style.display = 'none';
+        }
+
+        axios.get('http://localhost:8000/api/user-type', {
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+            }
+        })
+            .then(response => {
+                const userType = response.data.user_type;
+
+                let linkContainer = document.getElementById('user-link');
+                if (userType === 'creator') {
+                    linkContainer.href = "creator-interface.html";
+                    linkContainer.textContent = "Become a creator";
+                } else if (userType === 'business') {
+                    linkContainer.href = "profile-user.html";
+                    linkContainer.textContent = "My Account";
+                } else if (userType === 'support') {
+                    linkContainer.href = "creator-interface.html";
+                    linkContainer.textContent = "Become a creator";
+
+                    const socialIcons = document.querySelector('.footer-bottom .social-icons');
+                    if (socialIcons) {
+                        const adminLink = document.createElement('a');
+                        adminLink.href = "admin.html";
+                        adminLink.innerHTML = '<i class="fa fa-home"></i>';
+                        socialIcons.appendChild(adminLink);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user type:', error);
+            });
+    });
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UGC Platform</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Ugc.com</title>
+    <div class="promo-bar">
+        <div class="contact-info">
+            <span><i class="fas fa-phone"></i> 06 00 00 00 00</span>
+            <span><i class="fas fa-envelope"></i> example@ugc.com</span>
+        </div>
+        <div class="promo-text">
+            Boost your brand with authentic <a href="#">creator videos at UGC.com!</a>.
+        </div>
+        <div class="social-icons">
+            <i class="fab fa-whatsapp"></i>
+            <i class="fab fa-facebook"></i>
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-tiktok"></i>
+        </div>
+    </div>
+    <nav>
+        <a href="index.html" class="logo">Ugc.com</a>
+
+        <div class="menu-icon">
+            <i class="fa fa-bars"></i>
+        </div>
+        <ul class="nav-menu">
+            <li class="services">
+                <a href="#">Services</a>
+                <ul>
+                    <li><a href="by-platform.html">by platform</a></li>
+                    <li><a href="by-business-type.html">by business type</a></li>
+                </ul>
+            </li>
+            <li><a href="creators.html">Creators</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="About-Us.html">About Us</a></li>
+            <li><a href="Blog.html">Blog</a></li>
+
+            <li class="cta-buttons">
+                <a href="Login&SigneUp.html" class="login">Login</a>
+
+<body class="light-mode">
+    <button id="dark-mode-toggle">
+        <span class="material-icons">dark_mode</span>
+    </button>
+
+    <a id="user-link" href="Login&SigneUp.html" class="get-started">Get Started</a>
+
+    </li>
+    </ul>
+    </nav>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButton = document.getElementById('dark-mode-toggle');
+            const body = document.body;
+            const icon = toggleButton.querySelector('.material-icons');
+
+            const savedMode = localStorage.getItem('dark-mode');
+            if (savedMode === 'enabled') {
+                body.classList.add('dark-mode');
+                icon.textContent = 'light_mode';
+            }
+
+            toggleButton.addEventListener('click', () => {
+                if (body.classList.contains('dark-mode')) {
+                    body.classList.remove('dark-mode');
+                    icon.textContent = 'dark_mode';
+                    localStorage.setItem('dark-mode', 'disabled');
+                } else {
+                    body.classList.add('dark-mode');
+                    icon.textContent = 'light_mode';
+                    localStorage.setItem('dark-mode', 'enabled');
+                }
+            });
+        });
+    </script>
+
+    </head>
+    <script>
+
+
+        const menuIcon = document.querySelector('.menu-icon');
+        const navMenu = document.querySelector('.nav-menu');
+
+        menuIcon.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+    </script>
+    <style>
+        .body-con {
+
+
+            font-family: 'Raleway', sans-serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .ugc-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 50px;
+            color: #333;
+            max-width: 1900px;
+            margin: auto;
+            border-radius: 12px;
+        }
+
+        .ugc-text {
+            width: 50%;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #e3d8ff;
+            color: #6b50ff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .ugc-section h1 {
+            font-size: 2.5rem;
+            line-height: 1.2;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .ugc-section p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .primary-btn {
+            background-color: #000;
+            color: #fff;
+            border: none;
+        }
+
+        .primary-btn:hover {
+            background-color: #333;
+        }
+
+        .secondary-btn {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #000;
+        }
+
+        .secondary-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .image-container {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .phone-frame-1 {
+            position: relative;
+            width: 300px;
+            height: 600px;
+            background: #000;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .phone-frame-1::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 5px;
+            background-color: #999;
+            border-radius: 5px;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50px;
+        }
+
+        .phone-screen video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 37px;
+        }
+
+        .hashtag-container {
+            position: absolute;
+            background-color: #a080ff9f;
+            padding: 8px 16px;
+            border-radius: 15px;
+            color: white;
+            font-size: 0.9rem;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: floatHashtags 3s infinite;
+        }
+
+        .hashtag-container.left {
+            left: -25px;
+        }
+
+        .hashtag-container.right {
+            right: -160px;
+        }
+
+        @keyframes floatHashtags {
+            0% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+
+            25% {
+                transform: translateX(-50%) translateY(-10px);
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(10px);
+                opacity: 1;
+            }
+
+            75% {
+                transform: translateX(-50%) translateY(-10px);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .left-s,
+        .right-s {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .about-container {
+            background-color: linear-gradient(135deg, rgba(186, 104, 200, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+            padding: 20px;
+            border-radius: 8px;
+            width: 500px;
+        }
+
+        .about-header {
+            font-size: 2.1rem;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 30px;
+
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .profile-picture {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 30px;
+
+        }
+
+
+        .profile-info h3 {
+            display: flex;
+            color: #555;
+            margin-bottom: 0px;
+
+        }
+
+
+        .rating {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .rating i {
+            color: #ffb400;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .buttons button {
+            padding: 8px 16px;
+            border-radius: 25px;
+            border: 1px solid #555;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .buttons button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .details-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #555;
+
+        }
+
+        .details-box .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        .bio-text {
+
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 30px;
+            font-family: 'Raleway', sans-serif;
+
+        }
+
+        :root {
+            --primary-color: #5E60CE;
+            --secondary-color: #6b50ff;
+            --accent-color: #9f80ff;
+            --gradient-bg: linear-gradient(135deg, rgba(186, 104, 200, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+        }
+
+        h4 {
+            color: #aaa;
+        }
+
+        .form-title {
+            font-size: 2.5rem;
+            line-height: 1.2;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .form-container {
+            background: #fff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 500px;
+            text-align: center;
+        }
+
+        .platform-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 25px;
+        }
+
+        .icon {
+            font-size: 30px;
+            color: #333;
+            cursor: pointer;
+            transition: transform 0.2s, color 0.3s;
+        }
+
+        .icon.selected {
+            color: var(--secondary-color);
+            transform: scale(1.2);
+        }
+
+        .platform-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .platform-section.active {
+            display: block;
+        }
+
+        .video-type-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .video-type {
+            font-size: 16px;
+            padding: 5px 10px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .video-type.selected {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .input-group {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .input-group.active {
+            display: block;
+        }
+
+        label {
+            margin-top: 10px;
+            color: #aaa;
+        }
+
+        select,
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        select:focus,
+        input[type="number"]:focus {
+            border-color: var(--secondary-color);
+        }
+
+        .price {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #aaa;
+        }
+
+        @media only screen and (max-width: 1024px) {
+            .ugc-section {
+                flex-direction: column;
+                padding: 20px;
+                text-align: center;
+            }
+
+            .ugc-text {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .image-container {
+                width: 100%;
+            }
+
+            .phone-frame-1 {
+                width: 200px;
+                height: 400px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .primary-btn,
+            .secondary-btn {
+                width: 100%;
+            }
+
+            .container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .left-s,
+            .right-s {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .about-container {
+                width: 100%;
+                padding: 15px;
+            }
+
+            .details-box {
+                font-size: 1rem;
+                padding: 10px;
+            }
+
+            .profile-picture {
+                width: 50px;
+                height: 50px;
+            }
+
+            .profile-info h3 {
+                font-size: 1rem;
+                font-family: 'Raleway', sans-serif;
+
+            }
+
+            .form-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <title>Document</title>
+    </head>
+
+    <div class="body-con">
+
+
+
+
+        <section class="ugc-section">
+            <div class="image-container">
+                <div class="phone-frame-1">
+                    <div class="phone-screen">
+                        <video controls>
+                            <source src="s6.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+
+                    <div class="hashtag-container left" style="top: 30%;">#ContentCreation</div>
+                    <div class="hashtag-container left" style="top: 50%;">#BrandAuthenticity</div>
+
+                    <div class="hashtag-container right" style="top: 20%;">#UserGeneratedContent</div>
+                    <div class="hashtag-container right" style="top: 40%;">#SocialMediaMarketing</div>
+                    <div class="hashtag-container right" style="top: 60%;">#GrowthHacking</div>
+                </div>
+            </div>
+            <div class="ugc-text">
+                <div class="badge">The #1 UGC Partner</div>
+                <h1>Bring authenticity to your brand with UGC content</h1>
+                <p>
+                    Twirl is your partner for user-generated content (UGC) production. With our network of 1500+ content
+                    creators across the UK, US, and Europe, we produce scroll-stopping and authentic creatives for your
+                    ads,
+                    website, email, and social channels.
+                </p>
+                <div class="buttons">
+                    <button class="primary-btn">Get content</button>
+                    <button class="secondary-btn">View examples</button>
+                </div>
+            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const serviceId = urlParams.get('id');
+                    const apiUrl = `http://localhost:8000/api/services/${serviceId}`;
+
+
+                    axios.get(apiUrl)
+                        .then(response => {
+
+                            const service = response.data;
+
+                            const titleElement = document.querySelector(".ugc-text h1");
+                            if (titleElement) {
+                                titleElement.textContent = service.title || "Default Title";
+                            }
+
+                            const descriptionElement = document.querySelector(".ugc-text p");
+                            if (descriptionElement) {
+                                descriptionElement.textContent = service.description || "Default description.";
+                            }
+
+                            const videoElement = document.querySelector(".phone-screen video");
+                            if (service.uploaded_files && Array.isArray(service.uploaded_files) && service.uploaded_files.length > 0) {
+                                const videoSource = document.createElement('source');
+                                videoSource.src = service.uploaded_files[0];
+                                videoSource.type = 'video/mp4';
+
+                                videoElement.innerHTML = '';
+                                videoElement.appendChild(videoSource);
+                                videoElement.load();
+                                videoElement.play();
+                            } else {
+                                console.error('No video files found in the uploaded_files array.');
+                                document.querySelector(".phone-screen").innerHTML = `
+        <p>No video available for this service.</p>
+    `;
+                            }
+
+
+                            const hashtags = service.hashtags ? service.hashtags.split(" ") : [];
+                            const leftContainer = document.querySelectorAll(".hashtag-container.left");
+                            const rightContainer = document.querySelectorAll(".hashtag-container.right");
+
+                            hashtags.forEach((tag, index) => {
+                                if (index < leftContainer.length) {
+                                    leftContainer[index].textContent = `${tag.trim()}`;
+                                } else if (index - leftContainer.length < rightContainer.length) {
+                                    rightContainer[index - leftContainer.length].textContent = `${tag.trim()}`;
+                                }
+                            });
+
+                            const video = document.querySelector(".phone-screen video");
+                            video.load();
+                        })
+                        .catch(error => {
+                            console.error("Error fetching service data:", error);
+                        });
+                });
+
+            </script>
+        </section>
+
+
+
+        <div class="container">
+            <div class="left-s">
+                <div class="about-container">
+                    <div class="badge"> #About me</div>
+
+                    <div class="profile-section">
+
+
+
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Profile Card</title>
+
+                            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+                                rel="stylesheet">
+
+                            <style>
+                                .card-profile {
+
+                                    width: 800px;
+                                    height: 500px;
+                                    text-align: center;
+                                    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                                    padding: 50px;
+                                    position: relative;
+
+                                }
+
+                                .header {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    padding: 10px 0;
+                                }
+
+                                .header .icon {
+                                    font-size: 1.5rem;
+                                    color: #a080ff56;
+                                    ;
+                                    cursor: pointer;
+                                }
+
+                                .profile-image img {
+                                    width: 100px;
+                                    height: 100px;
+                                    border-radius: 50%;
+                                    margin-top: -50px;
+                                }
+
+                                .name {
+                                    font-size: 1.5rem;
+                                    margin: 10px 0 5px;
+                                    color: #333;
+                                    font-weight: bold;
+                                }
+
+                                .location,
+                                .role,
+                                .education {
+                                    margin: 5px 0;
+                                    color: #777;
+                                    font-size: 0.9rem;
+                                }
+
+                                .stats {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    margin: 20px 0;
+                                }
+
+                                .stats div {
+                                    text-align: center;
+                                }
+
+                                .stats p {
+                                    margin: 0;
+                                    font-size: 1.2rem;
+                                    font-weight: bold;
+                                    color: #333;
+                                }
+
+                                .stats span {
+                                    font-size: 0.8rem;
+                                    color: #777;
+                                }
+
+                                .show-more-btn {
+                                    background: linear-gradient(to right, #4a00e0, #8e2de2);
+                                    color: #fff;
+                                    border: none;
+                                    border-radius: 20px;
+                                    padding: 10px 20px;
+                                    cursor: pointer;
+                                    font-size: 0.9rem;
+                                    font-weight: bold;
+                                    transition: background 0.3s ease;
+                                }
+
+                                .show-more-btn:hover {
+                                    background: linear-gradient(to right, #8e2de2, #4a00e0);
+                                }
+
+                                .message-time {
+                                    display: block;
+                                    font-size: 12px;
+                                    color: #bbb;
+                                    margin-top: 5px;
+                                    text-align: right;
+                                }
+                            </style>
+                            <style>
+                            </style>
+                            <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+                        </head>
+                        <style>
+                            .popup {
+                                display: none;
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background-color: rgba(0, 0, 0, 0.7);
+                                z-index: 1000;
+                                justify-content: center;
+                                align-items: center;
+                                font-family: 'Raleway', sans-serif;
+
+                            }
+
+                            .popup-content {
+                                padding: 20px;
+                                border-radius: 10px;
+                                width: 80%;
+                                max-width: 900px;
+                                overflow-y: auto;
+                                max-height: 90%;
+                                position: relative;
+                                font-family: 'Raleway', sans-serif;
+
+                            }
+
+                            .close-btn {
+                                position: absolute;
+                                top: 10px;
+                                right: 10px;
+                                font-size: 20px;
+                                cursor: pointer;
+                                color: #fff;
+                            }
+                        </style>
+                        <script>
+                            function openPopup() {
+                                document.getElementById("profilePopup").style.display = "flex";
+                            }
+
+                            function closePopup() {
+                                document.getElementById("profilePopup").style.display = "none";
+                            }
+
+                        </script>
+                        <div class="profile-details card-profile">
+                            <div class="header">
+                                <i class="fas fa-user-plus icon"></i>
+                                <i class="fas fa-comment icon"></i>
+                            </div>
+                            <div class="profile-image">
+                                <img src="p3.png" alt="Profile Image">
+                            </div>
+                            <h2 class="name">AMJAD BEN</h2>
+                            <p class="role">I create engaging UGC (User-Generated Content) videos tailored to showcase your brand, product, or service authentically, helping you connect with your audience and boost engagement.</p>
+                            <div class="stats">
+                                <div>
+                                    <p>65</p>
+                                    <span>My Services</span>
+                                </div>
+                                <div>
+                                    <p>43</p>
+                                    <span>Followers</span>
+                                </div>
+                                <div>
+                                    <p>21</p>
+                                    <span>My Orders</span>
+                                </div>
+                            </div>
+                            <button class="show-more-btn" onclick="openPopup()">Show more</button>
+                        </div>
+
+                        <body>
+
+                            <div id="profilePopup" class="popup">
+                                <div class="popup-content">
+                                    <span class="close-btn" onclick="closePopup()">&times;</span>
+                                    <div class="profile-container">
+                                        <div class="profile-header">
+                                            <img src="p4.png" alt="Profile Picture">
+                                            <div class="profile-info">
+                                                <h1>John Doe</h1>
+                                                <p>Creative content creator specialized in social media videos.</p>
+                                                <div class="social-icons-3">
+                                                    <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                                                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                                                    <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="profile-details-3">
+                                            <h2>About</h2>
+                                            <div>
+                                                <p>Email: johndoe@example.com</p>
+                                                <p>Phone: +123-456-7890</p>
+                                                <div>
+                                                    <h2>Description:</h2>
+                                                    <p class="description">Description: Passionate about creating
+                                                        compelling stories and impactful visuals.</p>
+                                                    <h2>Followers:</h2>
+                                                    <p>250k</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="hashtags">
+                                                <span>#Creative</span>
+                                                <span>#Engaging</span>
+                                                <span>#Innovative</span>
+                                            </div>
+                                            <h2>Statistics</h2>
+                                            <div class="statistics">
+                                                <div class="stat-item">
+                                                    <h3>50</h3>
+                                                    <p>Services</p>
+                                                </div>
+                                                <div class="stat-item">
+                                                    <h3>120</h3>
+                                                    <p>Orders Completed</p>
+                                                </div>
+                                                <div class="stat-item">
+                                                    <h3>$80 - $150</h3>
+                                                    <p>Price Range</p>
+                                                </div>
+                                            </div>
+                                            <h2>Videos</h2>
+                                            <div class="cards-3">
+                                                <div class="card-3" data-category="health" data-title="Health video 2">
+                                                    <div class="video-thumbnail">
+                                                        <video src="s7.mp4" alt="Video thumbnail"></video>
+                                                        <div class="wishlist-icon">
+                                                            <i class="fa fa-bookmark"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="creator-info">
+                                                        <img src="p1.png" class="avatar-3" alt="Creator">
+                                                        <span class="name">Brie, Tennessee</span>
+                                                        <span class="rating">★ 4.8</span>
+                                                    </div>
+                                                </div>
+                                                <div class="card-3" data-category="health" data-title="Health video 3">
+                                                    <div class="video-thumbnail">
+                                                        <video src="s5.mp4" alt="Video thumbnail"></video>
+                                                        <div class="wishlist-icon">
+                                                            <i class="fa fa-bookmark"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="creator-info">
+                                                        <img src="p1.png" class="avatar-3" alt="Creator">
+                                                        <span class="name">Brie, Tennessee</span>
+                                                        <span class="rating">★ 4.8</span>
+                                                    </div>
+                                                </div>
+                                                <div class="card-3" data-category="health" data-title="Health video 4">
+                                                    <div class="video-thumbnail">
+                                                        <video src="s3.mp4" alt="Video thumbnail"></video>
+                                                        <div class="wishlist-icon">
+                                                            <i class="fa fa-bookmark"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="creator-info">
+                                                        <img src="p1.png" class="avatar-3" alt="Creator">
+                                                        <span class="name">Brie, Tennessee</span>
+                                                        <span class="rating">★ 4.8</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </body>
+
+                        <style>
+                            :root {
+                                font-family: 'Raleway', sans-serif;
+                                color: #333;
+                                overflow-x: hidden;
+                            }
+
+                            body {
+                                font-family: 'Raleway', sans-serif;
+                                color: #333;
+                                overflow-x: hidden;
+                            }
+
+                            .profile-container {
+                                max-width: 1900px;
+                                margin: 40px auto;
+                                border-radius: 15px;
+                                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+                                overflow: hidden;
+                                transform: scale(1);
+                                transition: transform 0.3s ease;
+                                font-family: 'Raleway', sans-serif;
+                                color: #333;
+                                overflow-x: hidden;
+                            }
+
+                            .profile-container:hover {
+                                transform: scale(1.03);
+                            }
+
+                            .profile-header {
+                                position: relative;
+                                background: linear-gradient(135deg, #f4e8f9, #e0d7f9);
+                                color: #ffffff;
+                                padding: 40px 20px;
+                                display: flex;
+                                align-items: center;
+                                gap: 20px;
+                            }
+
+                            .profile-header img {
+                                width: 120px;
+                                height: 120px;
+                                border-radius: 50%;
+                                border: 5px solid #ffffff;
+                                object-fit: cover;
+                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                                animation: rotateY 15s linear infinite;
+
+                            }
+
+                            @keyframes rotateY {
+                                0% {
+                                    transform: rotateY(0deg);
+                                }
+
+                                100% {
+                                    transform: rotateY(360deg);
+                                }
+                            }
+
+                            .profile-info h1 {
+                                margin: 0;
+                                font-size: 28px;
+                                font-family: 'Raleway', sans-serif;
+
+                            }
+
+                            .profile-info p {
+                                margin: 8px 0;
+                                font-size: 16px;
+                                font-family: 'Raleway', sans-serif;
+
+                            }
+
+                            .social-icons-3 {
+                                display: flex;
+                                gap: 15px;
+                                margin-top: 15px;
+                            }
+
+                            .social-icons-3 a {
+                                text-decoration: none;
+                                color: #ffffff;
+                                font-size: 24px;
+                                transition: transform 0.3s ease, color 0.3s ease;
+                            }
+
+                            .social-icons-3 a:hover {
+                                transform: scale(1.2);
+                                color: #8a2be2;
+                            }
+
+                            .profile-details-3 {
+                                padding: 30px;
+                                background-color: #fff;
+
+                            }
+
+                            .profile-details-3 h2 {
+                                margin-top: 0;
+                                font-size: 22px;
+                                position: relative;
+                                font-family: 'Raleway', sans-serif;
+
+                                display: inline-block;
+                            }
+
+                            .profile-details-3 h2::after {
+                                content: '';
+                                width: 50px;
+                                font-family: 'Raleway', sans-serif;
+
+                                height: 4px;
+                                background: #8a2be2;
+                                position: absolute;
+                                bottom: -5px;
+                                left: 0;
+                                border-radius: 2px;
+                            }
+
+                            .statistics {
+                                display: flex;
+                                justify-content: space-between;
+                                gap: 20px;
+                                margin: 30px 0;
+                            }
+
+                            .stat-item {
+                                text-align: center;
+                                background: #f1f1f1;
+                                padding: 20px;
+                                border-radius: 12px;
+                                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                                transition: transform 0.3s ease;
+                            }
+
+                            .stat-item:hover {
+                                transform: translateY(-10px);
+                            }
+
+                            .stat-item h3 {
+                                margin: 0;
+                                font-size: 24px;
+                                color: #8a2be2;
+                            }
+
+                            .profile-details-3 {
+                                display: flex;
+                                flex-wrap: wrap;
+                                justify-content: space-between;
+                                align-items: flex-start;
+                            }
+
+                            .profile-details-3 h2,
+                            .profile-details-3 p,
+                            .hashtags {
+                                flex: 1 1 100%;
+                                margin-bottom: 20px;
+                                font-family: 'Raleway', sans-serif;
+
+                            }
+
+                            .statistics {
+                                flex: 1 1 calc(50% - 20px);
+                                display: flex;
+                                flex-wrap: wrap;
+                                gap: 20px;
+                            }
+
+                            .stat-item {
+                                flex: 1 1 calc(33.333% - 20px);
+                                min-width: 150px;
+                            }
+
+
+                            .hashtags span {
+                                display: inline-block;
+                                background: linear-gradient(135deg, #f4e8f9, #d4aff7d3);
+                                color: #ffffff;
+                                padding: 8px 15px;
+                                border-radius: 20px;
+                                font-size: 14px;
+                                margin: 5px;
+                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                                transition: transform 0.3s ease;
+                            }
+
+                            .hashtags span:hover {
+                                transform: scale(1.1);
+                            }
+
+                            .videos-section ul li {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                background: #f1f1f1;
+                                padding: 15px;
+                                border-radius: 10px;
+                                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                                margin-bottom: 10px;
+                            }
+
+                            .videos-section ul li:hover {
+                                background: #8a2be2;
+                                color: #ffffff;
+                            }
+                        </style>
+                        <style>
+                            .cards-3 {
+                                display: grid;
+                                grid-template-columns: repeat(3, 1fr);
+                                gap: 10px;
+                                justify-content: center;
+                            }
+
+                            .card-3 {
+                                background-color: #fff;
+                                border-radius: 15px;
+                                box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+                                width: 250px;
+                                overflow: hidden;
+                                text-align: center;
+                                transition: transform 0.3s;
+                                margin-top: 15px;
+
+                            }
+
+                            .card-3:hover {
+                                transform: translateY(-10px);
+                            }
+
+                            .video-thumbnail {
+                                position: relative;
+                                width: 100%;
+                                padding-top: 177.78%;
+                                overflow: hidden;
+                                border-radius: 15px;
+                                border: #fff 7px solid;
+                            }
+
+                            .video-thumbnail img,
+                            .video-thumbnail video {
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                            }
+
+
+                            .play-button {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                font-size: 2rem;
+                                color: white;
+                                background-color: rgba(0, 0, 0, 0.5);
+                                border: none;
+                                border-radius: 50%;
+                                padding: 15px;
+                                cursor: pointer;
+                            }
+
+                            .creator-info {
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                padding: 15px;
+                            }
+
+                            .avatar-3 {
+                                width: 40px;
+                                height: 40px;
+                                border-radius: 50%;
+                                border: 2px solid #8a2be2;
+                            }
+
+                            .name {
+                                font-weight: bold;
+                                color: #333;
+                                font-size: 1rem;
+                            }
+
+                            .rating {
+                                font-size: 1rem;
+                                color: #ffb400;
+                            }
+
+                            .explore-button {
+                                margin-top: 20px;
+                                padding: 12px 25px;
+                                font-size: 1.1rem;
+                                font-weight: bold;
+                                color: white;
+                                background-color: #8a2be2;
+                                border: none;
+                                border-radius: 25px;
+                                cursor: pointer;
+                                transition: background-color 0.3s;
+                            }
+
+                            .explore-button:hover {
+                                background-color: #6d1cb2;
+                            }
+
+                            .header-section {
+                                background: linear-gradient(135deg, #f4e8f9, #e0d7f9);
+                                border-radius: 10px;
+                                padding: 40px;
+                                text-align: center;
+                                margin-bottom: 20px;
+                                width: 1050px;
+                                height: 300px;
+                                font-family: Arial, sans-serif;
+                                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+
+                            }
+
+                            .header-section h2 {
+                                font-size: 1.8rem;
+                                color: #333333;
+                                font-weight: normal;
+                                margin-bottom: 20px;
+                            }
+
+                            .top-text {
+                                font-size: 15px;
+                                color: #6b54ce;
+                                font-weight: bold;
+                                padding: 5px 15px;
+                                border-radius: 20px;
+                                background-color: #e3d8ff;
+                                display: inline-block;
+                                margin-bottom: 10px;
+                            }
+
+                            .header-section p {
+                                color: #666666;
+                                margin-bottom: 10px;
+                                font-size: 1rem;
+                            }
+
+                            .search-bar {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                margin-top: 10px;
+                            }
+
+                            .search-bar input[type="text"] {
+                                width: 60%;
+                                padding: 12px;
+                                border: 1px solid #cccccc;
+                                border-radius: 20px 0 0 20px;
+                                outline: none;
+                                font-size: 1rem;
+                            }
+
+                            .search-button {
+
+                                width: 5%;
+                                padding: 12px;
+                                border: 1px #cccccc;
+                                border-radius: 0px 20px 20px 0px;
+                                outline: none;
+
+
+
+                            }
+
+
+
+                            .wishlist-icon {
+                                position: absolute;
+                                top: 10px;
+                                right: 10px;
+                                color: #fff;
+                                padding: 5px;
+                                border-radius: 50%;
+                                cursor: pointer;
+                                transition: background-color 0.3s ease;
+                            }
+
+                            .wishlist-icon:hover {
+                                color: #e0d7f9;
+                            }
+
+                            .wishlist-icon i {
+                                font-size: 16px;
+                            }
+
+                            .wishlist-icon.active {
+                                color: #c9a1fd;
+                            }
+
+                            @media (max-width: 1024px) {
+                                .header-section {
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: center;
+                                    background-color: #f2f2f2;
+                                    padding: 25px;
+                                    height: 100%;
+                                    overflow: auto;
+                                }
+
+                                .header-section {
+                                    width: 80%;
+                                    text-align: center;
+                                    background: linear-gradient(135deg, #f4e8f9, #e0d7f9);
+                                    padding: 20px;
+                                    border-radius: 15px;
+                                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                                    margin-bottom: 20px;
+                                    position: relative;
+                                }
+
+
+
+
+
+
+                                .search-bar {
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    margin-top: 10px;
+                                }
+
+                                .search-bar input[type="text"] {
+                                    width: 60%;
+                                    padding: 12px;
+                                    border: 1px solid #cccccc;
+                                    border-radius: 20px 0 0 20px;
+                                    outline: none;
+                                    font-size: 1rem;
+                                }
+
+                                .search-button {
+
+                                    width: 20%;
+                                    padding: 12px;
+                                    border: 1px #cccccc;
+                                    border-radius: 0px 20px 20px 0px;
+                                    outline: none;
+
+                                }
+                            }
+
+
+                            @media (max-width: 1024px) {
+                                .cards-3 {
+                                    grid-template-columns: repeat(1, 1fr);
+                                    gap: 15px;
+                                    padding: 10px;
+                                }
+
+                                .card-3 {
+                                    width: 100%;
+                                }
+                            }
+                        </style>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                const urlParams = new URLSearchParams(window.location.search);
+                                const serviceId = urlParams.get('id');
+                                const apiUrl = `http://localhost:8000/api/services/${serviceId}`;
+
+                                axios.get(apiUrl)
+                                    .then(response => {
+                                        const service = response.data;
+
+                                        const titleElement = document.querySelector(".ugc-text h1");
+                                        if (titleElement) {
+                                            titleElement.textContent = service.title || "Default Title";
+                                        }
+
+                                        const descriptionElement = document.querySelector(".ugc-text p");
+                                        if (descriptionElement) {
+                                            descriptionElement.textContent = service.description || "Default description.";
+                                        }
+
+                                        const profile = service.profile;
+                                        if (profile) {
+                                            const profileContainer = document.querySelector(".profile-details");
+
+                                            profileContainer.querySelector(".profile-image img").src = `http://localhost:8000/storage/${profile.profile_image || "default-profile-image.jpg"}`;
+                                            profileContainer.querySelector(".name").textContent = profile.fullname || "Full Name";
+                                            profileContainer.querySelector(".role").textContent = profile.description || "No description available.";
+
+                                            const stats = profileContainer.querySelectorAll(".stats div p");
+                                            if (stats.length >= 3) {
+                                                stats[0].textContent = profile.stats?.services || 0;
+                                                stats[1].textContent = formatNumber(profile.stats?.followers || 0);
+                                                stats[2].textContent = profile.stats?.orders || 0;
+                                            }
+
+                                            document.getElementById('profile-image').src = `http://localhost:8000/storage/${profile.profile_image || "default-profile-image.jpg"}`;
+                                            document.getElementById('user-name').textContent = profile.fullname || "Full Name";
+
+                                            const lastSeenElement = document.getElementById('last-seen');
+                                            if (profile.is_online) {
+                                                lastSeenElement.textContent = '';
+                                            } else {
+                                                lastSeenElement.textContent = `Last seen: ${formatLastSeenTime(profile.last_seen)}`;
+                                            }
+
+                                            const onlineStatus = document.getElementById('online-status');
+                                            onlineStatus.classList.toggle('online', profile.is_online);
+                                            onlineStatus.classList.toggle('offline', !profile.is_online);
+                                        } else {
+                                            console.error("No profile information available for this service.");
+                                        }
+
+                                        const videoElement = document.querySelector(".phone-screen video");
+                                        if (service.uploaded_files && Array.isArray(service.uploaded_files) && service.uploaded_files.length > 0) {
+                                            const videoSource = document.createElement('source');
+                                            videoSource.src = service.uploaded_files[0];
+                                            videoSource.type = 'video/mp4';
+
+                                            videoElement.innerHTML = '';
+                                            videoElement.appendChild(videoSource);
+                                            videoElement.load();
+                                            videoElement.play();
+                                        } else {
+                                            console.error('No video files found in the uploaded_files array.');
+                                            document.querySelector(".phone-screen").innerHTML = `<p>No video available for this service.</p>`;
+                                        }
+
+                                        const myOrdersContainer = document.querySelector(".my-orders");
+                                        if (myOrdersContainer && service.my_orders && Array.isArray(service.my_orders)) {
+                                            myOrdersContainer.innerHTML = '';
+                                            service.my_orders.forEach(order => {
+                                                const orderElement = document.createElement('div');
+                                                orderElement.className = 'order-item';
+                                                orderElement.innerHTML = `
+                            <h4>${order.service_name}</h4>
+                            <p>Status: ${order.status}</p>
+                            <p>Total: $${order.total}</p>
+                            <p>Date: ${order.created_at}</p>
+                        `;
+                                                myOrdersContainer.appendChild(orderElement);
+                                            });
+                                        } else {
+                                            console.error("No orders available for this service.");
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error("Error fetching service data:", error);
+                                    });
+
+                                function formatNumber(number) {
+                                    if (number >= 1000000) {
+                                        return (number / 1000000).toFixed(1) + 'm';
+                                    } else if (number >= 1000) {
+                                        return (number / 1000).toFixed(1) + 'k';
+                                    } else {
+                                        return number;
+                                    }
+                                }
+
+                                function formatLastSeenTime(dateTime) {
+                                    if (!dateTime) return "N/A";
+
+                                    const date = new Date(dateTime);
+                                    const hours = date.getHours();
+                                    const minutes = date.getMinutes();
+                                    const ampm = hours >= 12 ? 'PM' : 'AM';
+                                    const formattedTime = `${hours % 12 || 12}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+
+                                    return formattedTime;
+                                }
+                            });
+                        </script>
+
+
+                        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="right-s">
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+                    rel="stylesheet">
+                <link rel="stylesheet"
+                    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+                <style>
+                    :root {
+                        --primary-color: #5E60CE;
+                        --secondary-color: #6b50ff;
+                        --accent-color: #9f80ff;
+                        --gradient-bg: linear-gradient(135deg, rgba(186, 104, 200, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+                    }
+
+                    h4 {
+                        color: #aaa;
+                    }
+
+                    .form-title {
+                        font-size: 2.5rem;
+                        line-height: 1.2;
+                        font-weight: 700;
+                        margin-bottom: 15px;
+                        color: #333;
+                    }
+
+                    .body-con {
+                        font-family: 'Arial', sans-serif;
+                        background: var(--gradient-bg);
+
+                    }
+
+                    .form-container {
+                        background: #fff;
+                        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                        padding: 30px;
+                        width: 500px;
+                        text-align: center;
+                    }
+
+                    .platform-icons {
+                        display: flex;
+                        justify-content: center;
+                        gap: 15px;
+                        margin-bottom: 20px;
+                        padding: 25px;
+                    }
+
+                    .icon {
+                        font-size: 30px;
+                        color: #333;
+                        cursor: pointer;
+                        transition: transform 0.2s, color 0.3s;
+                    }
+
+                    .icon.selected {
+                        color: var(--secondary-color);
+                        transform: scale(1.2);
+                    }
+
+                    .platform-section {
+                        display: none;
+                        margin-top: 20px;
+                    }
+
+                    .platform-section.active {
+                        display: block;
+                    }
+
+                    .video-type-container {
+                        display: flex;
+                        gap: 10px;
+                        justify-content: center;
+                        margin-top: 15px;
+                    }
+
+                    .video-type {
+                        font-size: 16px;
+                        padding: 5px 10px;
+                        cursor: pointer;
+                        border: 1px solid #ddd;
+                        border-radius: 25px;
+                        transition: background-color 0.2s, color 0.2s;
+                    }
+
+                    .video-type.selected {
+                        color: var(--accent-color);
+                        font-weight: bold;
+                    }
+
+                    .input-group {
+                        display: none;
+                        margin-top: 10px;
+                    }
+
+                    .input-group.active {
+                        display: block;
+                    }
+
+                    label {
+                        margin-top: 10px;
+                        color: #aaa;
+                    }
+
+                    select,
+                    input[type="number"] {
+                        width: 100%;
+                        padding: 10px;
+                        margin-top: 5px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        font-size: 14px;
+                        transition: border-color 0.3s;
+                    }
+
+
+
+                    select:focus,
+                    input[type="number"]:focus {
+                        border-color: var(--secondary-color);
+                    }
+
+                    .price {
+                        margin-top: 20px;
+                        font-size: 18px;
+                        font-weight: bold;
+                        color: #aaa;
+                    }
+
+                    /* إعدادات التنسيق الأساسية */
+
+
+
+                    .form-container {
+                        max-width: 600px;
+                        width: 100%;
+                        padding: 20px;
+                        text-align: center;
+                    }
+
+                    .form-container h2 {
+                        font-size: 25px;
+                        line-height: 1.2;
+                        font-weight: 700;
+                        margin-bottom: 15px;
+                        color: #333;
+                    }
+
+                    .form-group {
+                        justify-content: space-between;
+                        gap: 20px;
+                        margin-bottom: 15px;
+                        flex-wrap: wrap;
+                    }
+
+                    .form-group.full {
+                        flex-direction: column;
+                        align-items: center;
+                    }
+
+                    .form-group .field {
+                        flex: 1;
+                        min-width: 45%;
+                        position: relative;
+                    }
+
+                    .form-group input,
+                    .form-group textarea {
+                        width: 100%;
+                        padding: 10px 5px;
+                        font-size: 14px;
+                        border: none;
+                        border-bottom: 2px solid #ccc;
+                        outline: none;
+                        transition: border-color 0.3s ease;
+                    }
+
+                    .form-group input:focus,
+                    .form-group textarea:focus {
+                        border-bottom: 2px solid;
+                        border-image: linear-gradient(to right, #4a00e0, #8e2de2) 1;
+                    }
+
+                    .form-group input::placeholder,
+                    .form-group textarea::placeholder {
+                        color: #aaa;
+                    }
+
+                    .form-group textarea {
+                        resize: vertical;
+                        height: 80px;
+                    }
+
+                    .submit-btn {
+                        width: 150px;
+                        padding: 12px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        color: #fff;
+                        background: linear-gradient(to right, #4a00e0, #8e2de2);
+                        border: none;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        transition: background 0.3s ease;
+                        margin-top: 10px;
+                    }
+
+                    .submit-btn:hover {
+                        background: linear-gradient(to right, #8e2de2, #4a00e0);
+                    }
+
+
+
+                    .swiper-container {
+                        width: 100%;
+                        height: 350px;
+                        align-items: center;
+                        display: flex;
+                        overflow: hidden;
+                        margin-bottom: 30px;
+                    }
+
+                    .swiper-slide {
+                        width: 250px;
+                        height: 100%;
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 25px;
+                        overflow: hidden;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                    }
+
+                    .swiper-slide video {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                    .top-frame {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        background-color: rgb(255, 255, 255);
+                        padding: 8px 10px;
+                        box-sizing: border-box;
+                        display: flex;
+                        align-items: center;
+                        border-radius: 12px 12px 0 0;
+                        border-bottom-left-radius: 0px;
+                        border-bottom-right-radius: 0px;
+                    }
+
+                    .brand-info {
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    .brand-info img {
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        margin-right: 8px;
+                    }
+
+                    .brand-name {
+                        font-size: 14px;
+                        font-weight: bold;
+                        color: #333;
+                    }
+
+                    .sponsored-text {
+                        font-size: 12px;
+                        color: gray;
+                        margin-left: auto;
+                    }
+
+
+                    input[type="date"] {
+                        width: 100%;
+                        padding: 10px 5px;
+                        font-size: 14px;
+                        border: none;
+                        border-bottom: 2px solid #ccc;
+                        outline: none;
+                        transition: border-color 0.3s ease;
+
+                    }
+
+                    input[type="date"]:focus {
+                        border-bottom: 2px solid;
+                        border-image: linear-gradient(to right, #4a00e0, #8e2de2) 1;
+                    }
+
+                    input[type="date"]::placeholder {
+                        color: #aaa;
+                    }
+
+
+                    .request-type-icons {
+                        display: flex;
+                        gap: 20px;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    .icon-container {
+                        cursor: pointer;
+                        padding: 10px;
+                        border: 2px solid #ccc;
+                        border-radius: 50px;
+                        transition: all 0.3s;
+                    }
+
+                    .icon-container.selected {
+                        background-color: #555;
+                        color: white;
+                    }
+
+                    .icon-container i {
+                        font-size: 24px;
+                        display: block;
+                        margin-bottom: 5px;
+                    }
+                </style>
+
+                <div class="form-container">
+                    <h2>Responsive Contact us Form</h2>
+                    <form id="contactForm">
+                        <div class="form-group full">
+                            <div class="request-type-icons">
+                                <div class="icon-container" data-request-type="branding">
+                                    <span>Branding</span>
+                                </div>
+                                <div class="icon-container" data-request-type="one-time">
+                                    <span>One-time</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="platform-icons">
+                            <i class="fab fa-facebook icon" data-platform="facebook"></i>
+                            <i class="fab fa-instagram icon" data-platform="instagram"></i>
+                            <i class="fab fa-tiktok icon" data-platform="tiktok"></i>
+                            <i class="fab fa-youtube icon" data-platform="youtube"></i>
+                        </div>
+
+                        <div id="platform-sections"></div>
+
+
+                        <div class="form-group">
+
+
+
+
+                            <div class="field">
+                                <input type="text" id="firstName" placeholder="First Name" required>
+                            </div>
+                            <div class="field">
+                                <input type="text" id="lastName" placeholder="Last Name" required>
+                            </div>
+
+                            <div class="form-group date-fields">
+                                <div class="field">
+                                    <input type="text" id="startDate" placeholder="Start Date">
+                                </div>
+                                <div class="field">
+                                    <input type="text" id="endDate" placeholder="End Date">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="field">
+                                <input type="email" id="email" placeholder="Email Address" required>
+                            </div>
+                            <div class="field">
+                                <input type="text" id="website" placeholder="Website Name">
+                            </div>
+                        </div>
+                        <div class="form-group full">
+                            <textarea id="message" placeholder="Write your message" required></textarea>
+                        </div>
+
+
+
+                        <div id="price" class="price">Total Price: $0</div>
+
+                        <script>
+                            const iconContainers = document.querySelectorAll('.icon-container');
+                            const dateFields = document.querySelector('.date-fields');
+
+                            iconContainers.forEach(icon => {
+                                icon.addEventListener('click', () => {
+                                    iconContainers.forEach(icon => icon.classList.remove('selected'));
+
+                                    icon.classList.add('selected');
+
+                                    const requestType = icon.getAttribute('data-request-type');
+                                    if (requestType === 'one-time') {
+                                        dateFields.style.display = 'none';
+                                    } else if (requestType === 'branding') {
+                                        dateFields.style.display = 'flex';
+                                    }
+                                });
+                            });
+
+                        </script>
+
+
+                        <script>
+                            let totalPrice = 0;
+
+                            document.addEventListener('DOMContentLoaded', function () {
+                                const urlParams = new URLSearchParams(window.location.search);
+                                const serviceId = urlParams.get('id');
+                                axios.get(`http://localhost:8000/api/platforms/${serviceId}`)
+                                    .then(response => {
+                                        setupIcons(response.data);
+                                    })
+                                    .catch(error => console.error('Error fetching platforms:', error));
+                            });
+
+                            function setupIcons(data) {
+                                const platformIcons = {
+                                    facebook: 'fab fa-facebook',
+                                    instagram: 'fab fa-instagram',
+                                    tiktok: 'fab fa-tiktok',
+                                    youtube: 'fab fa-youtube'
+                                };
+
+                                const platformSections = document.querySelector('.platform-icons');
+                                platformSections.innerHTML = '';
+
+                                const platformsGrouped = groupByPlatform(data);
+
+                                Object.keys(platformsGrouped).forEach(platformName => {
+                                    const platformData = platformsGrouped[platformName];
+
+                                    if (platformIcons[platformName] && !document.querySelector(`.icon[data-platform="${platformName}"]`)) {
+                                        const icon = document.createElement('i');
+                                        icon.className = `${platformIcons[platformName]} icon`;
+                                        icon.dataset.platform = platformName;
+
+                                        icon.addEventListener('click', () => handlePlatformClick(platformName, platformData));
+                                        platformSections.appendChild(icon);
+                                    }
+                                });
+                            }
+
+                            function groupByPlatform(data) {
+                                return data.reduce((acc, item) => {
+                                    if (!acc[item.platform]) {
+                                        acc[item.platform] = [];
+                                    }
+                                    acc[item.platform].push(item);
+                                    return acc;
+                                }, {});
+                            }
+
+                            function handlePlatformClick(platformName, platformData) {
+                                const platformSection = document.getElementById('platform-sections');
+                                let section = document.querySelector(`#${platformName}-section`);
+
+                                if (section) {
+                                    section.classList.toggle('active');
+                                } else {
+                                    section = createPlatformSection(platformName, platformData);
+                                    platformSection.appendChild(section);
+                                }
+
+                                const icon = document.querySelector(`.icon[data-platform="${platformName}"]`);
+                                if (icon.classList.contains('selected')) {
+                                    icon.classList.remove('selected');
+                                    section.classList.remove('active');
+                                } else {
+                                    icon.classList.add('selected');
+                                    section.classList.add('active');
+                                }
+                            }
+
+                            function createPlatformSection(platformName, platformData) {
+                                const section = document.createElement('div');
+                                section.classList.add('platform-section');
+                                section.setAttribute('id', `${platformName}-section`);
+
+                                const header = document.createElement('h4');
+                                header.textContent = `Services for ${platformName.charAt(0).toUpperCase() + platformName.slice(1)}`;
+                                section.appendChild(header);
+
+                                platformData.forEach(item => {
+                                    const typeGroup = document.createElement('div');
+                                    typeGroup.classList.add('video-type-container');
+                                    typeGroup.dataset.type = item.video_type;
+
+                                    const typeButton = document.createElement('button');
+                                    typeButton.classList.add('video-type');
+                                    typeButton.textContent = item.video_type;
+                                    typeButton.addEventListener('click', () => toggleTypeSelection(platformName, item.video_type, typeButton));
+                                    typeGroup.appendChild(typeButton);
+
+                                    section.appendChild(typeGroup);
+
+                                    const inputGroup = document.createElement('div');
+                                    inputGroup.classList.add('input-group');
+                                    inputGroup.dataset.type = item.video_type;
+
+                                    const select = document.createElement('select');
+                                    const durationOption = document.createElement('option');
+                                    durationOption.value = item.duration;
+                                    durationOption.textContent = `${item.duration} min`;
+                                    select.appendChild(durationOption);
+                                    inputGroup.appendChild(select);
+
+                                    const videoCountLabel = document.createElement('label');
+                                    videoCountLabel.textContent = `Number of videos for ${platformName} ${item.video_type}`;
+                                    inputGroup.appendChild(videoCountLabel);
+
+                                    const videoCountInput = document.createElement('input');
+                                    videoCountInput.type = 'number';
+                                    videoCountInput.value = '0';
+                                    videoCountInput.dataset.platform = platformName;
+                                    videoCountInput.dataset.price = item.price;
+                                    videoCountInput.addEventListener('input', () => recalculateTotalPrice());
+                                    inputGroup.appendChild(videoCountInput);
+
+                                    typeGroup.appendChild(inputGroup);
+                                });
+
+                                return section;
+                            }
+
+                            function toggleTypeSelection(platformName, type, button) {
+                                const inputGroup = document.querySelector(`#${platformName}-section .input-group[data-type="${type}"]`);
+                                button.classList.toggle('selected');
+                                inputGroup.classList.toggle('active');
+                            }
+
+                            function recalculateTotalPrice() {
+                                totalPrice = 0;
+                                const inputs = document.querySelectorAll('.input-group input[type="number"]');
+
+                                inputs.forEach(input => {
+                                    const videoCount = parseInt(input.value, 10);
+                                    const videoPrice = parseFloat(input.dataset.price);
+
+                                    if (!isNaN(videoCount) && !isNaN(videoPrice)) {
+                                        totalPrice += videoCount * videoPrice;
+                                    }
+                                });
+
+                                document.getElementById('price').textContent = `Total Price: $${totalPrice.toFixed(2)}`;
+                            }
+                        </script>
+
+
+
+
+
+
+                        <button type="submit" class="submit-btn">Submit</button>
+                    </form>
+                </div>
+
+                <script>
+                    document.getElementById('contactForm').addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        alert('Form Submitted Successfully!');
+                    });
+                </script>
+            </div>
+
+
+            <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+            <script>
+                const swiper = new Swiper('.swiper-container', {
+                    loop: true,
+                    slidesPerView: 'auto',
+                    spaceBetween: 10,
+                    autoplay: {
+                        delay: 0,
+                        disableOnInteraction: true,
+                    },
+                    speed: 1000,
+                    freeMode: true,
+                    freeModeMomentum: true,
+                });
+                document.getElementById('contactForm').addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const serviceId = urlParams.get('id');
+                    const requestData = {
+                        first_name: document.getElementById('firstName').value,
+                        last_name: document.getElementById('lastName').value,
+                        start_date: document.getElementById('startDate').value ? document.getElementById('startDate').value : null,
+                        end_date: document.getElementById('endDate').value ? document.getElementById('endDate').value : null,
+                        email: document.getElementById('email').value,
+                        website: document.getElementById('website').value || null,
+                        message: document.getElementById('message').value,
+                        facebook: document.querySelector('.icon[data-platform="facebook"]')?.classList.contains('selected') ? 1 : 0,
+                        instagram: document.querySelector('.icon[data-platform="instagram"]')?.classList.contains('selected') ? 1 : 0,
+                        tiktok: document.querySelector('.icon[data-platform="tiktok"]')?.classList.contains('selected') ? 1 : 0,
+                        youtube: document.querySelector('.icon[data-platform="youtube"]')?.classList.contains('selected') ? 1 : 0,
+                        platform_data: JSON.stringify(getPlatformData()),
+                        price: totalPrice,
+                        service_id: serviceId,
+                    };
+
+                    const authToken = localStorage.getItem('authToken');
+
+                    axios.post('http://localhost:8000/api/orders', requestData, {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`
+                        }
+                    })
+                        .then(response => {
+                            console.log('Success:', response.data);
+                            alert('Order saved successfully!');
+                            document.getElementById('contactForm').reset();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error.response ? error.response.data : error.message);
+                            alert('An error occurred. Please try again.');
+                        });
+                });
+
+                function getPlatformData() {
+                    const platforms = [];
+                    const sections = document.querySelectorAll('.platform-section');
+
+                    sections.forEach(section => {
+                        const platform = section.id.replace('-section', '');
+                        const typeGroups = section.querySelectorAll('.video-type-container');
+
+                        typeGroups.forEach(group => {
+                            const type = group.dataset.type;
+                            const inputGroup = group.querySelector('.input-group');
+                            const duration = inputGroup.querySelector('select').value;
+                            const count = inputGroup.querySelector('input[type="number"]').value;
+
+                            if (count > 0) {
+                                platforms.push({
+                                    platform,
+                                    type,
+                                    duration,
+                                    count: parseInt(count, 10),
+                                });
+                            }
+                        });
+                    });
+
+                    return platforms;
+                }
+
+            </script>
+        </div>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <video src="s1.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p4.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s2.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p3.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s4.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p6.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s5.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p1.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s6.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p1.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <video src="s5.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p2.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <video src="s6.mp4" muted loop></video>
+                    <div class="top-frame">
+                        <div class="brand-info">
+                            <img src="p3.png" alt="Brand Logo">
+                            <span class="brand-name">keababies</span>
+                        </div>
+                        <div class="sponsored-text">Sponsored</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const swiper1 = new Swiper('.swiper-container', {
+                loop: true,
+                slidesPerView: 'auto',
+                spaceBetween: 10,
+                autoplay: {
+                    delay: 0,
+                    disableOnInteraction: true,
+                },
+                speed: 1000,
+                freeMode: true,
+                freeModeMomentum: true,
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <div class="chat-popup" id="chatWindow">
+            <div class="chat-area">
+                <div class="chat-header">
+                    <div class="avatar-container">
+                        <img src="p1.png" alt="User Profile" class="avatar" id="profile-image">
+                        <span class="online-status " id="online-status"></span>
+                    </div>
+                    <div class="user-info">
+                        <h3 class="user-name" id="user-name">Gold Coast</h3>
+                        <p class="user-role" id="last-seen">Last seen: 10:30 AM</p>
+                    </div>
+                </div>
+                <style>
+                    .online-status {
+                        position: absolute;
+                        width: 15px;
+                        height: 15px;
+                        background-color: rgb(34, 231, 34);
+                        border: 2px solid #fff;
+                        border-radius: 50%;
+                        bottom: 5px;
+                        right: 5px;
+                        font-size: 20px;
+                        font-weight: bold;
+                    }
+
+                    .online {
+                        background-color: rgb(34, 231, 34);
+                    }
+
+                    .offline {
+                        background-color: gray;
+                    }
+                </style>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const profilePopup = document.getElementById("profilePopup");
+                        const cardsContainer = profilePopup.querySelector(".cards-3");
+
+                        function formatFollowers(followers) {
+                            if (followers >= 1000000) {
+                                return (followers / 1000000).toFixed(1) + 'M';
+                            } else if (followers >= 1000) {
+                                return (followers / 1000).toFixed(1) + 'k';
+                            } else {
+                                return followers.toString();
+                            }
+                        }
+
+                        function fetchUserServices(userId) {
+                            axios.get(`http://localhost:8000/api/user-services/${userId}`)
+                                .then(response => {
+                                    const services = response.data;
+
+                                    if (!services || services.length === 0) {
+                                        cardsContainer.innerHTML = "<p>لا توجد خدمات متاحة حاليًا.</p>";
+                                        return;
+                                    }
+
+                                    cardsContainer.innerHTML = "";
+
+                                    services.forEach(service => {
+                                        const videoSrc = Array.isArray(service.uploaded_files) && service.uploaded_files.length > 0
+                                            ? service.uploaded_files[0]
+                                            : 'fallback-video.mp4';
+
+                                        const userImage = service.user?.profile_image || "https://via.placeholder.com/150";
+
+                                        const cardHtml = `
+                        <div class="card-3" data-service-id="${service.id}" data-category="${service.category}">
+                            <div class="video-thumbnail">
+                                <video src="${videoSrc}" controls></video>
+                            </div>
+                            <div class="creator-info">
+                                <img src="${userImage}" class="avatar-3" alt="Creator">
+                                <span class="name">${service.user?.first_name || "N/A"} ${service.user?.last_name || "N/A"}</span>
+                                <span class="rating">★ ${service.user?.rating || "4.8"}</span>
+                            </div>
+                        </div>
+                    `;
+                                        cardsContainer.innerHTML += cardHtml;
+                                    });
+                                })
+                                .catch(error => {
+                                    console.error("Error fetching user services:", error);
+                                    cardsContainer.innerHTML = "<p>حدث خطأ أثناء تحميل الخدمات. حاول مرة أخرى لاحقًا.</p>";
+                                });
+                        }
+
+                        cardsContainer.addEventListener("click", function (event) {
+                            const card = event.target.closest(".card-3");
+                            if (card) {
+                                const serviceId = card.getAttribute("data-service-id");
+                                if (serviceId) {
+                                    window.location.href = `description-page.html?id=${serviceId}`;
+                                }
+                            }
+                        });
+                        function fetchUserProfile(serviceId) {
+                            const apiUrl = `http://localhost:8000/api/services/${serviceId}`;
+                            axios.get(apiUrl)
+                                .then(response => {
+                                    const service = response.data;
+                                    const profile = service.profile;
+
+                                    if (profile) {
+                                        profilePopup.querySelector(".profile-header img").src = `http://localhost:8000/storage/${profile.profile_image || "default-profile-image.jpg"}`;
+                                        profilePopup.querySelector(".profile-info h1").textContent = profile.fullname || "Full Name";
+                                        profilePopup.querySelector(".profile-info p").textContent = profile.role || "No role available.";
+                                        profilePopup.querySelector(".profile-details-3 p:nth-child(1)").textContent = `Email: ${profile.email || "N/A"}`;
+                                        profilePopup.querySelector(".profile-details-3 p:nth-child(2)").textContent = `Phone: ${profile.phone || "N/A"}`;
+                                        profilePopup.querySelector(".profile-details-3 p:nth-child(4)").textContent = `${formatFollowers(profile.stats?.followers || 0)} Followers`;
+                                        profilePopup.querySelector(".description").textContent = ` ${profile.description || "No description available."}`;
+
+                                        const hashtagsContainer = profilePopup.querySelector(".profile-details-3 .hashtags");
+                                        hashtagsContainer.innerHTML = "";
+                                        (profile['hashtags-2'] || []).forEach(tag => {
+                                            const span = document.createElement("span");
+                                            span.textContent = tag;
+                                            hashtagsContainer.appendChild(span);
+                                        });
+
+                                        const statistics = profilePopup.querySelector(".statistics");
+                                        if (statistics) {
+                                            statistics.querySelector(".stat-item:nth-child(1) h3").textContent = profile.stats?.services || "0";
+                                            statistics.querySelector(".stat-item:nth-child(2) h3").textContent = profile.stats?.orders || "0";
+                                            statistics.querySelector(".stat-item:nth-child(3) h3").textContent =
+                                                profile.select_price === "less_100" ? "100€" :
+                                                    profile.select_price === "100_500" ? "100€ - 500€" : "More than 500€";
+                                        }
+
+                                        const onlineStatus = document.getElementById('online-status');
+                                        onlineStatus.classList.toggle('online', profile.is_online);
+                                        onlineStatus.classList.toggle('offline', !profile.is_online);
+
+                                        const socialIconsContainer = profilePopup.querySelector(".social-icons-3");
+                                        socialIconsContainer.innerHTML = "";
+                                        Object.entries(profile.social_links || {}).forEach(([platform, url]) => {
+                                            if (url && platform) {
+                                                const socialIcon = document.createElement('a');
+                                                socialIcon.href = url;
+                                                socialIcon.title = platform.charAt(0).toUpperCase() + platform.slice(1);
+                                                socialIcon.target = "_blank";
+                                                socialIcon.innerHTML = `<i class="fab fa-${platform}"></i>`;
+                                                socialIconsContainer.appendChild(socialIcon);
+                                            }
+                                        });
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error fetching profile data:", error);
+                                });
+                        }
+
+                        window.openPopup = function () {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const serviceId = urlParams.get('id');
+                            if (serviceId) {
+                                fetchUserProfile(serviceId);
+                                axios.get(`http://localhost:8000/api/services/${serviceId}`)
+                                    .then(response => {
+                                        console.log(response.data);
+                                        if (response.data && response.data.userId) {
+                                            const userId = response.data.userId;
+                                            fetchUserServices(userId);
+                                        } else {
+                                            console.error("User ID not found in the response.");
+                                            cardsContainer.innerHTML = "<p>حدث خطأ في جلب بيانات المستخدم.</p>";
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error("Error fetching service data:", error);
+                                        cardsContainer.innerHTML = "<p>حدث خطأ أثناء الاتصال بالخادم.</p>";
+                                    });
+                            }
+
+                            profilePopup.style.display = "block";
+                        };
+
+                        window.closePopup = function () {
+                            profilePopup.style.display = "none";
+                        };
+                    });
+
+                </script>
+
+
+
+                <div class="chat-messages">
+                    <div class="message sent">
+                        Hello! How are you?
+                        <span class="message-time">10:00 AM</span>
+                    </div>
+                    <div class="message received">
+                        Hi! I'm fine, thank you.
+                        <span class="message-time">10:01 AM</span>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Type a message">
+                    <div class="action-buttons">
+                        <img src="attach-file.png" alt="">
+                        <img src="paper-plane.png" id="sendButton" alt="Send">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="chat-icon" onclick="toggleChat()">
+            💬
+        </div>
+
+        <script>
+            function toggleChat() {
+                const chatWindow = document.getElementById('chatWindow');
+                chatWindow.style.display = chatWindow.style.display === 'none' || chatWindow.style.display === '' ? 'flex' : 'none';
+            }
+
+        </script>
+        <style>
+            .chat-popup {
+                position: fixed;
+                bottom: 90px;
+                right: 20px;
+                width: 350px;
+                max-height: 500px;
+                background-color: #ffffff;
+                border: 1px solid #ddd;
+                border-radius: 15px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                display: none;
+                flex-direction: column;
+                z-index: 1000;
+                overflow: auto;
+            }
+
+            .chat-icon {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                background-color: #a280ff;
+                color: #fff;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                cursor: pointer;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                transition: transform 0.3s ease;
+            }
+
+            .chat-icon:hover {
+                transform: scale(1.1);
+            }
+
+            .chat-interface {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                max-width: 350px;
+                border-radius: 15px;
+                overflow: hidden;
+                background-color: #f9f9f9;
+            }
+
+            .chat-header {
+                display: flex;
+                align-items: center;
+                padding: 15px;
+                background-color: #e3d8ff;
+                border-bottom: 1px solid #ddd;
+                position: relative;
+            }
+
+            .avatar-container {
+                position: relative;
+                width: 60px;
+                height: 60px;
+                margin-right: 15px;
+            }
+
+            .avatar {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                border: 2px solid #555;
+            }
+
+
+
+            .user-info {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .user-name {
+                font-size: 18px;
+                font-weight: bold;
+                color: #1c1c1e;
+                margin: 0;
+            }
+
+            .user-role {
+                font-size: 14px;
+                color: #666;
+                margin: 5px 0 0;
+            }
+
+
+            .chat-messages {
+                flex: 1;
+                overflow-y: auto;
+                padding: 15px;
+                background-color: #ffffff;
+            }
+
+            .message {
+                padding: 10px 15px;
+                margin: 10px 0;
+                border-radius: 12px;
+                font-size: 14px;
+                line-height: 1.4;
+                max-width: 70%;
+            }
+
+            .message.sent {
+                background-color: #e3d8ff;
+                color: #1c1c1e;
+                align-self: flex-end;
+                border-top-right-radius: 0;
+                margin-left: auto;
+            }
+
+            .message.received {
+                background-color: #4a4a56;
+                color: #fff;
+                align-self: flex-start;
+                border-top-left-radius: 0;
+            }
+
+            .chat-input {
+                position: sticky;
+                bottom: 0;
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                background-color: #f3f3f3;
+                border-top: 1px solid #ddd;
+                z-index: 10;
+            }
+
+            .chat-input input[type="text"] {
+                flex: 1;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 20px;
+                outline: none;
+                font-size: 14px;
+                color: #555;
+                margin-right: 10px;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .chat-input button {
+                background-color: #a280ff;
+                color: #fff;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 50px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background-color 0.3s;
+            }
+
+            .chat-input button:hover {
+                background-color: #8c67cc;
+            }
+        </style>
+
+        <script>
+            document.getElementById('sendButton').addEventListener('click', async () => {
+                const messageInput = document.getElementById('messageInput');
+                const messageText = messageInput.value.trim();
+
+                if (messageText === '') {
+                    alert('Please enter a message.');
+                    return;
+                }
+
+                try {
+                    const authToken = localStorage.getItem('authToken');
+                    if (!authToken) {
+                        alert('يرجى تسجيل الدخول أولاً.');
+                        return;
+                    }
+
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const serviceId = urlParams.get('id');
+                    if (!serviceId) {
+                        alert('Service ID not found.');
+                        return;
+                    }
+
+                    const response = await axios.post(`http://localhost:8000/api/services/${serviceId}/messages`, {
+                        message: messageText,
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        },
+                    });
+
+                    if (response.status === 200 || response.status === 201) {
+                        const chatMessages = document.querySelector('.chat-messages');
+                        const messageElement = document.createElement('div');
+                        messageElement.classList.add('message', 'sent');
+                        messageElement.innerHTML = `
+                    ${messageText}
+                    <span class="message-time">${new Date().toLocaleTimeString()}</span>
+                `;
+                        chatMessages.appendChild(messageElement);
+
+                        loadMessages(serviceId);
+
+                        messageInput.value = '';
+                    } else {
+                        alert('فشل في إرسال الرسالة. يرجى المحاولة مرة أخرى.');
+                    }
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    alert('حدث خطأ أثناء إرسال الرسالة.');
+                }
+            });
+
+            async function loadMessages(serviceId) {
+                try {
+                    const authToken = localStorage.getItem('authToken');
+                    const userData = await fetchUserData(authToken);
+                    if (!userData) {
+                        alert('لم يتم العثور على بيانات المستخدم.');
+                        return;
+                    }
+
+                    const response = await axios.get(`http://localhost:8000/api/services/${serviceId}/messages`, {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        },
+                    });
+
+                    if (response.status === 200 && response.data.messages) {
+                        const chatMessages = document.querySelector('.chat-messages');
+                        chatMessages.innerHTML = '';
+
+                        response.data.messages.forEach(message => {
+                            const messageClass = message.sender_id === userData.id ? 'sent' : 'received';
+                            const messageElement = document.createElement('div');
+                            messageElement.classList.add('message', messageClass);
+                            messageElement.innerHTML = `
+                        ${message.content}
+                        <span class="message-time">${new Date(message.created_at).toLocaleTimeString()}</span>
+                    `;
+                            chatMessages.appendChild(messageElement);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error loading messages:', error);
+                    alert('حدث خطأ أثناء تحميل الرسائل.');
+                }
+            }
+
+            async function fetchUserData(authToken) {
+                try {
+                    const response = await axios.get("http://localhost:8000/api/user", {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        },
+                    });
+                    return response.data;
+                } catch (error) {
+                    console.error("فشل في جلب بيانات المستخدم:", error.response?.data || error.message);
+                    return null;
+                }
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const serviceId = urlParams.get('id');
+            if (serviceId) {
+                loadMessages(serviceId);
+            } else {
+                alert('Service ID is missing in the URL.');
+            }
+
+        </script>
+
+
+        <footer>
+            <div class="footer-container">
+                <div class="footer-section">
+                    <h4>By business type</h4>
+                    <ul>
+                        <a href="by-business-type.html">
+                            <li>eCommerce</li>
+                        </a>
+                        <a href="by-business-type.html">
+                            <li>Agencies</li>
+                        </a>
+                        <a href="by-business-type.html">
+                            <li>Apps</li>
+                        </a>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>By platform</h4>
+                    <ul>
+                        <a href="by-platform.html">
+                            <li>TikTok</li>
+                        </a>
+                        <a href="by-platform.html">
+                            <li>Facebook</li>
+                        </a>
+                        <a href="by-platform.html">
+                            <li>Instagram</li>
+                        </a>
+                        <a href="by-platform.html">
+                            <li>Other</li>
+                        </a>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <a href="index.html">
+                            <li>Home</li>
+                        </a>
+                        <a href="by-platform.html">
+                            <li>Services by platform</li>
+                        </a>
+                        <a href="by-business-type.html">
+                            <li>Services by business</li>
+                        </a>
+                        <a href="creators.html">
+                            <li>Creators</li>
+                        </a>
+                        <a href="portfolio.html">
+                            <li>Portfolio</li>
+                        </a>
+                        <a href="About-Us.html">
+                            <li>About Us</li>
+                        </a>
+                        <a href="Blog.html">
+                            <li>Blog</li>
+                        </a>
+                        <a href="profile-user.html">
+                            <li>My Account</li>
+                        </a>
+
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <a href="Terms-of-service.html">
+                            <li>Terms of service</li>
+                        </a>
+                        <a href="Privacy_Statement_Ugc.html">
+                            <li>Privacy policy</li>
+                        </a>
+                        <a href="Refund_Policy_Ugc.html">
+                            <li>Refund policy</li>
+                        </a>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact us</h4>
+                    <p>584 Castro St. 2163<br>San Francisco, CA 94114</p>
+                    <p>+1 650 699 6740</p>
+                    <p>example@UJC.COM</p>
+                </div>
+
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright 2024 By ugc. All Rights Reserved.</p>
+                <div class="social-icons">
+                    <i class="fab fa-facebook"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-tiktok"></i>
+                    <!-- <a href="admin.html"> <i class="fa fa-home"></i></a> -->
+
+                </div>
+            </div>
+        </footer>
+
+</html>

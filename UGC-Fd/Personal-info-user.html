@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Section</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .form-section input,
+        .form-section textarea,
+        .form-section select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            background: transparent;
+            color: #555;
+        }
+
+        .custom-file-upload {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            background: transparent;
+        }
+
+        label {
+            color: #555;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        #identity-verification {
+            display: none;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(#eacaee, #f5e5db);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+        }
+
+        .header {
+            width: 100%;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #804ffc;
+            text-decoration: none;
+            margin-left: 50px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            max-width: 1200px;
+            margin-top: 20px;
+        }
+
+        .profile-section {
+            text-align: center;
+            color: #333;
+            width: 45%;
+        }
+
+        .profile-section img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-section h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .profile-section p {
+            font-size: 16px;
+            margin: 10px 0 20px;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        .profile-section .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: black;
+            color: white;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .icons a {
+            color: #333;
+            font-size: 20px;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .icons a:hover {
+            color: white;
+        }
+
+        .order-tabs a {
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: bold;
+            text-align: start;
+            background-color: #e3d8ff;
+            color: #6b50ff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 15px 5px;
+        }
+
+        .form-section {
+            width: 45%;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .form-section form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-section input,
+        .form-section textarea,
+        .form-section select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            background: transparent;
+        }
+
+        .form-section input:focus,
+        .form-section textarea:focus,
+        .form-section select:focus {
+            outline: none;
+            border-bottom-color: #6b50ff;
+        }
+
+        .form-section textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        .form-section button {
+            padding: 10px 20px;
+            background-color: #6b50ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .form-section button:hover {
+            background-color: #5438cc;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                padding: 0 15px;
+            }
+
+            .profile-section,
+            .form-section {
+                width: 100%;
+                margin: 20px 0;
+            }
+
+            .profile-section img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .profile-section h1 {
+                font-size: 28px;
+            }
+
+            .profile-section p {
+                font-size: 14px;
+            }
+
+            .form-section form {
+                gap: 10px;
+            }
+
+            .form-section input,
+            .form-section textarea,
+            .form-section select {
+                font-size: 14px;
+            }
+
+            .form-section button {
+                font-size: 14px;
+            }
+        }
+
+        input[name="instagram"],
+        input[name="facebook"],
+        input[name="tiktok"],
+        input[name="youtube"],
+        input[name="global_followers"],
+        input[name="identity_verification"],
+        select[name="category"],
+        select[name="select_price"],
+        select[name="video_type"],
+        input[name="role"],
+        label[for="category"],
+        label[for="select_price"],
+        label[for="video_type"],
+        label[for="role"] {
+            display: none !important;
+        }
+
+        div.filter-item {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <a href="index.html" class="logo">Ugc.com</a>
+    </div>
+
+    <div class="container">
+        <div class="profile-section" id="profile-container">
+            <img src="" alt="" id="profile-picture">
+            <h1 id="profile-name">Amjad Ben</h1>
+            <div class="order-tabs" id="profile-hashtags">
+                <a href="#">#CEO</a>
+                <a href="#">#DEV</a>
+                <a href="#">#UGC</a>
+                <a href="#">#AMJAD</a>
+            </div>
+            <p>This is my personal profile page.</p>
+            <p id="profile-description"></p>
+            <a href="profile-user.html" class="btn">Get in touch</a>
+            <div class="icons" id="platform-icons">
+            </div>
+        </div>
+        <script>
+            function loadProfileSection() {
+                const authToken = localStorage.getItem('authToken');
+
+                if (!authToken) {
+                    alert('يرجى تسجيل الدخول أولاً.');
+                    return;
+                }
+
+                axios.get(`${baseURL}/profile`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                    },
+                })
+                    .then(response => {
+                        const profile = response.data;
+
+                        const profilePicture = document.getElementById('profile-picture');
+                        if (profile.profile_image) {
+                            profilePicture.src = `http://localhost:8000/storage/${profile.profile_image}`;
+                        } else {
+                            profilePicture.src = "https://via.placeholder.com/150";
+                        }
+
+                        const profileName = document.getElementById('profile-name');
+
+                        profileName.textContent = `${profile.first_name || ''} ${profile.last_name || ''}`;
+
+                        const profileDescription = document.getElementById('profile-description');
+                        profileDescription.textContent = profile.service_description || 'لا يوجد وصف متاح.';
+
+                        const profileHashtags = document.getElementById('profile-hashtags');
+                        profileHashtags.innerHTML = '';
+                        const hashtags = (profile.hashtags || '').split(' ');
+                        hashtags.forEach(tag => {
+                            const tagElement = document.createElement('a');
+                            tagElement.href = '#';
+                            tagElement.textContent = `${tag.trim()}`;
+                            profileHashtags.appendChild(tagElement);
+                        });
+
+                    })
+                    .catch(error => {
+                        console.error('حدث خطأ أثناء جلب بيانات البروفايل:', error);
+                        alert('لم يتم جلب البيانات. حاول مرة أخرى.');
+                    });
+            }
+
+            document.addEventListener('DOMContentLoaded', loadProfileSection);
+        </script>
+
+        <div class="form-section">
+            <form lass="form-section" id="profile-form" enctype="multipart/form-data">
+                <input type="text" name="first_name" placeholder="First Name">
+                <input type="text" name="last_name" placeholder="Last Name">
+                <input type="text" name="email" placeholder="Email" disabled>
+                <input type="text" name="phone" placeholder="Phone">
+                <input type="text" name="instagram" placeholder="Instagram">
+                <input type="text" name="facebook" placeholder="Facebook">
+                <input type="text" name="tiktok" placeholder="TikTok">
+                <input type="text" name="youtube" placeholder="YouTube">
+                <div>
+                    <textarea name="service_description" id="service_description"
+                        onfocus="setCaretToEnd(this)">I am passionate about [your field], and I specialize in [specific service or solution]... </textarea>
+                </div> <input type="text" name="hashtags" placeholder="Hashtags">
+                <input type="text" name="global_followers"
+                    placeholder="Enter your highest follower count on any platform.">
+                <input type="file" name="identity_verification" placeholder="Identity Verification">
+                <label for="file-input" class="custom-file-upload">
+                    Profile Image </label>
+                <input id="file-input" type="file" name="profile_image">
+                <div class="filter-item">
+                    <label for="category">Category</label>
+                    <select type="text" id="category" name="category" class="form-select">
+                        <option disabled selected>Select a Category</option>
+                        <option value="beauty">Beauty</option>
+                        <option value="technology">Technology</option>
+                        <option value="fashion">Fashion</option>
+                    </select>
+                </div>
+
+                <div class="filter-item">
+                    <label for="select_price">Price</label>
+                    <select type="text" id="select_price" name="select_price" class="form-select">
+                        <option disabled selected>Select a Price</option>
+                        <option value="less_100">Less than 100€</option>
+                        <option value="100_500">100€ - 500€</option>
+                        <option value="more_500">More than 500€</option>
+                    </select>
+                </div>
+
+                <div class="filter-item">
+                    <label for="video_type">Video Type</label>
+                    <select type="text" id="video_type" name="video_type" class="form-select">
+                        <option disabled selected>Select a Video Type</option>
+                        <option value="advertisement">Advertisement</option>
+                        <option value="review">Review</option>
+                        <option value="tutorial">Tutorial</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="role">Role</label>
+                    <input type="text" id="role" name="role" class="form-control"
+                        placeholder="Enter your role (e.g., Content Creator, Developer)">
+
+                </div>
+
+
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function formatNumber(number) {
+            if (number >= 1000000) {
+                return (number / 1000000).toFixed(1) + 'M';
+            } else if (number >= 1000) {
+                return (number / 1000).toFixed(1) + 'K';
+            }
+            return number.toString();
+        }
+        function loadProfileSection() {
+            const authToken = localStorage.getItem('authToken');
+
+            if (!authToken) {
+                alert('يرجى تسجيل الدخول أولاً.');
+                return;
+            }
+
+            axios.get(`${baseURL}/user`, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                    "Accept": "application/json"
+                }
+            })
+                .then(userResponse => {
+                    const userData = userResponse.data;
+
+                    return axios.get(`${baseURL}/profile`, {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        },
+                    })
+                        .then(profileResponse => {
+                            const profile = profileResponse.data;
+
+                            const profilePicture = document.getElementById('profile-picture');
+                            if (profile.profile_image) {
+                                profilePicture.src = `http://localhost:8000/storage/${profile.profile_image}`;
+                            } else {
+                                profilePicture.src = "https://via.placeholder.com/150";
+                            }
+
+                            const profileName = document.getElementById('profile-name');
+                            profileName.textContent = `${userData.first_name || ''} ${userData.last_name || ''}`;
+
+                            const profileDescription = document.getElementById('profile-description');
+                            profileDescription.textContent = profile.service_description || 'لا يوجد وصف متاح.';
+
+                            const profileHashtags = document.getElementById('profile-hashtags');
+                            profileHashtags.innerHTML = '';
+                            const hashtags = (profile.hashtags || '').split(' ');
+                            hashtags.forEach(tag => {
+                                const tagElement = document.createElement('a');
+                                tagElement.href = '#';
+                                tagElement.textContent = `${tag.trim()}`;
+                                profileHashtags.appendChild(tagElement);
+                            });
+
+                        });
+                })
+                .catch(error => {
+                    console.error('حدث خطأ أثناء جلب البيانات:', error);
+                    alert('لم يتم جلب البيانات. حاول مرة أخرى.');
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProfileSection);
+
+        function loadUserProfile() {
+            const authToken = localStorage.getItem("authToken");
+
+            if (!authToken) {
+                alert("لم يتم العثور على التوكن. يرجى تسجيل الدخول.");
+                return;
+            }
+
+            axios.get(`${baseURL}/user`, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                    "Accept": "application/json"
+                }
+            })
+                .then(response => {
+                    if (response.status === 200) {
+                        const userData = response.data;
+
+                        document.querySelector('input[name="first_name"]').value = userData.first_name || '';
+                        document.querySelector('input[name="last_name"]').value = userData.last_name || '';
+                        document.querySelector('input[name="email"]').value = userData.email || '';
+                        document.querySelector('input[name="phone"]').value = userData.phone || '';
+                    }
+                })
+                .catch(error => {
+                    if (error.response) {
+                        console.error("Error fetching user data:", error.response.data);
+                        alert(`خطأ: ${error.response.data.message || "فشل في جلب بيانات المستخدم."}`);
+                    } else {
+                        console.error("Error:", error);
+                        alert("حدث خطأ أثناء محاولة جلب البيانات. حاول مرة أخرى لاحقًا.");
+                    }
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", loadUserProfile);
+
+
+        document.getElementById('profile-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+
+            axios.post(`${baseURL}/profile`, formData, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
+                    'Content-Type': 'multipart/form-data',
+                }
+            })
+                .then(response => {
+                    alert('تم تحديث البروفايل بنجاح!');
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    console.error('حدث خطأ أثناء التحديث:', error.response);
+                    alert('حدث خطأ أثناء تحديث البيانات.');
+                });
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const authToken = localStorage.getItem('authToken');
+            if (!authToken) {
+                alert('الرجاء تسجيل الدخول أولاً');
+                return;
+            }
+
+            axios.get(`${baseURL}/profile`, {
+                headers: {
+                    'Authorization': 'Bearer ' + authToken,
+                },
+            })
+                .then(response => {
+                    const profile = response.data;
+
+                    document.querySelector('input[name="instagram"]').value = profile.instagram || '';
+                    document.querySelector('input[name="facebook"]').value = profile.facebook || '';
+                    document.querySelector('input[name="tiktok"]').value = profile.tiktok || '';
+                    document.querySelector('input[name="youtube"]').value = profile.youtube || '';
+                    document.querySelector('textarea[name="service_description"]').value = profile.service_description || '';
+                    document.querySelector('input[name="hashtags"]').value = profile.hashtags || '';
+                    document.querySelector('select[name="category"]').value = profile.category || '';
+                    document.querySelector('select[name="select_price"]').value = profile.select_price || '';
+                    document.querySelector('select[name="video_type"]').value = profile.video_type || '';
+                    document.querySelector('input[name="role"]').value = profile.role || '';
+                })
+                .catch(error => {
+                    console.error('خطأ أثناء جلب بيانات البروفايل:', error);
+                    alert('لم يتم جلب البيانات. تأكد من أنك قمت بإنشاء البروفايل.');
+                });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="Tab&Api.js"> </script>
+</body>
+
+</html>
