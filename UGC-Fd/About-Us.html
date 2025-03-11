@@ -1,48 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const authToken = localStorage.getItem('authToken');
 
-        const loginLink = document.querySelector('a.login');
-        if (authToken && loginLink) {
-            loginLink.style.display = 'none';
-        }
-
-        axios.get('http://localhost:8000/api/user-type', {
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-            }
-        })
-            .then(response => {
-                const userType = response.data.user_type;
-
-                let linkContainer = document.getElementById('user-link');
-                if (userType === 'creator') {
-                    linkContainer.href = "creator-interface.html";
-                    linkContainer.textContent = "Become a creator";
-                } else if (userType === 'business') {
-                    linkContainer.href = "profile-user.html";
-                    linkContainer.textContent = "My Account";
-                } else if (userType === 'support') {
-                    linkContainer.href = "creator-interface.html";
-                    linkContainer.textContent = "Become a creator";
-
-                    const socialIcons = document.querySelector('.footer-bottom .social-icons');
-                    if (socialIcons) {
-                        const adminLink = document.createElement('a');
-                        adminLink.href = "admin.html";
-                        adminLink.innerHTML = '<i class="fa fa-home"></i>';
-                        socialIcons.appendChild(adminLink);
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching user type:', error);
-            });
-    });
-</script>
 
 <head>
     <meta charset="UTF-8">
@@ -449,8 +408,95 @@
                 </div>
             </div>
         </footer>
-
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+            const authToken = localStorage.getItem('authToken');
+        
+            toggleLoginLink(authToken);
+        
+            if (authToken) {
+                fetchUserType(authToken)
+                    .then(userType => {
+                        updateUserLink(userType);
+                        if (userType === 'support') {
+                            addAdminLinkToFooter();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user type:', error);
+                        alert('Failed to fetch user type. Please try again later.');
+                    });
+            }
+        });
+        
+        function toggleLoginLink(authToken) {
+            const loginLink = document.querySelector('a.login');
+            if (authToken && loginLink) {
+                loginLink.style.display = 'none';
+            }
+        }
+        
+        function fetchUserType(authToken) {
+            return axios.get('http://localhost:8000/api/user-type', {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                }
+            })
+            .then(response => response.data.user_type);
+        }
+        
+        function updateUserLink(userType) {
+            const linkContainer = document.getElementById('user-link');
+            if (!linkContainer) return;
+        
+            switch (userType) {
+                case 'creator':
+                    linkContainer.href = "creator-interface.html";
+                    linkContainer.textContent = "Become a creator";
+                    break;
+                case 'business':
+                    linkContainer.href = "profile-user.html";
+                    linkContainer.textContent = "My Account";
+                    break;
+                case 'support':
+                    linkContainer.href = "creator-interface.html";
+                    linkContainer.textContent = "Become a creator";
+                    break;
+                default:
+                    linkContainer.href = "#";
+                    linkContainer.textContent = "My Account";
+            }
+        }
+        
+        function addAdminLinkToFooter() {
+            const socialIcons = document.querySelector('.footer-bottom .social-icons');
+            if (socialIcons) {
+                const adminLink = document.createElement('a');
+                adminLink.href = "admin.html";
+                adminLink.innerHTML = '<i class="fa fa-home"></i>';
+                socialIcons.appendChild(adminLink);
+            }
+        }
+        function fetchUserType(authToken) {
+            const cachedUserType = localStorage.getItem('cachedUserType');
+            if (cachedUserType) {
+                return Promise.resolve(cachedUserType);
+            }
+        
+            return axios.get('http://localhost:8000/api/user-type', {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                }
+            })
+            .then(response => {
+                const userType = response.data.user_type;
+                localStorage.setItem('cachedUserType', userType);
+                return userType;
+            });
+        }
+        </script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     </body>
 
 </html>

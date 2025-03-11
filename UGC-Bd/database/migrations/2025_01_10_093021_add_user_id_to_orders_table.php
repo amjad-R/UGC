@@ -12,11 +12,12 @@ return new class extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            if (!Schema::hasColumn('orders', 'user_id')) { // التحقق من وجود العمود أولاً
+                $table->unsignedBigInteger('user_id')->after('id'); // إضافة العمود
+                $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // إضافة المفتاح الأجنبي
+            }
         });
-
     }
-
 
     /**
      * Reverse the migrations.
@@ -24,7 +25,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            //
+            $table->dropForeign(['user_id']); // حذف المفتاح الأجنبي عند التراجع
+            $table->dropColumn('user_id'); // حذف العمود
         });
     }
 };
